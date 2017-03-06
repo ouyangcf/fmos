@@ -1,0 +1,538 @@
+<div class="container-fluid">
+    <div class="row">
+        <div id="divUserToolbar" class="col-md-12">
+            <a href="" class="btn btn-danger" id="btnUserDel">
+                <i class="glyphicon glyphicon-remove"></i>删除用户</a>
+            <a href="" class="btn btn-primary" id="btnUserRefresh">
+                <i class="glyphicon glyphicon-refresh"></i>刷新</a>
+        </div>
+    </div>
+    <div class="row" id="divUserSearchBar">
+        <div class="col-md-12">
+            <div class="input-group">
+                <span class="input-group-addon">用户ID</span>
+                <input class="form-control typeahead" id="iptUserList" autocomplete="off" type="text" data-provide="typeahead">
+                <span class="input-group-addon">创建于</span>
+                <input type="text" class="form-control daterangesetter" id="dpkUserStarttime">
+                <span class="input-group-addon">至</span>
+                <input type="text" class="form-control daterangesetter" id="dpkUserEndtime">
+                <span class="input-group-addon">期间</span>
+                <span class="input-group-btn">
+                    <button class="btn btn-info" id="btnUserSearch" type="button" style="color: #fff;background-color: #3498db;border: none;">搜索</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="tbUserInfo" data-striped="true" data-show-header="true" data-halign="true" data-height="390">
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    /**
+     * [Format description]
+     * @param {[type]} fmt [description]
+     */
+
+    setMessage('修改用户信息时,请将用户密码重置,否则将无法使用该账号', 'info', true);
+
+    Date.prototype.format = function(format) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //month
+                "d+": this.getDate(), //day
+                "h+": this.getHours(), //hour
+                "m+": this.getMinutes(), //minute
+                "s+": this.getSeconds(), //second
+                "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                "S": this.getMilliseconds() //millisecond
+            }
+            if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+                (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1,
+                        RegExp.$1.length == 1 ? o[k] :
+                        ("00" + o[k]).substr(("" + o[k]).length));
+            return format;
+        }
+        //loading iptUserList
+    var $input = $('#iptUserList');
+    $.ajax({
+            url: 'user/businiess/user/userIdDirectionary',
+            type: 'GET',
+            dataType: 'json'
+        })
+        .done(function(data) {
+            $input.typeahead({
+                source: data
+            });
+        })
+        .fail(function() {
+            setMessage('获取字典失败', 'error', true);
+        }); //loading roleList
+
+    $('#tbUserInfo').bootstrapTable({
+        url: 'user/businiess/user/users',
+        method: 'get',
+        pagination: true,
+        columns: [{
+                field: 'state',
+                checkbox: true
+            }, {
+                field: 'lineId',
+                title: '主键序号',
+                visible: true
+            }, {
+                field: 'userId',
+                title: '用户ID',
+                editable: {
+                    type: 'text',
+                    title: '用户ID',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '用户ID不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'userName',
+                title: '用户名称',
+                editable: {
+                    type: 'text',
+                    title: '用户名称',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '用户名称不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'userPassword',
+                title: '用户密码',
+                editable: {
+                    type: 'text',
+                    title: '用户密码',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '用户密码不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'roleLineId',
+                title: '角色名称',
+                editable: {
+                    type: 'select',
+                    sourceCache: true,
+                    source: function() {
+                        var result = [];
+                        $.ajax({
+                            url: 'user/businiess/user/roleDirectionary',
+                            async: false,
+                            type: "get",
+                            data: {},
+                            success: function(data, status) {
+                                $.each(data, function(key, value) {
+                                    result.push({
+                                        value: value.id,
+                                        text: value.name
+                                    });
+                                });
+                            }
+                        }).fail(function() {
+                            setMessage('获取字典失败', 'error', true);
+                        }); //loading roleList;
+                        return result;
+                    },
+                    title: '角色名称',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '角色名称不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'areaCode',
+                title: '县份编码',
+                editable: {
+                    type: 'text',
+                    title: '县份编码',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '县份编码不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'departCode',
+                title: '部门编码',
+                editable: {
+                    type: 'text',
+                    title: '部门编码',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '部门编码不能为空!';
+                        }
+                    }
+                }
+            }, {
+                field: 'positionCode',
+                title: '职位编码',
+                editable: {
+                    type: 'text',
+                    title: '职位编码',
+                    emptytext: '未填写',
+                    validate: function(value) {
+                        if ($.trim(value) == '') {
+                            return '职位编码不能为空!';
+                        }
+                    }
+                }
+            },
+
+            {
+                field: 'createUser',
+                title: '创建人'
+            }, {
+                field: 'createTime',
+                title: '创建时间',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    if (value == undefined) {
+                        return value;
+                    } else {
+                        var tempTime = new Date(value);
+                        var fullYear = tempTime.getFullYear();
+                        var month = tempTime.getMonth() + 1;
+                        var date = tempTime.getDate();
+                        var hours = tempTime.getHours();
+                        var minute = tempTime.getMinutes();
+                        var second = tempTime.getSeconds();
+                        var strTime =
+                            fullYear + "-" +
+                            month + "-" +
+                            date + " " +
+                            hours + ":" +
+                            minute + ":" +
+                            second;
+                        return strTime;
+                    }
+                }
+            }, {
+                field: 'updateUser',
+                title: '更新人'
+            }, {
+                field: 'updateTime',
+                title: '更新时间',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    if (value == undefined) {
+                        return value;
+                    } else {
+                        var tempTime = new Date(value);
+                        var fullYear = tempTime.getFullYear();
+                        var month = tempTime.getMonth() + 1;
+                        var date = tempTime.getDate();
+                        var hours = tempTime.getHours();
+                        var minute = tempTime.getMinutes();
+                        var second = tempTime.getSeconds();
+                        var strTime =
+                            fullYear + "-" +
+                            month + "-" +
+                            date + " " +
+                            hours + ":" +
+                            minute + ":" +
+                            second;
+                        return strTime;
+                    }
+                }
+            }, {
+                field: 'updateMemo',
+                title: '更新说明'
+            }
+        ],
+        onLoadError: function(status) {
+            setMessage('获取数据失败', 'error', true);
+        },
+        onEditableSave: function(field, row, oldValue, $el) {
+            if (row.lineId == undefined) {
+                var checkFlag = '';
+                if (row.userId == checkFlag) {
+                    return;
+                }
+                if (row.userName == checkFlag) {
+                    return;
+                }
+                if (row.userPassword == checkFlag) {
+                    return;
+                }
+                if (row.areaCode == checkFlag) {
+                    return;
+                }
+                if (row.positionCode == checkFlag) {
+                    return;
+                }
+                if (row.departCode == checkFlag) {
+                    return;
+                }
+                if (row.roleLineId == undefined) {
+                    return;
+                }
+                setMessage('正在提交', 'info', true);
+                var json = [{
+                    userId: row.userId.trim(),
+                    userName: row.userName.trim(),
+                    userPassword: row.userPassword.trim(),
+                    roleLineId: row.roleLineId,
+                    areaCode: row.areaCode,
+                    positionCode: row.positionCode,
+                    departCode: row.departCode
+                }];
+                $.ajax({
+                        url: 'user/businiess/user/add',
+                        type: 'POST',
+                        contentType: "application/json;charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify(json)
+                    })
+                    .done(function(data) {
+                        if (data.retCode == -1) {
+                            setMessage(data.errDesc, 'error', true);
+                            return;
+                        }
+                        if (data.retCode == 1) {
+                            setMessage('新增成功', 'info', true);
+                            $('#btnUserRefresh').click();
+                        }
+                    })
+                    .fail(function(data) {
+                        setMessage('新增失败', 'error', true);
+                    });
+            } else {
+                setMessage('正在提交', 'info', true);
+                var json = [{
+                    lineId: row.lineId,
+                    userId: row.userId.trim(),
+                    userName: row.userName.trim(),
+                    userPassword: row.userPassword.trim(),
+                    roleLineId: row.roleLineId,
+                    areaCode: row.areaCode,
+                    positionCode: row.positionCode,
+                    departCode: row.departCode
+                }];
+                $.ajax({
+                        url: 'user/businiess/user/update',
+                        type: 'POST',
+                        contentType: "application/json;charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify(json)
+                    })
+                    .done(function(data) {
+                        if (data.retCode == -1) {
+                            setMessage(data.errDesc, 'error', true);
+                            return;
+                        }
+                        if (data.retCode == 1) {
+                            setMessage('修改成功', 'info', true);
+                            $('#btnUserRefresh').click();
+                        }
+                    })
+                    .fail(function(data) {
+                        setMessage('修改失败', 'error', true);
+                    });
+            }
+        }
+    });
+
+    $('.daterangesetter').daterangepicker({
+        "singleDatePicker": true,
+        "locale": {
+            "format": "YYYY-MM-DD",
+            "separator": "-",
+            "applyLabel": "应用",
+            "cancelLabel": "取消",
+            "monthNames": [
+                "一月",
+                "二月",
+                "三月",
+                "四月",
+                "五月",
+                "六月",
+                "七月",
+                "八月",
+                "九月",
+                "十月",
+                "十一月",
+                "十二月"
+            ],
+            "daysOfWeek": [
+                "日",
+                "一",
+                "二",
+                "三",
+                "四",
+                "五",
+                "六"
+            ]
+        }
+    });
+    $('#dpkUserStarttime').data('daterangepicker').setStartDate(moment().subtract(29, 'days'));
+    $('#dpkUserEndtime').data('daterangepicker').setStartDate(moment());
+    var btnUserDelClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbUserInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+        } else {
+            msg = Messenger().post({
+                message: "是否删除选定的行?",
+                hideAfter: 10,
+                actions: {
+                    delete: {
+                        label: "删除",
+                        action: function() {
+                            msg.hide();
+                            var j = 0;
+                            var idArr = [];
+                            for (var i = 0; i < selRows.length; i++) {
+                                if (selRows[i].lineId != undefined) {
+                                    idArr.push(selRows[i].lineId);
+                                    j++;
+                                }
+                            }
+                            if (j == 0) {
+                                setMessage('没有需要删除的行', 'error', true);
+                                return false;
+                            } else {
+                                $('#btnUserDel').off('click');
+                                $.ajax({
+                                        url: 'user/businiess/user/del',
+                                        type: 'POST',
+                                        data: {
+                                            "idArr": idArr
+                                        },
+                                        dataType: "json"
+                                    })
+                                    .done(function(data) {
+                                        if (data.retCode == -1) {
+                                            setMessage(data.errDesc, 'error', true);
+                                            return;
+                                        }
+                                        if (data.retCode == 1) {
+                                            setMessage('删除成功', 'success', true);
+                                            $('#btnUserRefresh').click();
+                                        }
+                                    })
+                                    .fail(function(data) {
+                                        setMessage('删除失败', 'error', true);
+                                    })
+                                    .always(function(data) {
+                                        $('#btnUserDel').on('click', btnUserDelClick);
+                                    });
+                            }
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        action: function() {
+                            msg.hide();
+                        }
+                    }
+                }
+            });
+        }
+        event.stopPropagation();
+    }
+    $('#btnUserDel').on('click', btnUserDelClick);
+
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+        $('#' + id).empty();
+        $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+        $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+        var url = 'views/' + id + '.html';
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                beforeSend: function(XHR) {
+                    setLoader(id);
+                }
+            })
+            .done(function(data) {
+                removeLoader(id);
+                $('#' + id).append(data);
+            })
+            .fail(function() {})
+            .always(function() {});
+    }
+    var btnUserRefreshClick = function(event) {
+        event.preventDefault();
+        $('#userMaintain').empty();
+        refresh('userMaintain');
+        event.stopPropagation();
+    }
+    $('#btnUserRefresh').on('click', btnUserRefreshClick);
+
+    var btnUserSearchClick = function(event) {
+        event.preventDefault();
+        var userId = $('#iptUserList').val() == '' ? undefined : $('#iptUserList').val();
+        var startTime = $('#dpkUserStarttime').val() + ' 00:00:00';
+        var endTime = $('#dpkUserEndtime').val() + ' 23:59:59';
+        var json = [{
+            roleName: userId,
+            createTime: startTime,
+            activeTime: endTime
+        }];
+        $('#btnUserSearch').off('click');
+        $.ajax({
+                url: 'user/businiess/user/search',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                setMessage('共找到 ' + data.length + ' 条数据', 'info', true);
+                var str = JSON.stringify(data)
+                $('#tbUserInfo').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('查询失败', 'error', true);
+            }).always(function(data) {
+                $('#btnUserSearch').on('click', btnUserSearchClick);
+            });
+        event.stopPropagation();
+    }
+    $('#btnUserSearch').on('click', btnUserSearchClick);
+});
+</script>

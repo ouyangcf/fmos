@@ -1,0 +1,51 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceMachiningMethodMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceMachiningMethodToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceMachiningMethodToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnDeviceMachiningMethodDetail" class="btn btn-info">
+                <i class="glyphicon glyphicon-list-alt"></i>详细</a>
+        </div>
+    </div>
+    <div id="divDeviceMachiningMethodSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    <div id="divDeviceMachiningMethodTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceMachiningMethodinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceMachiningMethodinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnDeviceMachiningMethodDetail */
+    var btnDeviceMachiningMethodDetailClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceMachiningMethodDetail").on("click", btnDeviceMachiningMethodDetailClick);
+    /*end define btnDeviceMachiningMethodDetail */
+
+    /*begin define tbDeviceMachiningMethodinfos */
+    $("#tbDeviceMachiningMethodinfos").bootstrapTable({
+        url: "deviceMachiningMethod/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "isNumericalControl",
+            title: "是否数控"
+        }, {
+            field: "availablePocess",
+            title: "可进行加工"
+        }]
+    });
+    /*end define tbDeviceMachiningMethodinfos */
+});
+</script>

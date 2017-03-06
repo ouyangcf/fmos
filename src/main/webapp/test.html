@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>云制造设备管理系统</title>
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-treeview.min.css">
+    <!-- Loading Bootstrap Table UI -->
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <!-- Loading Bootstrap Table Extension UI -->
+    <link rel="stylesheet" href="css/bootstrap-editable.css">
+    <!-- <link rel="stylesheet" href="css/bootstrap-tagsinput.css"> -->
+    <!-- Loading Bootstrap Date Range Picker UI -->
+    <link rel="stylesheet" type="text/css" href="css/daterangepicker.css" />
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!-- Loading Bootstrap TreeView -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-treeview.min.css">
+    <!-- Loading Bootstrap Select -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
+    <!-- Loading Messenger UI -->
+    <link rel="stylesheet" type="text/css" href="css/messenger.css">
+    <link rel="stylesheet" type="text/css" href="css/messenger-theme-flat.css">
+    <!-- Loading Loder UI -->
+    <link rel="stylesheet" type="text/css" href="css/loaders.min.css">
+    <!--  Loading SUI UI -->
+    <link rel="stylesheet" type="text/css" href="css/sui.nav.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- Loading Z-tree -->
+    <link rel="stylesheet" href="css/zTreeStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.min.css">
+    <!-- Loading Custom UI -->
+    <link rel="stylesheet" type="text/css" href="css/custom/home-ui.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-inverse cancelRadius navbar-fixed-top" role="navigation">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+                            <span class="sr-only">Toggle navigation</span>
+                        </button>
+                        <a class="navbar-brand" href="#">FMOS</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse-01">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#" cx lass="chinese_font" id="msgYourMsg">
+                                    您的消息
+                                    <!-- Indicator with number -->
+                                    <span class="navbar-new">2</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <p class="navbar-text navbar navbar-right chinese_font">
+                            <c:out value="${user.userName}" />&nbsp;
+                            <a class="navbar-link" href="user/log/out">退出</a>
+                        </p>
+                        <form role="search" class="navbar-form navbar-right">
+                            <div class="form-group">
+                                <input type="text" placeholder="搜索..." class="form-control" id="iptMenuSearch" autocomplete="off">
+                            </div>
+                            <button class="btn btn-default" id="btnMenuItemSearch">搜索</button>
+                        </form>
+                    </div>
+                    <!-- /navbar-collapse -->
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- /navbar -->
+    <!-- main -->
+    <div class="container-fluid" id="main-container">
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <div id="menu-container" class="sui-nav">
+                    <div class="sui-nav-wrapper nav-border nav-line">
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- tab -->
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist" id="tablist-container">
+                        <li role="presentation" class="active" data-toggle="context" data-target="#tab-context-menu">
+                            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">首页</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content" id="tabcontent-container">
+                        <div role="tabpanel" class="tab-pane active" id="home" style="padding: 10px;">
+                            <div id="similarSearchContainer" class="container-fluid" style="margin-top:5px;margin-bottom:5px;">
+                                <div class="row">
+                                    <div id="similarSearchToolbar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+                                        <a id="btnsimilarSearchNumber" class="btn btn-primary">
+                                            <i class="glyphicon glyphicon-globe"></i>型号编码信息</a>
+                                        <a id="btnsimilarSearchMethod" class="btn btn-success">
+                                            <i class="glyphicon glyphicon-briefcase"></i>加工方法信息</a>
+                                        <a id="btnsimilarSearchBaseInfo" class="btn btn-info hidden">
+                                            <i class="glyphicon glyphicon-bell"></i>基本信息</a>
+                                        <a id="btnsimilarSearchFeature" class="btn btn-default hidden">
+                                            <i class="glyphicon glyphicon-filter"></i>特征信息</a>
+                                        <a id="btnsimilarSearchRefresh" class="btn btn-warning">
+                                            <i class="glyphicon glyphicon-refresh"></i>刷新</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row" style="margin-top: 2px;">
+                                            <div id="selDivselsimilarSeardeviceName" class="col-md-4 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">设备名称</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceName"></select>
+                                                </div>
+                                            </div>
+                                            <div id="selDivselsimilarSeardeviceModel" class="col-md-4 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">设备型号</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceModel" disabled="disabled"></select>
+                                                </div>
+                                            </div>
+                                            <div id="selDivselsimilarSeardeviceGroup" class="col-md-4 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">设备组别</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceGroup" disabled="disabled"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 2px;">
+                                            <div id="selDivselsimilarSeardeviceSameModel" class="col-md-3 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">相同类型</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceSameModel"></select>
+                                                </div>
+                                            </div>
+                                            <div id="selDivselsimilarSeardeviceSameGroup" class="col-md-3 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">相同组别</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceSameGroup"></select>
+                                                </div>
+                                            </div>
+                                            <div id="selDivselsimilarSeardeviceParamsCompare" class="col-md-3 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">参数对比</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceParamsCompare"></select>
+                                                </div>
+                                            </div>
+                                            <div id="selDivselsimilarSeardevicethreshold" class="col-md-3 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">阈值选定</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardevicethreshold"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 2px;">
+                                            <div id="selDivselsimilarSeardeviceFeatureSeled" class="col-md-11 col-md-offset-0">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">参数选定</span>
+                                                    <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceFeatureSeled" multiple></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <a id="btnsimilarSearSearch" class="btn btn-primary pull-right">
+                                                    <i class="glyphicon glyphicon-search"></i>搜索</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="divdeviceSimilarSearchTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+                                        <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbSimilarSearchInfo"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /tab -->
+        </div>
+    </div>
+    <!-- /main -->
+    <!-- context-menu -->
+    <div id="tab-context-menu">
+        <ul class="dropdown-menu" role="menu">
+        </ul>
+    </div>
+    <!-- /context-menu -->
+    <!-- tmpMenu -->
+    <div class="hidden" id="tmpTree">
+        <ul id="treeTmp" class="ztree"></ul>
+    </div>
+    <!-- tmpMenu -->
+    <div class="hidden" id="tmpUserId">
+        <c:out value="${user.roleLineId}" />
+    </div>
+    <!-- Loading Jquery -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Loading NiceScroll -->
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <!-- Loading Flat-UI -->
+    <script src="js/flat-ui.min.js"></script>
+    <!-- Loading Bootstrap TreeView -->
+    <script src="js/bootstrap-treeview.min.js"></script>
+    <!-- Loading Bootstrap Select -->
+    <script src="js/bootstrap-select.min.js"></script>
+    <!-- Loading Bootstrap-Table -->
+    <script src="js/bootstrap-table.min.js"></script>
+    <!-- Loading Bootstrap-Table Extension -->
+    <script type="text/javascript" src="js/bootstrap-table-editable.js"></script>
+    <script type="text/javascript" src="js/bootstrap-editable.js"></script>
+    <!-- Loading Bootstrap-Contextmenu -->
+    <script src="js/bootstrap-contextmenu.js"></script>
+    <script type="text/javascript" src="css/jquery.ui.position.min.js"></script>
+    <script type="text/javascript" src="css/jquery.contextMenu.min.js"></script>
+    <!-- Loading Bootstrap-Table-Locales -->
+    <script src="js/bootstrap-table-zh-CN.min.js"></script>
+    <!-- Loading Bootstrap-Date-Range-Picker -->
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/daterangepicker.js"></script>
+    <!-- Loading Bootstrap-Typehead -->
+    <script type="text/javascript" src="js/bootstrap3-typeahead.min.js"></script>
+    <!-- Loading Echarts -->
+    <script src="js/echarts.min.js"></script>
+    <!-- Loading Messenger -->
+    <script src="js/backbone-0.9.10.js"></script>
+    <script src="js/messenger.min.js"></script>
+    <script src="js/messenger-theme-flat.js"></script>
+    <!-- Loading Loader -->
+    <script src="js/loaders.css.js"></script>
+    <script src="js/sui.nav.min.js"></script>
+    <!-- Loading Z-tree -->
+    <script src="js/jquery.ztree.all.min.js"></script>
+    <!-- Loading Custom JS -->
+    <script src="js/custom/utils.js"></script>
+    <!-- <script src="js/custom/home-init.js"></script> -->
+    <script src="js/custom/home-pocess.js"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+
+        var btnsimilarSearchRefreshClick = function(event) {
+            event.preventDefault();
+        }
+        $('#btnsimilarSearchRefresh').on('click', btnsimilarSearchRefreshClick);
+
+        var $selectIsNumber = $("#selsimilarSeardeviceName");
+        var data = [{
+            id: '设备名称0',
+            name: '设备名称0'
+        }, {
+            id: '设备名称1',
+            name: '设备名称1'
+        }, {
+            id: '设备名称2',
+            name: '设备名称2'
+        }, {
+            id: '设备名称3',
+            name: '设备名称3'
+        }, {
+            id: '设备名称4',
+            name: '设备名称4'
+        }, {
+            id: '设备名称5',
+            name: '设备名称5'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        var $selectIsNumber = $("#selsimilarSeardeviceModel");
+        var data = [{
+            id: '设备名称0',
+            name: '设备名称0'
+        }, {
+            id: '设备名称1',
+            name: '设备名称1'
+        }, {
+            id: '设备名称2',
+            name: '设备名称2'
+        }, {
+            id: '设备名称3',
+            name: '设备名称3'
+        }, {
+            id: '设备名称4',
+            name: '设备名称4'
+        }, {
+            id: '设备名称5',
+            name: '设备名称5'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        var $selectIsNumber = $("#selsimilarSeardeviceGroup");
+        var data = [{
+            id: '设备名称0',
+            name: '设备名称0'
+        }, {
+            id: '设备名称1',
+            name: '设备名称1'
+        }, {
+            id: '设备名称2',
+            name: '设备名称2'
+        }, {
+            id: '设备名称3',
+            name: '设备名称3'
+        }, {
+            id: '设备名称4',
+            name: '设备名称4'
+        }, {
+            id: '设备名称5',
+            name: '设备名称5'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        $("#selsimilarSeardeviceName").on('change', function(event) {
+            event.preventDefault();
+            var val = $('#selsimilarSeardeviceName').selectpicker('val');
+            $('#selsimilarSeardeviceModel').selectpicker('val', val);
+            $('#selsimilarSeardeviceGroup').selectpicker('val', val);
+        });
+
+        $("#selsimilarSeardeviceSameGroup").on('change', function(event) {
+            event.preventDefault();
+            var val = $('#selsimilarSeardeviceSameGroup').selectpicker('val');
+            if (val == 'true') {
+                $('#selsimilarSeardeviceSameModel').selectpicker('val', val);
+            }
+        });
+
+        $("#selsimilarSeardeviceSameModel").on('change', function(event) {
+            event.preventDefault();
+            var val = $('#selsimilarSeardeviceSameModel').selectpicker('val');
+            if (val == 'false') {
+                $('#selsimilarSeardeviceSameGroup').selectpicker('val', val);
+            }
+        });
+
+        var $selectIsNumber = $("#selsimilarSeardeviceSameModel");
+        var data = [{
+            id: true,
+            name: '是'
+        }, {
+            id: false,
+            name: '否'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        var $selectIsNumber = $("#selsimilarSeardeviceSameGroup");
+        var data = [{
+            id: true,
+            name: '是'
+        }, {
+            id: false,
+            name: '否'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        var $selectIsNumber = $("#selsimilarSeardeviceFeatureSeled");
+        var data = [{
+            id: '参数一',
+            name: '参数一'
+        }, {
+            id: '参数二',
+            name: '参数二'
+        }, {
+            id: '参数三',
+            name: '参数三'
+        }, {
+            id: '参数四',
+            name: '参数四'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        var $selectIsNumber = $("#selsimilarSeardeviceParamsCompare");
+        var data = [{
+            id: '不对比',
+            name: '不对比'
+        }, {
+            id: '高于参照实例',
+            name: '高于参照实例'
+        }, {
+            id: '低于参照实例',
+            name: '低于参照实例'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        //
+        var $selectIsNumber = $("#selsimilarSeardevicethreshold");
+        var data = [{
+            id: 0.1,
+            name: '0.1'
+        }, {
+            id: 0.2,
+            name: '0.2'
+        }, {
+            id: 0.3,
+            name: '0.3'
+        }, {
+            id: 0.4,
+            name: '0.4'
+        }, {
+            id: 0.5,
+            name: '0.5'
+        }, {
+            id: 0.6,
+            name: '0.6'
+        }, {
+            id: 0.7,
+            name: '0.7'
+        }, {
+            id: 0.9,
+            name: '0.9'
+        }, {
+            id: 1,
+            name: '1'
+        }];
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $selectIsNumber.append(strOption);
+        }
+        $selectIsNumber.selectpicker();
+
+        /*begin define tbSimilarSearchInfo */
+        $("#tbSimilarSearchInfo").bootstrapTable({
+            pagination: true,
+            columns: [{
+                field: "state",
+                checkbox: true
+            }, {
+                field: "createTime",
+                title: "创建时间",
+                sortable: true,
+                formatter: function(value, row, index) {
+                    if (value == undefined) {
+                        return value;
+                    } else {
+                        var tempTime = new Date(value);
+                        var fullYear = tempTime.getFullYear();
+                        var month = tempTime.getMonth() + 1;
+                        var date = tempTime.getDate();
+                        var hours = tempTime.getHours();
+                        var minute = tempTime.getMinutes();
+                        var second = tempTime.getSeconds();
+                        var strTime =
+                            fullYear + "-" +
+                            month + "-" +
+                            date + " " +
+                            hours + ":" +
+                            minute + ":" +
+                            second;
+                        return strTime;
+                    }
+                }
+            }, {
+                field: "instanceNumber",
+                title: "实例编号"
+            }, {
+                field: "instanceName",
+                title: "实例名称"
+            }, {
+                field: "modelLineId",
+                title: "实例型号"
+            }, {
+                field: "createUser",
+                title: "创建人"
+            }]
+        });
+        /*end define tbSimilarSearchInfo */
+    });
+    </script>
+</body>
+
+</html>

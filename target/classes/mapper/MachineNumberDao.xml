@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.business.MachineNumberDao">
+  <resultMap id="BaseResultMap" type="com.unicom.fmos.entity.business.MachineNumber">
+    <id column="line_id" jdbcType="INTEGER" property="lineId" />
+    <result column="model_line_id" jdbcType="INTEGER" property="modelLineId" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="code_property" jdbcType="VARCHAR" property="codeProperty" />
+    <result column="code_value" jdbcType="VARCHAR" property="codeValue" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="active" jdbcType="BIT" property="active" />
+    <result column="active_user" jdbcType="VARCHAR" property="activeUser" />
+    <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
+    <result column="active_memo" jdbcType="VARCHAR" property="activeMemo" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_memo" jdbcType="VARCHAR" property="updateMemo" />
+  </resultMap>
+</mapper>

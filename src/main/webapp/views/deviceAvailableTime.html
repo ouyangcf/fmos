@@ -1,0 +1,75 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceAvailableTimeMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceAvailableTimeToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceAvailableTimeToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    </div>
+    <div id="divDeviceAvailableTimeSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthDeviceAvailableTimeKeyWord" class="col-md-11 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thDeviceAvailableTimeKeyWord">
+            </div>
+        </div>
+        <a id="btnDeviceAvailableTime" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divDeviceAvailableTimeTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceAvailableTimeinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceAvailableTimeinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define thDeviceAvailableTimeKeyWord */
+    var $input = $("#thDeviceAvailableTimeKeyWord");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethDeviceAvailableTimeKeyWord */
+
+    /*begin define btnDeviceAvailableTime */
+    var btnDeviceAvailableTimeClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceAvailableTime").on("click", btnDeviceAvailableTimeClick);
+    /*end define btnDeviceAvailableTime */
+
+    /*begin define tbDeviceAvailableTimeinfos */
+    $("#tbDeviceAvailableTimeinfos").bootstrapTable({
+        url: "deviceAvailableTime/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceNumber",
+            title: "设备编号"
+        }, {
+            field: "monthlyAvailableTime",
+            title: "月可用时间(小时)"
+        }, {
+            field: "weeklyAvailableTime",
+            title: "周可用时间(小时)"
+        }, {
+            field: "daylyAvailableTime",
+            title: "日可用时间(小时)"
+        }, {
+            field: "createTime",
+            title: "启用时间"
+        }]
+    });
+    /*end define tbDeviceAvailableTimeinfos */
+});
+</script>

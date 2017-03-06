@@ -1,0 +1,403 @@
+<div class="container-fluid">
+  <div class="row">
+    <div id="roleTableToolBar" class="col-md-12">
+        <a href="" class="btn btn-danger" id="btn_role_del"><i class="glyphicon glyphicon-remove"></i>删除角色</a>
+        <a href="" class="btn btn-primary" id="btn_role_refresh"><i class="glyphicon glyphicon-refresh"></i>刷新</a>
+    </div>
+  </div>
+  <div class="row" id="roleTableSearchDiv">
+    <div class="col-md-12">
+      <div class="input-group">
+        <span class="input-group-addon">角色名称</span>
+        <input class="form-control typeahead" id="roleList" autocomplete="off" type="text" data-provide="typeahead">
+        <span class="input-group-addon">创建于</span>
+        <input type="text" class="form-control daterangesetter" id="date_role_starttime">
+        <span class="input-group-addon">至</span>
+        <input type="text" class="form-control daterangesetter" id="date_role_endtime">
+        <span class="input-group-addon">期间</span>
+        <span class="input-group-btn">
+          <button class="btn btn-info" id="btnRoleSearch" type="button" style="color: #fff;background-color: #3498db;border: none;">搜索</button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table id="roleTable" data-striped="true" data-show-header="true" data-halign="true"  data-height="390">
+    </div>
+    </table>
+  </div>
+</div>
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+
+    /**
+     * [Format description]
+     * @param {[type]} fmt [description]
+     */
+    Date.prototype.format =function(format) { //author: meizz
+      var o = {
+        "M+" : this.getMonth()+1, //month
+        "d+" : this.getDate(),    //day
+        "h+" : this.getHours(),   //hour
+        "m+" : this.getMinutes(), //minute
+        "s+" : this.getSeconds(), //second
+        "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+        "S" : this.getMilliseconds() //millisecond
+      }
+      if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+      (this.getFullYear()+"").substr(4- RegExp.$1.length));
+      for(var k in o)if(new RegExp("("+ k +")").test(format))
+      format = format.replace(RegExp.$1,
+      RegExp.$1.length==1? o[k] :
+      ("00"+ o[k]).substr((""+ o[k]).length));
+      return format;
+    }
+
+    //loading roleList
+    var $input = $('#roleList');
+    $.ajax({
+      url: 'user/businiess/rolematain/getRoles',
+      type: 'GET',
+      dataType: 'json'
+    })
+    .done(function(data) {
+      $input.typeahead({ source:data });
+    })
+    .fail(function() {
+      setMessage('获取角色字典失败', 'error', true);
+    });//loading roleList
+
+    $('.daterangesetter').daterangepicker({
+      "singleDatePicker": true,
+      "locale": {
+      "format": "YYYY-MM-DD",
+      "separator": "-",
+      "applyLabel": "应用",
+      "cancelLabel": "取消",
+      "monthNames": [
+        "一月",
+        "二月",
+        "三月",
+        "四月",
+        "五月",
+        "六月",
+        "七月",
+        "八月",
+        "九月",
+        "十月",
+        "十一月",
+        "十二月"],
+      "daysOfWeek": [
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"]
+      }
+    });
+    $('#date_role_starttime').data('daterangepicker').setStartDate(moment().subtract(29, 'days'));
+    $('#date_role_endtime').data('daterangepicker').setStartDate(moment());
+    $('#roleTable').bootstrapTable({
+      url: 'user/businiess/rolematain/getRoleData',
+      method: 'get',
+      pagination: true,
+      onEditableSave: function (field, row, oldValue, $el) {
+        if (row.lineId == undefined) {
+          setMessage('正在提交','info',true);
+          var json = {
+            roleName: row.roleName
+          }
+          $.ajax({
+           url: 'user/businiess/rolematain/add_role',
+           type: 'POST',
+           contentType:"application/json;charset=UTF-8",
+           dataType: 'json',
+           data: JSON.stringify(json)
+          })
+          .done(function(data) {
+           if (data.retCode == -1) {
+             setMessage(data.errDesc, 'error', true);
+             return;
+           }
+           if (data.retCode == 1) {
+             setMessage('新增成功','success',true);
+             $('#btn_role_refresh').click();
+           }
+          })
+          .fail(function(data) {
+            setMessage('新增失败','error',true);
+          });
+        }
+        else {
+          setMessage('正在提交','info',true);
+          var json = {
+            roleName: row.roleName,
+            lineId: row.lineId
+          }
+          $.ajax({
+           url: 'user/businiess/rolematain/editRole',
+           type: 'POST',
+           contentType:"application/json;charset=UTF-8",
+           dataType: 'json',
+           data: JSON.stringify(json)
+          })
+          .done(function(data) {
+           if (data.retCode == -1) {
+             setMessage(data.errDesc, 'error', true);
+             return;
+           }
+           if (data.retCode == 1) {
+             setMessage('修改成功','success',true);
+             $('#btn_role_refresh').click();
+           }
+          })
+          .fail(function(data) {
+            setMessage('修改失败','error',true);
+          });
+        }
+
+      },
+      columns: [{
+        field: 'state',
+        checkbox: true
+      },
+      {
+        field: 'lineId',
+        title: '主键序号'
+      },
+      {
+        field: 'roleName',
+        title: '角色名称',
+        editable: {
+        type: 'text',
+        title: '角色名称',
+        emptytext: '未填写',
+        validate: function(value) {
+          if ($.trim(value) == '') {
+           return '角色名称不能为空!';
+          }
+        }
+        }
+      },
+      {
+        field: 'createUser',
+        title: '创建人'
+      },
+      {
+        field: 'createTime',
+        title: '创建时间',
+        sortable: true,
+        formatter: function(value, row, index) {
+          if (value == undefined) {
+            return value;
+          } else {
+            var tempTime = new Date(value);
+            var fullYear = tempTime.getFullYear();
+            var month = tempTime.getMonth() + 1;
+            var date = tempTime.getDate();
+            var hours = tempTime.getHours();
+            var minute = tempTime.getMinutes();
+            var second = tempTime.getSeconds();
+            var strTime =
+              fullYear + "-" +
+              month + "-" +
+              date + " " +
+              hours + ":" +
+              minute + ":" +
+              second;
+            return strTime;
+          }
+        }
+      },
+      {
+        field: 'updateUser',
+        title: '更新人'
+      },
+      {
+        field: 'updateTime',
+        title: '更新时间',
+        sortable: true,
+        formatter: function(value, row, index) {
+          if (value == undefined) {
+            return value;
+          } else {
+            var tempTime = new Date(value);
+            var fullYear = tempTime.getFullYear();
+            var month = tempTime.getMonth() + 1;
+            var date = tempTime.getDate();
+            var hours = tempTime.getHours();
+            var minute = tempTime.getMinutes();
+            var second = tempTime.getSeconds();
+            var strTime =
+              fullYear + "-" +
+              month + "-" +
+              date + " " +
+              hours + ":" +
+              minute + ":" +
+              second;
+            return strTime;
+          }
+        }
+      },
+      {
+        field: 'updateMemo',
+        title: '更新说明'
+      }],
+      onLoadSuccess: function(data) {
+      }
+    });
+
+    var btn_delrole_click = function(event) {
+      event.preventDefault();
+      var $table = $('#roleTable');
+      var selRows = $table.bootstrapTable('getAllSelections');
+      if (selRows.length == 0) {
+      setMessage('未选中行', 'error', true);
+      } else {
+        msg = Messenger().post({
+        message: "是否删除选定的行?",
+        hideAfter: 10,
+        actions: {
+          delete: {
+            label: "删除",
+            action: function(){
+              msg.hide();
+              var j =0;
+              var idArr = [];
+              for(var i = 0; i< selRows.length; i++) {
+                if (selRows[i].lineId != undefined) {
+                  idArr.push(selRows[i].lineId);
+                  j++;
+                }
+              }
+              if (j == 0) {
+                setMessage('没有需要删除的行', 'error', true);
+                return false;
+              } else {
+                setMessage('正在提交', 'info', true);
+                $('#btn_role_del').off('click');
+                $.ajax({
+                 url: 'user/businiess/rolematain/delRole',
+                 type: 'POST',
+                 data: {"idArr":idArr},
+                 dataType: "json"
+                })
+                .done(function(data) {
+                 if (data.retCode == -1) {
+                   setMessage(data.errDesc, 'error', true);
+                   return;
+                 }
+                 if (data.retCode == 1) {
+                   setMessage('删除成功','success',true);
+                   $('#btn_role_refresh').click();
+                 }
+                })
+                .fail(function(data) {
+                  setMessage('删除失败','error',true);
+                })
+                .always(function(data) {
+                  $('#btn_role_del').on('click', btn_delrole_click);
+                });
+              }
+            }
+          },
+        cancel: {
+          label: "取消",
+          action: function(){
+            msg.hide();
+          }
+        }
+      }
+    })
+    }
+    event.stopPropagation();
+    }
+    $('#btn_role_del').on('click', btn_delrole_click);
+
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+      $('#' + id).empty();
+      $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+      $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+      var url = 'views/' + id + '.html';
+      $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html',
+        beforeSend: function(XHR) {
+          setLoader(id);
+        }
+      })
+      .done(function(data) {
+        removeLoader(id);
+        $('#' + id).append(data);
+      })
+      .fail(function() {
+      })
+      .always(function() {
+      });
+    }
+    var btn_rolerefresh_click = function(event) {
+      event.preventDefault();
+      $('#roleMaintain').empty();
+      refresh('roleMaintain');
+      event.stopPropagation();
+    }
+    $('#btn_role_refresh').on('click', btn_rolerefresh_click);
+
+    var btnRoleSearchClick = function(event) {
+      event.preventDefault();
+      var roleName = $('#roleList').val() == '' ? undefined : $('#roleList').val();
+      var startTime = $('#date_role_starttime').val() + ' 00:00:00';
+      var endTime = $('#date_role_endtime').val() + ' 23:59:59';
+      var json = [{
+        roleName: roleName,
+        createTime: startTime,
+        activeTime: endTime
+      }];
+      $('#btnRoleSearch').off('click');
+      $.ajax({
+       url: 'user/businiess/rolematain/searchRole',
+       type: 'POST',
+       contentType:"application/json;charset=UTF-8",
+       dataType: 'json',
+       data: JSON.stringify(json)
+      })
+      .done(function(data) {
+        setMessage('共找到 ' + data.length + ' 条数据','info',true);
+        var str =JSON.stringify(data)
+        out(data);
+        $('#roleTable').bootstrapTable('load', data);
+      })
+      .fail(function(data) {
+        setMessage('查询失败','error',true);
+      }).always(function(data) {
+        $('#btnRoleSearch').on('click', btnRoleSearchClick);
+      });
+      event.stopPropagation();
+    }
+    $('#btnRoleSearch').on('click', btnRoleSearchClick);
+  });
+</script>

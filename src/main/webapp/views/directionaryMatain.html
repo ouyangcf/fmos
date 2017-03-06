@@ -1,0 +1,935 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+                <span id="spanDirectionary"></span>
+                <span>字典资源树</span>
+                <span class="menu-toolbar pull-right">
+                    <a href="" class="menu-top-button" id="btn_directionary_add">
+                        <i class="icon-plus"></i>&nbsp;新增</a>
+                    <a href="" class="menu-top-button" id="btn_directionary_edit">
+                        <i class="icon-edit"></i>&nbsp;修改</a>
+                    <a href="" class="menu-top-button" id="btn_directionary_del">
+                        <i class="icon-minus"></i>&nbsp;删除</a>
+                </span>
+            </div>
+            <div>
+                <ul id="treeDirectionary" class="ztree"></ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="divDirectionaryTitle" style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+                <span>字典信息表</span>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="roleTableToolBar" class="col-md-12">
+                        <a href="" class="btn btn-danger" id="btn_directionarydetail_del">
+                            <i class="glyphicon glyphicon-remove"></i>删除键值</a>
+                    </div>
+                </div>
+                <div class="row" id="divDirectionarySearchbar" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">字典键</span>
+                            <input class="form-control typeahead" id="iptDirectionarySearchKey" autocomplete="off" type="text" data-provide="typeahead">
+                            <span class="input-group-addon">字典值</span>
+                            <input class="form-control typeahead" id="iptDirectionarySearchValue" autocomplete="off" type="text" data-provide="typeahead">
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 10px;">
+                        <div class="input-group">
+                            <span class="input-group-addon">创建于</span>
+                            <input type="text" class="form-control daterangesetter" id="dpkDirectionarySearchstarttime">
+                            <span class="input-group-addon">至</span>
+                            <input type="text" class="form-control daterangesetter" id="dpkDirectionarySearchendtime">
+                            <span class="input-group-addon">期间</span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" id="btnDirectionarysearch" type="button" style="color: #fff;background-color: #3498db;border: none;">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <table id="tbDirectionaryinfo" data-striped="true" data-show-header="true" data-halign="true" data-height="390">
+                    </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DirectionaryNodeAdddlg -->
+<div class="modal fade" id="directionaryNodeAdddlg" tabindex="-1" role="dialog" aria-labelledby="directionaryNodeLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndirectionaryNodeAddClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="directionaryNodeLabel">字典新增</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon">字典</span>
+                    <input class="form-control typeahead" id="iptDirectionaryGroupAdd" autocomplete="off" type="text" data-provide="typeahead">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btndirectionaryNodeAddCancel">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btndirectionaryNodeAddEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DirectionaryNodeAdddlg -->
+<!-- DirectionaryNodeAdddlg -->
+<div class="modal fade" id="directionaryNodeEditdlg" tabindex="-1" role="dialog" aria-labelledby="directionaryNodeEditLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndirectionaryNodeEditClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="directionaryNodeEditLabel">字典修改</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon">字典</span>
+                    <input class="form-control typeahead" id="iptDirectionaryGroupEdit" autocomplete="off" type="text" data-provide="typeahead">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btndirectionaryNodeEditCancel">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btndirectionaryNodeEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DirectionaryNodeAdddlg -->
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+    /**
+     * [Format description]
+     * @param {[type]} fmt [description]
+     */
+    Date.prototype.format = function(format) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(), //day
+            "h+": this.getHours(), //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+            (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(format))
+                format = format.replace(RegExp.$1,
+                    RegExp.$1.length == 1 ? o[k] :
+                    ("00" + o[k]).substr(("" + o[k]).length));
+        return format;
+    }
+
+    //begin loading iptDirectionarySearchKey
+    var directionaryKeyInfoInit = function(lineId) {
+            var $inputKey = $('#iptDirectionarySearchKey');
+            var $inputValue = $('#iptDirectionarySearchValue');
+            $.ajax({
+                    url: 'user/businiess/directionary/keysAndValues',
+                    type: 'GET',
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    $inputKey.typeahead({
+                        source: data.keys
+                    });
+                    $inputValue.typeahead({
+                        source: data.vals
+                    });
+                })
+                .fail(function() {
+                    setMessage('获取字典失败', 'error', true);
+                });
+        }
+        //end loading iptDirectionarySearchKey
+
+    //begin tree init
+    /**
+     * [treeDirectionaryInit description]
+     * @return {[type]} [description]
+     */
+    var directionaryNodeClick = function(event, treeId, treeNode) {
+        var $inputKey = $('#iptDirectionarySearchKey');
+        var $inputValue = $('#iptDirectionarySearchValue');
+        if (treeNode.parentTId == null) {
+            $('#tbDirectionaryinfo').bootstrapTable('removeAll');
+            $inputKey.typeahead({
+                source: []
+            });
+            $inputValue.typeahead({
+                source: []
+            });
+            return;
+        }
+        var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+        var nodes = treeObj.getSelectedNodes();
+        var json = {
+            directionaryLineId: nodes[0].id
+        }
+        $.ajax({
+                url: 'user/businiess/directionary/getdetails',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#tbDirectionaryinfo').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('加载字典失败', 'error', true);
+            });
+
+        var jsonSend = {
+            lineId: nodes[0].id
+        };
+        $.ajax({
+                url: 'user/businiess/directionary/keysAndValues',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $inputKey.typeahead({
+                    source: data.keys
+                });
+                $inputValue.typeahead({
+                    source: data.vals
+                });
+            })
+            .fail(function() {
+                setMessage('获取字典失败', 'error', true);
+            });
+    }
+    var treeDirectionaryInit = function(roleLineId) {
+        var setting = {
+            callback: {
+                onClick: directionaryNodeClick
+            },
+            edit: {
+                showRemoveBtn: false,
+                showRenameBtn: false
+            },
+            check: {
+                enable: false
+            }
+        };
+        $.fn.zTree.init($("#treeDirectionary"), setting, [{
+            id: "rootNode",
+            name: "字典资源树",
+            isParent: true
+        }]);
+        var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+        /*when excute use it*/
+        setMessage('正在加载字典树', 'info', true);
+        $.ajax({
+                url: 'user/businiess/directionary/heads',
+                type: 'GET',
+                dataType: 'json'
+            })
+            .done(function(data) {
+                var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                var topNodes = treeObj.getNodesByFilter(function(node) {
+                    return node.parentTId == null;
+                });
+                treeObj.addNodes(topNodes[0], data);
+                treeObj.expandAll(true);
+                setMessage('已完成字典树加载', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('字典树加载失败', 'error', true);
+            })
+            .always(function(data) {});
+    }
+    treeDirectionaryInit();
+    //end tree init
+
+    $('.daterangesetter').daterangepicker({
+        "singleDatePicker": true,
+        "locale": {
+            "format": "YYYY-MM-DD",
+            "separator": "-",
+            "applyLabel": "应用",
+            "cancelLabel": "取消",
+            "monthNames": [
+                "一月",
+                "二月",
+                "三月",
+                "四月",
+                "五月",
+                "六月",
+                "七月",
+                "八月",
+                "九月",
+                "十月",
+                "十一月",
+                "十二月"
+            ],
+            "daysOfWeek": [
+                "日",
+                "一",
+                "二",
+                "三",
+                "四",
+                "五",
+                "六"
+            ]
+        }
+    });
+    $('#dpkDirectionarySearchstarttime').data('daterangepicker').setStartDate(moment().subtract(29, 'days'));
+    $('#dpkDirectionarySearchendtime').data('daterangepicker').setStartDate(moment());
+    $('#tbDirectionaryinfo').bootstrapTable({
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {
+            if (row.lineId == undefined) {
+                var checkFlag = '';
+                if (row.directionaryKey == checkFlag) {
+                    return;
+                }
+                if (row.directionaryValue == checkFlag) {
+                    return;
+                }
+                setMessage('正在提交', 'info', true);
+                var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                var nodes = treeObj.getSelectedNodes();
+                var json = {
+                    directionaryLineId: nodes[0].id,
+                    directionaryKey: row.directionaryKey,
+                    directionaryValue: row.directionaryValue
+                }
+                $.ajax({
+                        url: 'user/businiess/directionary/adddetail',
+                        type: 'POST',
+                        contentType: "application/json;charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify(json)
+                    })
+                    .done(function(data) {
+                        if (data.retCode == -1) {
+                            setMessage(data.errDesc, 'error', true);
+                            return;
+                        }
+                        if (data.retCode == 1) {
+                            setMessage('新增成功', 'success', true);
+                            var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                            var nodes = treeObj.getSelectedNodes();
+                            var json = {
+                                directionaryLineId: nodes[0].id
+                            }
+                            $.ajax({
+                                    url: 'user/businiess/directionary/getdetails',
+                                    type: 'POST',
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: 'json',
+                                    data: JSON.stringify(json)
+                                })
+                                .done(function(data) {
+                                    $('#tbDirectionaryinfo').bootstrapTable('load', data);
+                                })
+                                .fail(function(data) {
+                                    setMessage('加载字典失败', 'error', true);
+                                });
+
+                            var jsonSend = {
+                                lineId: nodes[0].id
+                            };
+                            $.ajax({
+                                    url: 'user/businiess/directionary/keysAndValues',
+                                    type: 'POST',
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: 'json',
+                                    data: JSON.stringify(json)
+                                })
+                                .done(function(data) {
+                                    $inputKey.typeahead({
+                                        source: data.keys
+                                    });
+                                    $inputValue.typeahead({
+                                        source: data.vals
+                                    });
+                                })
+                                .fail(function() {
+                                    setMessage('获取字典失败', 'error', true);
+                                });
+                        }
+                    })
+                    .fail(function(data) {
+                        setMessage('新增失败', 'error', true);
+                    });
+            } else {
+                setMessage('正在提交', 'info', true);
+                var json = {
+                    directionaryKey: row.directionaryKey,
+                    directionaryValue: row.directionaryValue,
+                    lineId: row.lineId
+                }
+                $.ajax({
+                        url: 'user/businiess/directionary/editdetail',
+                        type: 'POST',
+                        contentType: "application/json;charset=UTF-8",
+                        dataType: 'json',
+                        data: JSON.stringify(json)
+                    })
+                    .done(function(data) {
+                        if (data.retCode == -1) {
+                            setMessage(data.errDesc, 'error', true);
+                            return;
+                        }
+                        if (data.retCode == 1) {
+                            setMessage('修改成功', 'success', true);
+                            var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                            var nodes = treeObj.getSelectedNodes();
+                            var json = {
+                                directionaryLineId: nodes[0].id
+                            }
+                            $.ajax({
+                                    url: 'user/businiess/directionary/getdetails',
+                                    type: 'POST',
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: 'json',
+                                    data: JSON.stringify(json)
+                                })
+                                .done(function(data) {
+                                    $('#tbDirectionaryinfo').bootstrapTable('load', data);
+                                })
+                                .fail(function(data) {
+                                    setMessage('加载字典失败', 'error', true);
+                                });
+
+                            var jsonSend = {
+                                lineId: nodes[0].id
+                            };
+                            $.ajax({
+                                    url: 'user/businiess/directionary/keysAndValues',
+                                    type: 'POST',
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: 'json',
+                                    data: JSON.stringify(json)
+                                })
+                                .done(function(data) {
+                                    $inputKey.typeahead({
+                                        source: data.keys
+                                    });
+                                    $inputValue.typeahead({
+                                        source: data.vals
+                                    });
+                                })
+                                .fail(function() {
+                                    setMessage('获取字典失败', 'error', true);
+                                });
+                        }
+                    })
+                    .fail(function(data) {
+                        setMessage('修改失败', 'error', true);
+                    });
+            }
+
+        },
+        columns: [{
+            field: 'state',
+            checkbox: true
+        }, {
+            field: 'lineId',
+            title: '主键序号'
+        }, {
+            field: 'directionaryKey',
+            title: '字典键',
+            editable: {
+                type: 'text',
+                title: '字典键',
+                emptytext: '未填写',
+                validate: function(value) {
+                    if ($.trim(value) == '') {
+                        return '字典键不能为空!';
+                    }
+                }
+            }
+        }, {
+            field: 'directionaryValue',
+            title: '字典值',
+            editable: {
+                type: 'text',
+                title: '字典值',
+                emptytext: '未填写',
+                validate: function(value) {
+                    if ($.trim(value) == '') {
+                        return '字典值不能为空!';
+                    }
+                }
+            }
+        }, {
+            field: 'createUser',
+            title: '创建人'
+        }, {
+            field: 'createTime',
+            title: '创建时间',
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: 'updateUser',
+            title: '更新人'
+        }, {
+            field: 'updateTime',
+            title: '更新时间',
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: 'updateMemo',
+            title: '更新说明'
+        }],
+        onAll: function(name, args) {},
+        onLoadSuccess: function(data) {
+            if (data.length != 0) {
+                var newArr = new Array();
+                var j = 0;
+                for (var i = 1; i < data.length; i++) {
+                    newArr[j] = data[i];
+                    j++;
+                }
+                $('#tbDirectionaryinfo').bootstrapTable('load', newArr);
+            }
+        }
+    });
+
+    var btnDirectionarysearchClick = function(event) {
+        event.preventDefault();
+        var directionaryKey = $('#iptDirectionarySearchKey').val() == '' ? undefined : $('#iptDirectionarySearchKey').val();
+        var directionaryValue = $('#iptDirectionarySearchValue').val() == '' ? undefined : $('#iptDirectionarySearchValue').val();
+        var startTime = $('#dpkDirectionarySearchstarttime').val() + ' 00:00:00';
+        var endTime = $('#dpkDirectionarySearchendtime').val() + ' 23:59:59';
+        var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+        var nodes = treeObj.getSelectedNodes();
+        if (nodes.length == 0) {
+            setMessage('请选择需要查询的字典结点', 'error', true);
+            return;
+        }
+        if (nodes[0].parentTId == null) {
+            setMessage('请选择需要查询的字典结点', 'error', true);
+            return;
+        }
+        var json = {
+            directionaryLineId: nodes[0].id,
+            directionaryKey: directionaryKey,
+            directionaryValue: directionaryValue,
+            createTime: startTime,
+            activeTime: endTime
+        };
+        $('#btnDirectionarysearch').off('click');
+        $.ajax({
+                url: 'user/businiess/directionary/search',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                if (data.length >= 1) {
+                    setMessage('共找到 ' + data.length + ' 条数据', 'info', true);
+                } else {
+                    setMessage('当前条件没有找到数据', 'info', true);
+                }
+
+                $('#tbDirectionaryinfo').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('查询失败', 'error', true);
+            })
+            .always(function() {
+                $('#btnDirectionarysearch').on('click', btnDirectionarysearchClick);
+            });
+        event.stopPropagation();
+    }
+    $('#btnDirectionarysearch').on('click', btnDirectionarysearchClick);
+
+    var btn_directionary_addClick = function(event) {
+        event.preventDefault();
+        $('#iptDirectionaryGroupAdd').val('');
+        $('#directionaryNodeAdddlg').modal();
+        event.stopPropagation();
+    }
+    $('#btn_directionary_add').on('click', btn_directionary_addClick);
+
+    var btn_directionary_delClick = function(event) {
+        event.preventDefault();
+        var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+        var nodes = treeObj.getSelectedNodes();
+        if (nodes.length == 0) {
+            setMessage('请选择需要删除的父结点', 'error', true);
+        } else {
+            //do something
+            msg = Messenger().post({
+                message: "是否删除选定的节点?",
+                hideAfter: 10,
+                actions: {
+                    delete: {
+                        label: "删除",
+                        action: function() {
+                            msg.hide();
+                            setMessage('正在删除', 'info', true);
+                            var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                            var nodes = treeObj.getSelectedNodes();
+                            var json = {
+                                "lineId": nodes[0].id
+                            };
+                            $('#btn_directionary_del').off('click');
+                            $.ajax({
+                                    url: 'user/businiess/directionary/delhead',
+                                    type: 'POST',
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: 'json',
+                                    data: JSON.stringify(json)
+                                })
+                                .done(function(data) {
+                                    if (data.retCode == -1) {
+                                        setMessage(data.errDesc, 'error', true);
+                                        return;
+                                    }
+                                    if (data.retCode == 1) {
+                                        setMessage('删除成功', 'success', true);
+                                    }
+                                    $('#directionaryMatain').empty();
+                                    refresh('directionaryMatain');
+                                })
+                                .fail(function(data) {
+                                    setMessage('删除失败', 'error', true);
+                                })
+                                .always(function(data) {
+                                    $('#btn_directionary_del').on('click', btn_directionary_delClick);
+                                });
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        action: function() {
+                            msg.hide();
+                        }
+                    }
+                }
+            })
+        }
+        event.stopPropagation();
+    }
+    $('#btn_directionary_del').on('click', btn_directionary_delClick);
+
+    var btn_directionary_editClick = function(event) {
+        event.preventDefault();
+        var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+        var nodes = treeObj.getSelectedNodes();
+        if (nodes.length == 0) {
+            setMessage('请选择需要修改的结点', 'error', true);
+        } else {
+            //do something
+            $('#iptDirectionaryGroupEdit').val(nodes[0].name);
+            $('#directionaryNodeEditdlg').modal();
+        }
+    }
+    $('#btn_directionary_edit').on('click', btn_directionary_editClick);
+
+    var btndirectionaryNodeAddEnsureClick = function(event) {
+        event.preventDefault();
+        if ($('#iptDirectionaryGroupAdd').val() == '') {
+            setMessage('字典不能为空', 'error', true);
+            return false;
+        }
+        $('<div id="directionaryNodeAddResult"></div>').appendTo('body');
+        $('#directionaryNodeAdddlg').modal('hide');
+        event.stopPropagation();
+    };
+
+    var btndirectionaryNodeEditEnsureClick = function(event) {
+        event.preventDefault();
+        if ($('#iptDirectionaryGroupEdit').val() == '') {
+            setMessage('字典不能为空', 'error', true);
+            return false;
+        }
+        $('<div id="directionaryNodeEditResult"></div>').appendTo('body');
+        $('#directionaryNodeEditdlg').modal('hide');
+        event.stopPropagation();
+    }
+
+    $('#btndirectionaryNodeAddEnsure').on('click', btndirectionaryNodeAddEnsureClick);
+    $('#directionaryNodeAdddlg').on('hidden.bs.modal', function(event) {
+        if ($('#directionaryNodeAddResult').length != 0) {
+            $('#directionaryNodeAddResult').remove();
+            //do something
+            var directionaryGroup = $('#iptDirectionaryGroupAdd').val();
+            var json = {
+                directionaryGroup: directionaryGroup
+            };
+            $('#btn_directionary_add').off('click');
+            $.ajax({
+                    url: 'user/businiess/directionary/addhead',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('新增成功', 'success', true);
+                        $('#directionaryMatain').empty();
+                        refresh('directionaryMatain');
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('新增失败', 'error', true);
+                })
+                .always(function() {
+                    $('#btn_directionary_add').on('click', btn_directionary_addClick);
+                });
+        }
+    });
+
+    $('#btndirectionaryNodeEditEnsure').on('click', btndirectionaryNodeEditEnsureClick);
+    $('#directionaryNodeEditdlg').on('hidden.bs.modal', function(event) {
+        if ($('#directionaryNodeEditResult').length != 0) {
+            $('#directionaryNodeEditResult').remove();
+            //do something
+            var directionaryGroup = $('#iptDirectionaryGroupEdit').val();
+            var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+            var nodes = treeObj.getSelectedNodes();
+            var json = {
+                directionaryGroup: directionaryGroup,
+                lineId: nodes[0].id
+            };
+            $('#btn_directionary_edit').off('click');
+            $.ajax({
+                    url: 'user/businiess/directionary/edithead',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'success', true);
+                        $('#directionaryMatain').empty();
+                        refresh('directionaryMatain');
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                })
+                .always(function() {
+                    $('#btn_directionary_edit').on('click', btn_directionary_editClick);
+                });
+        }
+    });
+
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+        $('#' + id).empty();
+        $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+        $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+        var url = 'views/' + id + '.html';
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                beforeSend: function(XHR) {
+                    setLoader(id);
+                }
+            })
+            .done(function(data) {
+                removeLoader(id);
+                $('#' + id).append(data);
+            })
+            .fail(function() {})
+            .always(function() {});
+    }
+
+    var btn_deldirectionarydetail_click = function(event) {
+        event.preventDefault();
+        var $table = $('#tbDirectionaryinfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+        } else {
+            msg = Messenger().post({
+                message: "是否删除选定的行?",
+                hideAfter: 10,
+                actions: {
+                    delete: {
+                        label: "删除",
+                        action: function() {
+                            msg.hide();
+                            var j = 0;
+                            var idArr = [];
+                            for (var i = 0; i < selRows.length; i++) {
+                                if (selRows[i].lineId != undefined) {
+                                    idArr.push(selRows[i].lineId);
+                                    j++;
+                                }
+                            }
+                            if (j == 0) {
+                                setMessage('没有需要删除的行', 'error', true);
+                                return false;
+                            } else {
+                                setMessage('正在提交', 'info', true);
+                                $('#btn_directionarydetail_del').off('click');
+                                $.ajax({
+                                        url: 'user/businiess/directionary/deldetail',
+                                        type: 'POST',
+                                        data: {
+                                            "idArr": idArr
+                                        },
+                                        dataType: "json"
+                                    })
+                                    .done(function(data) {
+                                        if (data.retCode == -1) {
+                                            setMessage(data.errDesc, 'error', true);
+                                            return;
+                                        }
+                                        if (data.retCode == 1) {
+                                            setMessage('删除成功', 'success', true);
+                                            var treeObj = $.fn.zTree.getZTreeObj("treeDirectionary");
+                                            var nodes = treeObj.getSelectedNodes();
+                                            var json = {
+                                                directionaryLineId: nodes[0].id
+                                            }
+                                            $.ajax({
+                                                    url: 'user/businiess/directionary/getdetails',
+                                                    type: 'POST',
+                                                    contentType: "application/json;charset=UTF-8",
+                                                    dataType: 'json',
+                                                    data: JSON.stringify(json)
+                                                })
+                                                .done(function(data) {
+                                                    $('#tbDirectionaryinfo').bootstrapTable('load', data);
+                                                })
+                                                .fail(function(data) {
+                                                    setMessage('加载字典失败', 'error', true);
+                                                });
+
+                                            var jsonSend = {
+                                                lineId: nodes[0].id
+                                            };
+                                            $.ajax({
+                                                    url: 'user/businiess/directionary/keysAndValues',
+                                                    type: 'POST',
+                                                    contentType: "application/json;charset=UTF-8",
+                                                    dataType: 'json',
+                                                    data: JSON.stringify(json)
+                                                })
+                                                .done(function(data) {
+                                                    $inputKey.typeahead({
+                                                        source: data.keys
+                                                    });
+                                                    $inputValue.typeahead({
+                                                        source: data.vals
+                                                    });
+                                                })
+                                                .fail(function() {
+                                                    setMessage('获取字典失败', 'error', true);
+                                                });
+                                        }
+                                    })
+                                    .fail(function(data) {
+                                        setMessage('删除失败', 'error', true);
+                                    })
+                                    .always(function(data) {
+                                        $('#btn_directionarydetail_del').on('click', btn_deldirectionarydetail_click);
+                                    });
+                            }
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        action: function() {
+                            msg.hide();
+                        }
+                    }
+                }
+            })
+        }
+        event.stopPropagation();
+    }
+    $('#btn_directionarydetail_del').on('click', btn_deldirectionarydetail_click);
+
+});
+</script>

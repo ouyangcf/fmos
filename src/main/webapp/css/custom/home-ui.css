@@ -1,0 +1,101 @@
+body {
+    padding-top: 70px;
+}
+
+.chinese_font {
+    font-family: "黑体";
+}
+
+#menu-container {
+    height: 600px;
+    z-index: 1000;
+    font-size: 14px;
+}
+
+#tabcontent-container {
+    margin-top: 13px;
+    height: 540px;
+    padding: 10px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+}
+
+.x-small-icon {
+    font-size: x-small;
+    top: 1px;
+    left: 2px;
+    visibility: hidden;
+}
+
+.x-small-icon:hover {
+    color: #1ABC9C;
+}
+
+.loader-inner div {
+    background: #48C9B0;
+}
+
+#main-container {
+    font-size: 16px;
+}
+
+.item-selected {
+    color: #0084C6 !important;
+}
+
+#home .badge {
+    margin-top: 4px;
+}
+
+#deal_list {
+    margin-top: 30%;
+}
+
+.top-button:hover {
+    color: #1ABC9C;
+    cursor: pointer;
+}
+
+.pagination li {
+    margin-right: 0px !important;
+}
+
+.fixed-table-pagination .pagination a {
+    padding-top: 9px !important;
+}
+
+.menu-toolbar a:hover {
+    color: #1abc9c;
+}
+
+.required-icon {
+    color: #e74c3c;
+    font-size: 12px;
+    top: 2px;
+}
+
+.success-icon {
+    color: #148F77;
+    font-size: 12px;
+    top: 2px;
+}
+
+.has-error {
+    border-color: #e74c3c!important;
+    box-shadow: none!important;
+}
+
+label.has-error {
+    color: #e74c3c!important;
+}
+
+#roleTableSearchDiv,
+#divUserSearchBar {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-cutom-select {
+    color: #34495e;
+    background-color: #fff;
+}

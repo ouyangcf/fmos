@@ -1,0 +1,75 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceSimpleSearchMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceSimpleSearchToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceSimpleSearchToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    </div>
+    <div id="divDeviceSimpleSearchSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthDeviceSimpleSearchKeyWord" class="col-md-6 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thDeviceSimpleSearchKeyWord">
+            </div>
+        </div>
+        <a id="btnDeviceSimpleSearchSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divDeviceSimpleSearchTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceSimpleSearchinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceSimpleSearchinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define thDeviceSimpleSearchKeyWord */
+    var $input = $("#thDeviceSimpleSearchKeyWord");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethDeviceSimpleSearchKeyWord */
+
+    /*begin define btnDeviceSimpleSearchSearch */
+    var btnDeviceSimpleSearchSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceSimpleSearchSearch").on("click", btnDeviceSimpleSearchSearchClick);
+    /*end define btnDeviceSimpleSearchSearch */
+
+    /*begin define tbDeviceSimpleSearchinfos */
+    $("#tbDeviceSimpleSearchinfos").bootstrapTable({
+        url: "deviceSimpleSearch/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceNumber",
+            title: "设备编码"
+        }, {
+            field: "deviceGroup",
+            title: "设备组别"
+        }, {
+            field: "deviceType",
+            title: "设备类型"
+        }]
+    });
+    /*end define tbDeviceSimpleSearchinfos */
+});
+</script>

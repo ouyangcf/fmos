@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.business.MachineBaseinfoDetailDao">
+  <resultMap id="BaseResultMap" type="com.unicom.fmos.entity.business.MachineBaseinfoDetail">
+    <id column="line_id" jdbcType="INTEGER" property="lineId" />
+    <result column="info_value" jdbcType="VARCHAR" property="infoValue" />
+    <result column="instance_line_id" jdbcType="INTEGER" property="instanceLineId" />
+    <result column="baseinfo_head_line_id" jdbcType="INTEGER" property="baseinfoHeadLineId" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="active" jdbcType="BIT" property="active" />
+    <result column="active_user" jdbcType="VARCHAR" property="activeUser" />
+    <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
+    <result column="active_memo" jdbcType="VARCHAR" property="activeMemo" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_memo" jdbcType="VARCHAR" property="updateMemo" />
+  </resultMap>
+  <resultMap id="IdKeyValueDtoResultMap" type="com.unicom.fmos.dto.IdKeyValueDto">
+
+  </resultMap>
+  <select id="getmachineBaseinfoByInstanceLineId" parameterType="com.unicom.fmos.entity.business.Instance" resultMap="IdKeyValueDtoResultMap">
+    SELECT
+    td_directionary_detail.directionary_key AS NAME,
+    td_machine_baseinfo_detail.info_value AS VALUE,
+    td_machine_baseinfo_head.line_id AS id
+    FROM td_directionary_detail,td_machine_baseinfo_detail,td_machine_baseinfo_head,td_model,td_instance
+    WHERE
+    1 = 1
+    AND td_instance.`line_id` = #{lineId}
+    AND td_instance.`model_line_id` = td_model.`line_id`
+    AND td_model.`line_id` = td_machine_baseinfo_head.`model_line_id`
+    AND td_instance.`line_id` = td_machine_baseinfo_detail.`line_id`
+    AND td_machine_baseinfo_head.`directionary_detail_line_id` = td_directionary_detail.`line_id`
+    AND td_machine_baseinfo_head.`active` = 1
+  </select>
+
+  <select id="getmachineFeatureByInstanceLineId" parameterType="com.unicom.fmos.entity.business.Instance" resultMap="IdKeyValueDtoResultMap">
+    SELECT
+    td_directionary_detail.directionary_key as name,
+    td_machine_feature_detail.info_value as value,
+    td_machine_feature_head.line_id as id
+    FROM
+    td_directionary_detail LEFT JOIN  td_machine_feature_head ON td_directionary_detail.line_id = td_machine_feature_head.directionary_detail_line_id
+    LEFT JOIN td_machine_feature_detail ON td_machine_feature_head.line_id = td_machine_feature_detail.feature_head_line_id,td_instance,td_model
+    WHERE
+    td_instance.model_line_id = td_model.line_id
+    AND td_model.line_id = td_machine_feature_head.model_line_id
+    AND td_instance.line_id = #{lineId,jdbcType = INTEGER}
+    AND td_instance.active = 1
+    AND td_model.active = 1
+    AND td_directionary_detail.active = 1
+    AND td_machine_feature_head.active = 1
+  </select>
+
+  <select id="select" parameterType="com.unicom.fmos.entity.business.MachineBaseinfoDetail" resultMap="BaseResultMap">
+    SELECT * FROM td_machine_baseinfo_detail
+    <where>
+      1 = 1
+      <if test="lineId != null" >
+        AND line_id = #{lineId ,jdbcType=INTEGER}
+      </if>
+      <if test="instanceLineId != null" >
+        AND instance_line_id = #{instanceLineId,jdbcType=INTEGER}
+      </if>
+      <if test="baseinfoHeadLineId != null" >
+        AND baseinfo_head_line_id = #{baseinfoHeadLineId ,jdbcType=INTEGER}
+      </if>
+      <if test="infoValue != null" >
+        AND info_value = #{infoValue,jdbcType=VARCHAR}
+      </if>
+      <if test="createUser != null" >
+        AND create_user = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="active != null" >
+        AND active = #{active ,jdbcType=BIT}
+      </if>
+      <if test="activeUser != null" >
+        AND active_user = #{activeUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="activeTime != null" >
+        AND active_time = #{activeTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="activeMemo != null" >
+        AND active_memo = #{activeMemo ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUser != null" >
+        AND update_user = #{updateUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+        AND  update_time = #{updateTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateMemo != null" >
+        AND  update_memo = #{updateMemo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertSelective" parameterType="com.unicom.fmos.entity.business.MachineBaseinfoDetail">
+    insert into td_machine_baseinfo_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        line_id,
+      </if>
+      <if test="instanceLineId != null">
+        instance_line_id,
+      </if>
+      <if test="baseinfoHeadLineId != null">
+        baseinfo_head_line_id,
+      </if>
+      <if test="infoValue != null">
+        info_value,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="active != null">
+        active,
+      </if>
+      <if test="activeUser != null">
+        active_user,
+      </if>
+      <if test="activeTime != null">
+        active_time,
+      </if>
+      <if test="activeMemo != null">
+        active_memo,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateMemo != null">
+        update_memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        #{lineId,jdbcType=INTEGER},
+      </if>
+      <if test="instanceLineId != null">
+        #{instanceLineId,jdbcType=INTEGER},
+      </if>
+      <if test="baseinfoHeadLineId != null">
+        #{baseinfoHeadLineId,jdbcType=INTEGER},
+      </if>
+      <if test="infoValue != null">
+        #{infoValue,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null">
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null">
+        #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null">
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null">
+        #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null">
+        #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.unicom.fmos.entity.business.MachineBaseinfoDetail">
+    update td_machine_baseinfo_detail
+    <set>
+      <if test="instanceLineId != null">
+        instance_line_id = #{instanceLineId,jdbcType=INTEGER},
+      </if>
+      <if test="baseinfoHeadLineId != null">
+        baseinfo_head_line_id = #{baseinfoHeadLineId,jdbcType=INTEGER},
+      </if>
+      <if test="infoValue != null">
+        info_value = #{infoValue,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null">
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null">
+        active_user = #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null">
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null">
+        active_memo = #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null">
+        update_memo = #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+</mapper>

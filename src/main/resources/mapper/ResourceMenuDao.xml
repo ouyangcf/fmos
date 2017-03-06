@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.sys.ResourceMenuDao">
+    <resultMap id="ResourceTreeNodeResultMap" type="com.unicom.fmos.dto.ResourceTreeNode">
+        <id column="line_id" property="id"/>
+        <result property="path" column="path"/>
+        <result property="name" column="menu_name"/>
+        <result property="number" column="menu_number"/>
+        <result property="menuIcon" column="menu_icon"/>
+        <collection property="children" column="line_id" select="com.unicom.fmos.dao.sys.ResourceMenuDao.selectTreeNodeById"/>
+    </resultMap>
+
+    <sql id="resource_tree_node_column_sql">
+        line_id,
+        path,
+        menu_name,
+        menu_icon,
+        menu_number,
+        parent_line_id
+    </sql>
+
+    <select id="getTree" resultMap="ResourceTreeNodeResultMap">
+        SELECT <include refid="resource_tree_node_column_sql"/> FROM td_resource_menu
+        <where>
+            is_parent = 1
+            and 1 = 1
+            and active = 1 ORDER BY sort_id ASC
+        </where>
+    </select>
+
+    <select id="selectTreeNodeById" parameterType="int" resultMap="ResourceTreeNodeResultMap">
+        SELECT <include refid="resource_tree_node_column_sql"/> FROM td_resource_menu
+        <where>
+            parent_line_id = #{parentId}
+            and 1 = 1
+            and active = 1
+                ORDER BY sort_id ASC
+        </where>
+    </select>
+
+    <select id="selectBranchById" parameterType="int" resultMap="ResourceTreeNodeResultMap">
+        SELECT <include refid="resource_tree_node_column_sql"/> FROM td_resource_menu
+        <where>
+            line_id = #{id}
+            and 1 = 1
+            and active = 1
+        </where>
+    </select>
+
+    <sql id="resource_menu_column_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">line_id,</if>
+            <if test="path != null ">path,</if>
+            <if test="sortId != null ">sort_id,</if>
+            <if test="menuIcon != null ">menu_icon,</if>
+            <if test="menuName != null ">menu_name,</if>
+            <if test="menuNumber != null ">menu_number,</if>
+            <if test="isParent != null ">is_parent,</if>
+            <if test="parentLineId != null ">parent_line_id,</if>
+            <if test="createUser != null ">create_user,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="active != null ">active,</if>
+            <if test="activeUser != null ">active_user,</if>
+            <if test="activeTime != null ">active_time,</if>
+            <if test="activeMemo != null ">active_memo,</if>
+            <if test="updateUser != null ">update_user,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateMemo != null ">update_memo,</if>
+        </trim>
+    </sql>
+
+    <sql id="resource_menu_whereclause_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">#{lineId},</if>
+            <if test="path != null ">#{path},</if>
+            <if test="sortId != null ">#{sortId},</if>
+            <if test="menuIcon != null ">#{menuIcon},</if>
+            <if test="menuName != null ">#{menuName},</if>
+            <if test="menuNumber != null ">#{menuNumber},</if>
+            <if test="isParent != null ">#{isParent},</if>
+            <if test="parentLineId != null ">#{parentLineId},</if>
+            <if test="createUser != null ">#{createUser},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="active != null ">#{active},</if>
+            <if test="activeUser != null ">#{activeUser},</if>
+            <if test="activeTime != null ">#{activeTime},</if>
+            <if test="activeMemo != null ">#{activeMemo},</if>
+            <if test="updateUser != null ">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateMemo != null ">#{updateMemo},</if>
+        </trim>
+    </sql>
+
+    <insert id="insertResourceMenu" parameterType="com.unicom.fmos.entity.sys.ResourceMenu" >
+        insert into td_resource_menu
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                LINE_ID,
+            </if>
+            <if test="menuIcon != null" >
+                MENU_ICON,
+            </if>
+            <if test="menuNumber != null" >
+                MENU_NUMBER,
+            </if>
+            <if test="sortId != null" >
+                SORT_ID,
+            </if>
+            <if test="menuName != null" >
+                MENU_NAME,
+            </if>
+            <if test="path != null" >
+                PATH,
+            </if>
+            <if test="isParent != null" >
+                IS_PARENT,
+            </if>
+            <if test="parentLineId != null" >
+                PARENT_LINE_ID,
+            </if>
+            <if test="createUser != null" >
+                CREATE_USER,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="active != null" >
+                ACTIVE,
+            </if>
+            <if test="activeUser != null" >
+                ACTIVE_USER,
+            </if>
+            <if test="activeTime != null" >
+                ACTIVE_TIME,
+            </if>
+            <if test="activeMemo != null" >
+                ACTIVE_MEMO,
+            </if>
+            <if test="updateUser != null" >
+                UPDATE_USER,
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME,
+            </if>
+            <if test="updateMemo != null" >
+                UPDATE_MEMO,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                #{lineId,jdbcType=VARCHAR},
+            </if>
+            <if test="menuIcon != null" >
+                #{menuIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="menuNumber != null" >
+                #{menuNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="sortId != null" >
+                #{sortId,jdbcType=DECIMAL},
+            </if>
+            <if test="menuName != null" >
+                #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="path != null" >
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null" >
+                #{isParent,jdbcType=DECIMAL},
+            </if>
+            <if test="parentLineId != null" >
+                #{parentLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="createUser != null" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="active != null" >
+                #{active,jdbcType=DECIMAL},
+            </if>
+            <if test="activeUser != null" >
+                #{activeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activeTime != null" >
+                #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeMemo != null" >
+                #{activeMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateMemo != null" >
+                #{updateMemo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="delResourceMenuBranch" parameterType="map">
+        UPDATE td_resource_menu SET
+        active = 0,
+        active_user = #{activeuser},
+        active_memo = #{activememo},
+        active_time = #{activetime}
+        WHERE line_id in
+        <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateMenu" parameterType="com.unicom.fmos.entity.sys.ResourceMenu">
+        UPDATE td_resource_menu
+        <set>
+            <if test="path != null ">path = #{path},</if>
+            <if test="sortId != null ">sort_id = #{sortId},</if>
+            <if test="isParent != null ">is_parent = #{isParent},</if>
+            <choose>
+                <when test="isParent == 1">
+                    parent_line_id = NULL ,
+                </when>
+                <otherwise>
+                    parent_line_id = #{parentLineId},
+                </otherwise>
+            </choose>
+            <if test="menuName != null ">menu_name = #{menuName},</if>
+            <if test="menuIcon != null ">menu_icon = #{menuIcon},</if>
+            <if test="menuNumber != null ">menu_number = #{menuNumber},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateMemo != null ">update_memo= #{updateMemo}</if>
+        </set>
+        <where>
+            <choose>
+                <when test="lineId != null">and line_id = #{lineId}</when>
+                <otherwise>and line_id = </otherwise>
+            </choose>
+        </where>
+    </update>
+</mapper>

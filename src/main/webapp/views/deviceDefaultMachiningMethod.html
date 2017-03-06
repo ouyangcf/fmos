@@ -1,0 +1,126 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceDefaultMachiningMethodMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceDefaultMachiningMethodToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceDefaultMachiningMethodToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnDeviceDefaultMachiningMethodAddDevice" class="btn btn-info">
+                <i class="glyphicon glyphicon-plus"></i>添加</a>
+            <a id="btnDviceModelSetDeviceActive" class="btn btn-warning">
+                <i class="glyphicon glyphicon-minus"></i>停用</a>
+            <a id="btnDDeviceDefaultMachiningMethodEdit" class="btn btn-danger">
+                <i class="glyphicon glyphicon-pencil"></i>编辑</a>
+        </div>
+    </div>
+    <div id="divDeviceDefaultMachiningMethodSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthDeviceDefaultMachiningMethod" class="col-md-6 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thDeviceDefaultMachiningMethod">
+            </div>
+        </div>
+        <div id="selDivselDeviceDefaultMachiningMethodShowType" class="col-md-5 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">显示类型</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selDeviceDefaultMachiningMethodShowType"></select>
+            </div>
+        </div>
+        <a id="btnDeviceDefaultMachiningMethodSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divDeviceDefaultMachiningMethodTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceDefaultMachiningMethodinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceDefaultMachiningMethodinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnDeviceDefaultMachiningMethodAddDevice */
+    var btnDeviceDefaultMachiningMethodAddDeviceClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceDefaultMachiningMethodAddDevice").on("click", btnDeviceDefaultMachiningMethodAddDeviceClick);
+    /*end define btnDeviceDefaultMachiningMethodAddDevice */
+
+    /*begin define btnDviceModelSetDeviceActive */
+    var btnDviceModelSetDeviceActiveClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDviceModelSetDeviceActive").on("click", btnDviceModelSetDeviceActiveClick);
+    /*end define btnDviceModelSetDeviceActive */
+
+    /*begin define btnDDeviceDefaultMachiningMethodEdit */
+    var btnDDeviceDefaultMachiningMethodEditClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDDeviceDefaultMachiningMethodEdit").on("click", btnDDeviceDefaultMachiningMethodEditClick);
+    /*end define btnDDeviceDefaultMachiningMethodEdit */
+
+    /*begin define thDeviceDefaultMachiningMethod */
+    var $input = $("#thDeviceDefaultMachiningMethod");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethDeviceDefaultMachiningMethod */
+
+    /*begin define selDeviceDefaultMachiningMethodShowType */
+    var $select = $("#selDeviceDefaultMachiningMethodShowType");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselDeviceDefaultMachiningMethodShowType */
+
+    /*begin define btnDeviceDefaultMachiningMethodSearch */
+    var btnDeviceDefaultMachiningMethodSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceDefaultMachiningMethodSearch").on("click", btnDeviceDefaultMachiningMethodSearchClick);
+    /*end define btnDeviceDefaultMachiningMethodSearch */
+
+    /*begin define tbDeviceDefaultMachiningMethodinfos */
+    $("#tbDeviceDefaultMachiningMethodinfos").bootstrapTable({
+        url: "DeviceDefaultMachiningMethod/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "availablePocessMethod",
+            title: "可进行加工"
+        }, {
+            field: "isNumberialControl",
+            title: "是否数控"
+        }, {
+            field: "createTime",
+            title: "添加时间"
+        }]
+    });
+    /*end define tbDeviceDefaultMachiningMethodinfos */
+});
+</script>

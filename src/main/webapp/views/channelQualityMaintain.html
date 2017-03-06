@@ -1,0 +1,521 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+                <span id="spanPvlCqsRolename"></span>
+                <span>菜单资源树</span>
+                <span class="menu-toolbar pull-right">
+                    <a href="" class="menu-top-button" id="btnPvlCqsRuleChange">
+                        <i class="icon-plus"></i>&nbsp;规则修改</a>
+                    <a href="" class="menu-top-button" id="btnPvlCqsSave">
+                        <i class="icon-plus"></i>&nbsp;保存</a>
+                </span>
+            </div>
+            <div>
+                <ul id="treePvlCqs" class="ztree"></ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="divPvlCqsTitle" style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+                <span>角色信息表</span>
+            </div>
+            <div class="container-fluid">
+                <div class="row" id="divPvlCqsSearchbar">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">角色名称</span>
+                            <input class="form-control typeahead" id="iptPvlCqsSearchname" autocomplete="off" type="text" data-provide="typeahead">
+                            <span class="input-group-addon">创建于</span>
+                            <input type="text" class="form-control daterangesetter" id="dpkPvlCqsSearchstarttime">
+                            <span class="input-group-addon">至</span>
+                            <input type="text" class="form-control daterangesetter" id="dpkPvlCqsSearchendtime">
+                            <span class="input-group-addon">期间</span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" id="btnPvlCqsRolesearch" type="button" style="color: #fff;background-color: #3498db;border: none;">搜索</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-12">
+                        <table id="tbPvlCqsRoleinfo" data-striped="true" data-show-header="true" data-halign="true" data-height="390">
+                    </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- RuleChangeModal -->
+<div class="modal fade" id="ruleChangeDlg" tabindex="-1" role="dialog" aria-labelledby="ruleChangeDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btn_rule_change_close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="ruleChangeDlgLabel">规则修改</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="col-md-6">
+                    <label class="radio">
+                        <input type="radio" data-toggle="radio" name="rulechangeRadios" id="rulechangeDynamicRadio" value="0" data-radiocheck-toggle="radio" required="" class="custom-radio">
+                        <span class="icons">
+                            <span class="icon-unchecked"></span>
+                            <span class="icon-checked"></span>
+                        </span>
+                        动态规则
+                    </label>
+                </div>
+                <div class="col-md-6">
+                    <label class="radio">
+                        <input type="radio" data-toggle="radio" name="rulechangeRadios" id="rulechangeStaticRadio" value="1" data-radiocheck-toggle="radio" required="" class="custom-radio">
+                        <span class="icons">
+                            <span class="icon-unchecked"></span>
+                            <span class="icon-checked"></span>
+                        </span>
+                        静态规则
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_rule_change_cancel">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn_rule_change_ensure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /RuleChangeModal -->
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    /**
+     * [Format description]
+     * @param {[type]} fmt [description]
+     */
+    Date.prototype.format = function(format) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //month
+                "d+": this.getDate(), //day
+                "h+": this.getHours(), //hour
+                "m+": this.getMinutes(), //minute
+                "s+": this.getSeconds(), //second
+                "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                "S": this.getMilliseconds() //millisecond
+            }
+            if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+                (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1,
+                        RegExp.$1.length == 1 ? o[k] :
+                        ("00" + o[k]).substr(("" + o[k]).length));
+            return format;
+        }
+        /*global variables*/
+    var jsonPvlTree;
+    /*global variables*/
+
+    //渠道质量加载
+    var loadChannelQualityFirstLayout = function() {
+            var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+            var node = treeObj.getNodesByFilter(function(node) {
+                return node.name == '渠道质量';
+            }, true);
+            treeObj.removeChildNodes(node);
+            setMessage('正在加载权限树', 'info', true);
+            $.ajax({
+                    url: 'user/businiess/cqsmatain/channelqualityfirst',
+                    type: 'GET',
+                    dataType: 'json'
+                }).done(function(data) {
+                    treeObj.addNodes(node, data, false);
+                    setMessage('已完成权限树加载', 'success', true);
+                })
+                .fail(function(data) {
+                    setMessage('权限树加载失败', 'error', true);
+                })
+                .always(function(data) {});
+        }
+        //渠道质量加载
+        //begin tree init
+        /**
+         * [treeInit description]
+         * @return {[type]} [description]
+         */
+    var zTreeCqsOnExpand = function(event, treeId, treeNode) {
+        var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+        //检测是否属于渠道质量下的子孙
+        var result = false;
+        $.each(treeNode.getPath(), function(index, val) {
+            /* iterate through array or object */
+            if (val.name == '渠道质量') {
+                result = true;
+            }
+        });
+        //检测是否属于渠道质量下的子孙
+        if (result == true) {
+            //检查是否存在子孙,若存在则不再加载
+            var nodes = treeObj.getNodesByFilter(function(node) {
+                return node.parentTId == treeNode.tId;
+            });
+            if (nodes.length != 0) {
+                return;
+            }
+            var name = treeNode.name;
+            var layout = treeNode.layout == undefined ? 0 : treeNode.layout;
+            setMessage('正在提交', 'info', true);
+            var json = [{
+                name: name,
+                layout: layout
+            }];
+            $.ajax({
+                    url: 'user/businiess/cqsmatain/channelquality',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                }).done(function(data) {
+
+                    treeObj.removeChildNodes(treeNode);
+                    treeObj.addNodes(treeNode, data, false);
+                    setMessage('已完成权限树加载', 'success', true);
+                }).fail(function(data) {
+                    setMessage('权限树加载失败', 'error', true);
+                })
+                .always(function(data) {});
+        }
+    }
+    var treeInit = function(roleLineId) {
+        var setting = {
+            edit: {
+                showRemoveBtn: false,
+                showRenameBtn: false
+            },
+            check: {
+                enable: true
+            },
+            callback: {
+                onExpand: zTreeCqsOnExpand
+            }
+        };
+
+        /*when excute use it*/
+        setMessage('正在加载权限树', 'info', true);
+        $.ajax({
+                url: 'user/businiess/privilege/prvltree',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    "roleLineId": roleLineId
+                }
+            })
+            .done(function(data) {
+                $.fn.zTree.init($("#treePvlCqs"), setting, data.menuTree);
+                var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+                var prvl = data.privilege;
+                for (var i = 0; i < prvl.length; i++) {
+                    var resourceId = prvl[i].resourceLineId;
+                    var node = treeObj.getNodesByFilter(function(node) {
+                        return node.id == resourceId;
+                    }, true);
+
+                    if (node.length != 0) {
+                        treeObj.checkNode(node, true, false);
+                        node.isParent = true;
+                        treeObj.updateNode(node);
+                    }
+                }
+                var nodes = treeObj.getNodesByFilter(function(node) {
+                    return node.checked == false;
+                });
+                if (nodes.length != 0) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        treeObj.removeNode(nodes[i]);
+                    }
+                }
+                setMessage('已完成权限树加载', 'success', true);
+                var channelnodes = treeObj.getNodesByFilter(function(node) {
+                    return node.path == "channelQuality";
+                });
+            })
+            .fail(function(data) {
+                setMessage('权限树加载失败', 'error', true);
+            })
+            .always(function(data) {});
+        /*when excute use it*/
+    }
+
+    /**
+     * [btnPvlCqsSaveClick description]
+     * @param  {[type]} event [description]
+     * @return {[type]}       [description]
+     */
+    var btnPvlCqsSaveClick = function(event) {
+            event.preventDefault();
+            var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+            if (treeObj == null) {
+                setMessage('请先建立权限树', 'error', true);
+                return;
+            }
+            var nodes = treeObj.transformToArray(treeObj.getNodes());
+            if (nodes.length == 0) {
+                setMessage('请先建立权限树', 'error', true);
+                return;                
+            }
+            var rows = $('#tbPvlCqsRoleinfo').bootstrapTable('getSelections');
+            var lineId = rows[0].lineId;
+            var jsonNodeInfo = [];
+            setMessage('正在保存', 'info', true);
+            $('#btnPvlCqsSave').off('click');
+            for (var i = 0; i < nodes.length; i++) {
+                var jsonTmp = {
+                    nodeName: nodes[i].name,
+                    roleLineId: lineId,
+                    checked: nodes[i].checked == true ? 1 : 0,
+                    checkType: nodes[i].checkType,
+                    layout: nodes[i].layout
+                }
+                jsonNodeInfo.push(jsonTmp);
+            }
+            $.ajax({
+                    url: 'user/businiess/cqsmatain/cqspvlsave',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(jsonNodeInfo)
+                })
+                .done(function(data) {
+                    setMessage('保存成功', 'success', true);
+                })
+                .fail(function(data) {
+                    setMessage('保存失败', 'error', true);
+                })
+                .always(function() {
+                    $('#btnPvlCqsSave').on('click', btnPvlCqsSaveClick);
+                });
+        }
+        //btnPvlCqsSaveClickEvent Binding
+    $('#btnPvlCqsSave').on('click', btnPvlCqsSaveClick);
+    //end tree init
+
+    //begin table init
+    $('.daterangesetter').daterangepicker({
+        "singleDatePicker": true,
+        "locale": {
+            "format": "YYYY-MM-DD",
+            "separator": "-",
+            "applyLabel": "应用",
+            "cancelLabel": "取消",
+            "monthNames": [
+                "一月",
+                "二月",
+                "三月",
+                "四月",
+                "五月",
+                "六月",
+                "七月",
+                "八月",
+                "九月",
+                "十月",
+                "十一月",
+                "十二月"
+            ],
+            "daysOfWeek": [
+                "日",
+                "一",
+                "二",
+                "三",
+                "四",
+                "五",
+                "六"
+            ]
+        }
+    });
+    $('#dpkPvlCqsSearchstarttime').data('daterangepicker').setStartDate(moment().subtract(29, 'days'));
+    $('#dpkPvlCqsSearchendtime').data('daterangepicker').setStartDate(moment());
+    $('#tbPvlCqsRoleinfo').bootstrapTable({
+        url: 'user/cqsmatain/roleinfos',
+        method: 'get',
+        pagination: true,
+        columns: [{
+            field: 'state',
+            radio: true
+        }, {
+            field: 'lineId',
+            title: '主键序号'
+        }, {
+            field: 'roleName',
+            title: '角色名称'
+        }, {
+            field: 'createUser',
+            title: '创建人'
+        }, {
+            field: 'createTime',
+            title: '创建时间',
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: 'updateUser',
+            title: '更新人'
+        }, {
+            field: 'updateTime',
+            title: '更新时间',
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: 'updateMemo',
+            title: '更新说明'
+        }],
+        onAll: function(name, args) {},
+        onLoadSuccess: function(data) {
+            var $input = $('#iptPvlCqsSearchname');
+            $input.typeahead({
+                source: data.rolemaps
+            });
+            data = data.roleinfos;
+            $('#tbPvlCqsRoleinfo').bootstrapTable('load', data);
+        },
+        onCheck: function(row) {
+            var lineId = row.lineId; {
+                treeInit(lineId);
+            }
+        }
+    });
+
+    var btnPvlCqsRolesearchClick = function(event) {
+        event.preventDefault();
+        var roleName = $('#iptPvlCqsSearchname').val() == '' ? undefined : $('#iptPvlCqsSearchname').val();
+        var startTime = $('#dpkPvlCqsSearchstarttime').val() + ' 00:00:00';
+        var endTime = $('#dpkPvlCqsSearchendtime').val() + ' 23:59:59';
+        var json = [{
+            roleName: roleName,
+            createTime: startTime,
+            activeTime: endTime
+        }];
+        $('#btnPvlCqsRolesearch').off('click');
+        $.fn.zTree.destroy("treePvlCqs");
+        $.ajax({
+                url: 'user/businiess/cqsmatain/searchrole',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                setMessage('共找到 ' + data.length + ' 条数据', 'info', true);
+                $('#tbPvlCqsRoleinfo').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('查询失败', 'error', true);
+            })
+            .always(function() {
+                $('#btnPvlCqsRolesearch').on('click', btnPvlCqsRolesearchClick);
+            });
+        event.stopPropagation();
+    }
+    $('#btnPvlCqsRolesearch').on('click', btnPvlCqsRolesearchClick);
+
+    var btn_rule_change_click = function(event) {
+        event.preventDefault();
+        var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+        if (treeObj == null) {
+            setMessage('请先建立权限树', 'error', true);
+            return;
+        }
+        var treeNode = treeObj.getSelectedNodes();
+        if (treeNode.length == 0) {
+            setMessage('请选择结点', 'error', true);
+            return;
+        }
+        //检测是否属于渠道质量下的子孙
+        var result = false;
+        if (treeNode[0].parentTId == null) {
+            setMessage('请选择渠道质量下的结点', 'error', true);
+            return;
+        }
+        /*        if (treeNode[0].name == "渠道质量") {
+                    setMessage('请选择渠道质量下的结点', 'error', true);
+                    return;            
+                }  */
+        var parents = treeNode[0].getPath();
+        $.each(parents, function(index, val) {
+            /* iterate through array or object */
+            if (val.name == '渠道质量') {
+                result = true;
+            }
+        });
+        if (result == false) {
+            setMessage('请选择渠道质量下的结点', 'error', true);
+            return;
+        }
+        if (treeNode[0].checkType == 0) {
+            $('#rulechangeDynamicRadio:radio').radiocheck('check');
+        } else {
+            $('#rulechangeStaticRadio:radio').radiocheck('check');
+        }
+        $('#ruleChangeDlg').modal('show');
+    }
+
+    $('#btnPvlCqsRuleChange').on('click', btn_rule_change_click);
+
+    var btn_rule_change_ensure_click = function(event) {
+        event.preventDefault();
+        $('<div id="ruleChangeDlgResult"></div>').appendTo('body');
+        $('#ruleChangeDlg').modal('hide');
+        event.stopPropagation();
+    }
+    $('#btn_rule_change_ensure').on('click', btn_rule_change_ensure_click);
+    $('#ruleChangeDlg').on('hidden.bs.modal', function(event) {
+        if ($('#ruleChangeDlgResult').length != 0) {
+            $('#ruleChangeDlgResult').remove();
+            var treeObj = $.fn.zTree.getZTreeObj("treePvlCqs");
+            var nodes = treeObj.getSelectedNodes();
+            var selNode = nodes[0];
+            var $checked = $('#ruleChangeDlg input:checked');
+            selNode.checkType = $checked.val() * 1;
+            treeObj.updateNode(selNode);
+        }
+    });
+});
+</script>

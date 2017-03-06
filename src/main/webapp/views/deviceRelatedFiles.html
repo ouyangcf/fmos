@@ -1,0 +1,48 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceRelatedFilesMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceRelatedFilesToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceRelatedFilesToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnDeviceRelatedFilesDownload" class="btn btn-default">
+                <i class="glyphicon glyphicon-save"></i>下载</a>
+        </div>
+    </div>
+    <div id="divDeviceRelatedFilesSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    <div id="divDeviceRelatedFilesTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceRelatedFilesinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceRelatedFilesinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnDeviceRelatedFilesDownload */
+    var btnDeviceRelatedFilesDownloadClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceRelatedFilesDownload").on("click", btnDeviceRelatedFilesDownloadClick);
+    /*end define btnDeviceRelatedFilesDownload */
+
+    /*begin define tbDeviceRelatedFilesinfos */
+    $("#tbDeviceRelatedFilesinfos").bootstrapTable({
+        url: "deviceRelatedFiles/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "fileName",
+            title: "文件名"
+        }, {
+            field: "fileType",
+            title: "文件类型"
+        }, {
+            field: "createTime",
+            title: "创建时间"
+        }]
+    });
+    /*end define tbDeviceRelatedFilesinfos */
+});
+</script>

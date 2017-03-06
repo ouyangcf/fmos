@@ -1,0 +1,68 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceSeniorSearchMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceSeniorSearchToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceSeniorSearchToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    </div>
+    <div id="divDeviceSeniorSearchSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="selDivselDeviceSeniorSearch" class="col-md-12 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">目标设备类型</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selDeviceSeniorSearch"></select>
+            </div>
+        </div>
+    </div>
+    <div id="divDeviceSeniorSearchTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceSeniorSearchinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceSeniorSearchinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define selDeviceSeniorSearch */
+    var $select = $("#selDeviceSeniorSearch");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselDeviceSeniorSearch */
+
+    /*begin define tbDeviceSeniorSearchinfos */
+    $("#tbDeviceSeniorSearchinfos").bootstrapTable({
+        url: "deviceSeniorSearch/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceNumber",
+            title: "设备编码"
+        }, {
+            field: "deviceGroup",
+            title: "设备组别"
+        }, {
+            field: "deviceType",
+            title: "设备类型"
+        }]
+    });
+    /*end define tbDeviceSeniorSearchinfos */
+});
+</script>

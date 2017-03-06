@@ -1,0 +1,1020 @@
+<div id="similarSearchContainer" class="container-fluid" style="margin-top:5px;margin-bottom:5px;">
+    <div class="row">
+        <div id="similarSearchToolbar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnsimilarSearchNumber" class="btn btn-primary">
+                <i class="glyphicon glyphicon-globe"></i>型号编码信息</a>
+            <a id="btnsimilarSearchMethod" class="btn btn-success">
+                <i class="glyphicon glyphicon-briefcase"></i>加工方法信息</a>
+            <a id="btnsimilarSearchBaseInfo" class="btn btn-info">
+                <i class="glyphicon glyphicon-bell"></i>基本信息</a>
+            <a id="btnsimilarSearchFeature" class="btn btn-default">
+                <i class="glyphicon glyphicon-filter"></i>特征信息</a>
+            <a id="btnSimilarSearchAvailabletime" class="btn btn-primary">
+                <i class="glyphicon glyphicon-calendar"></i>可用时间</a>
+            <a id="btnSimilarSearchPreviewUpload" class="btn btn-danger">
+                <i class="glyphicon glyphicon-paperclip"></i>实例预览</a>
+            <a id="btnsimilarSearchRefresh" class="btn btn-warning">
+                <i class="glyphicon glyphicon-refresh"></i>刷新</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row" style="margin-top: 2px;">
+                <div id="selDivselsimilarSeardeviceName" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">设备名称</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceName"></select>
+                    </div>
+                </div>
+                <div id="selDivselsimilarSeardeviceModel" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">设备型号</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceModel" disabled="disabled"></select>
+                    </div>
+                </div>
+                <div id="selDivselsimilarSeardeviceGroup" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">设备组别</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceGroup" disabled="disabled"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2px;">
+                <div id="selDivselsimilarSeardeviceSameModel" class="col-md-3 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">相同类型</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceSameModel"></select>
+                    </div>
+                </div>
+                <div id="selDivselsimilarSeardeviceSameGroup" class="col-md-3 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">相同组别</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceSameGroup"></select>
+                    </div>
+                </div>
+                <div id="selDivselsimilarSeardeviceParamsCompare" class="col-md-3 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">参数对比</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceParamsCompare"></select>
+                    </div>
+                </div>
+                <div id="selsimilarSeardevicethresholdDiv" class="col-md-3 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">阈值</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="selsimilarSeardevicethreshold">
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2px;">
+                <div id="selDivselsimilarSeardeviceFeatureSeled" class="col-md-11 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">参数选定</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selsimilarSeardeviceFeatureSeled" multiple></select>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <a id="btnsimilarSearSearch" class="btn btn-primary pull-right">
+                        <i class="glyphicon glyphicon-search"></i>搜索</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="divdeviceSimilarSearchTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbSimilarSearchInfo"></table>
+        </div>
+    </div>
+</div>
+<!-- 型号编码对话框 -->
+<div class="modal fade" id="similarSearchNumberlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnsimilarSearchClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchDlgLabel">型号编码</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeMachineTypeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">设备类型</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeMachineType" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="similarSearchMainParams" data-toggle="tooltip" data-placement="top" title="未知">主参数</span>
+                            <input class="form-control typeahead" id="iptDivthsimilarSearchMainParams" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeControlTypeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">控制方式</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeControlType" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodePreciseLevelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">精度等级</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodePreciseLevel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeMainPowerDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">主轴功率</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeMainPower" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeMainVelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">主轴转速</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeMainVel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeHasKnifeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否有刀库</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeHasKnife" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeHasnumberDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否有数控转台/分度头</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeHasnumber" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeDeviceSourceDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">设备来源</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeDeviceSource" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="selSimilarSearchCodeManagerlevelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">管理级别</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selSimilarSearchCodeManagerlevel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 型号编码对话框 -->
+<!-- 加工方法编辑对话框 -->
+<div class="modal fade" id="similarSearchMethodEditlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchDlgMethodLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnsimilarSearchEditMethodClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchDlgMethodLabel">加工方法</h4>
+            </div>
+            <div class="modal-body">
+                <div id="selsimilarSearchMachineMethodDiv">
+                    <div class="input-group">
+                        <span class="input-group-addon">加工方法</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" multiple data-style="btn-cutom-select" id="selsimilarSearchMachineMethod" disabled="disabled"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 加工方法编辑对话框 -->
+<!-- 基本信息编辑对话框 -->
+<div class="modal fade" id="similarSearchBaseInfoDlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchBaseInfoDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnSimilarSearchBaseInfoClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchBaseInfoDlgLabel">基本信息</h4>
+            </div>
+            <div class="container-fluid" id="similarSearchBaseInfoDlgBody">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 基本信息编辑对话框 -->
+<!-- 特征信息编辑对话框 -->
+<div class="modal fade" id="similarSearchFeatureDlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchFeatureDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnSimilarSearchFeatureClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchFeatureDlgLabel">特征信息</h4>
+            </div>
+            <div class="container-fluid" id="similarSearchFeatureDlgBody">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 特征信息编辑对话框 -->
+<!-- 可用时间编辑对话框 -->
+<div class="modal fade" id="similarSearchAvaliableDlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchAvaliableDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnSimilarSearchAvailabletimeClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchAvaliableDlgLabel">可用时间</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">月可用时间(小时)</span>
+                            <input class="form-control typeahead" id="similarSearchAvailableMonth" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">周可用时间(小时)</span>
+                            <input class="form-control typeahead" id="similarSearchAvailableWeek" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">日可用时间(小时)</span>
+                            <input class="form-control typeahead" id="similarSearchAvailableDay" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 可用时间编辑对话框 -->
+<!--  预览图片上传对话框 -->
+<div class="modal fade" id="similarSearchPreviewUploadDlg" tabindex="-1" role="dialog" aria-labelledby="similarSearchPreviewUploadDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btnsimilarSearchPreviewUploadDlgClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="similarSearchPreviewUploadDlgLabel"> 实例预览</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" id="similarSearchPreviewUploadDlgDlgBody" style="margin-top: 2px;margin-bottom: 2px;">
+                    <div id="iptDivthsimilarSearchPreviewUploadDiv" class="col-md-12 col-md-offset-0">
+                        <img src="" height="100%" width="100%" alt="图片不存在或正在加载..." id="similarSearchInstancePreview" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnsimilarSearchPreviewUploadDlgCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnsimilarSearchPreviewUploadDlgEnsure">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  预览图片上传对话框 -->
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+
+    $('[data-toggle="tooltip"]').tooltip();
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+        $('#' + id).empty();
+        $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+        $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+        var url = 'views/' + id + '.html';
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                beforeSend: function(XHR) {
+                    setLoader(id);
+                }
+            })
+            .done(function(data) {
+                removeLoader(id);
+                $('#' + id).append(data);
+            })
+            .fail(function() {})
+            .always(function() {});
+    }
+
+    var btnsimilarSearchRefreshClick = function(event) {
+        event.preventDefault();
+        $('#similarSearch').empty();
+        refresh('similarSearch');
+    }
+    $('#btnsimilarSearchRefresh').on('click', btnsimilarSearchRefreshClick);
+
+    var btnsimilarSearSearchClick = function(event) {
+        event.preventDefault();
+        var instanceName = $('#selsimilarSeardeviceName').selectpicker('val');
+        var isSameModel = $('#selsimilarSeardeviceSameModel').selectpicker('val');
+        var isSameGroup = $('#selsimilarSeardeviceSameGroup').selectpicker('val');
+        var isCompared = $('#selsimilarSeardeviceParamsCompare').selectpicker('val');
+        var featureSeled = $('#selsimilarSeardeviceFeatureSeled').selectpicker('val');
+        var threshold = $('#selsimilarSeardevicethreshold').val();
+        if (featureSeled != null && featureSeled.length != 1) {
+            if ($.trim(threshold) == '') {
+                setMessage("阈值未输入数字", 'error', false);
+                return;
+            }
+            if ($.isNumeric(threshold) == false) {
+                setMessage("阈值未输入数字", 'error', false);
+                return;
+            }
+            if (threshold * 1 < 0 || threshold * 1 > 1) {
+                setMessage("阈值范围是 0 -- 1", 'error', false);
+                return;
+            }
+        } else {
+            threshold = 0.0;
+        }
+        /*发送到后台*/
+        var json = [{
+            instanceLineId: instanceName * 1,
+            sameModel: isSameModel == "true" ? true : false,
+            sameGroup: isSameGroup == "true" ? true : false,
+            compared: isCompared,
+            threshold: threshold * 1,
+            featureSeled: featureSeled == null ? undefined : featureSeled
+        }];
+        $.ajax({
+                url: 'user/businiess/similarSearch/search',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                //ModelMaintainbaseinfoEditDlgBody
+                if (data.minThreadHold != undefined) {
+                    setMessage('共找到 ' + data.instanceList.length + ' 条数据,实际阈值范围为 ' + data.minThreadHold + ' - ' + data.maxThreadHold, 'info', true);
+                } else {
+                    setMessage('共找到 ' + data.instanceList.length + ' 条数据', 'info', true);
+                }
+                $('#tbSimilarSearchInfo').bootstrapTable('load', data.instanceList);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    }
+    $('#btnsimilarSearSearch').on('click', btnsimilarSearSearchClick);
+
+
+    /*加载下拉框*/
+    $.ajax({
+            url: 'user/businiess/similarSearch/allinstances',
+            type: 'POST',
+            contentType: "application/json;charset=UTF-8",
+            dataType: 'json'
+        })
+        .done(function(data) {
+            var $selsimilarSeardeviceName = $("#selsimilarSeardeviceName");
+            var $selsimilarSeardeviceModel = $("#selsimilarSeardeviceModel");
+            var $selsimilarSeardeviceGroup = $("#selsimilarSeardeviceGroup");
+            for (var i = 0; i < data.length; i++) {
+                var id = data[i].id;
+                var name = data[i].name;
+                var model = data[i].model;
+                var group = data[i].group;
+                var strOption0 = '<option value="' + id + '">' + name + '</option>';
+                var strOption1 = '<option value="' + id + '">' + model + '</option>';
+                var strOption2 = '<option value="' + id + '">' + group + '</option>';
+                $selsimilarSeardeviceName.append(strOption0);
+                $selsimilarSeardeviceModel.append(strOption1);
+                $selsimilarSeardeviceGroup.append(strOption2);
+            }
+            $selsimilarSeardeviceName.selectpicker();
+            $selsimilarSeardeviceModel.selectpicker();
+            $selsimilarSeardeviceGroup.selectpicker();
+
+            $('#selsimilarSeardeviceFeatureSeled').selectpicker('destroy');
+            $('#selsimilarSeardeviceFeatureSeled option').remove();
+            var val = $('#selsimilarSeardeviceName').selectpicker('val');
+            //加载该实例所勾选的参数
+            var json = [{
+                lineId: val
+            }];
+            $.ajax({
+                    url: 'user/businiess/similarSearch/instancefeture',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                })
+                .done(function(data) {
+                    //ModelMaintainbaseinfoEditDlgBody
+                    for (var i = 0; i < data.length; i++) {
+                        var id = data[i].id;
+                        var name = data[i].name;
+                        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                        $('#selsimilarSeardeviceFeatureSeled').append(strOption);
+
+                    }
+                    $('#selsimilarSeardeviceFeatureSeled').selectpicker();
+                })
+                .fail(function(data) {
+                    setMessage('加载失败', 'error', true);
+                });
+        })
+        .fail(function(data) {
+            setMessage('修改失败', 'error', true);
+        });
+    /*加载下拉框*/
+
+    $("#selsimilarSeardeviceName").on('change', function(event) {
+        event.preventDefault();
+        var val = $('#selsimilarSeardeviceName').selectpicker('val');
+        $('#selsimilarSeardeviceModel').selectpicker('val', val);
+        $('#selsimilarSeardeviceGroup').selectpicker('val', val);
+        //加载该实例所勾选的参数
+        setMessage('正在加载该实例的特征参数', 'info', true);
+        var json = [{
+            lineId: val
+        }];
+        $('#selsimilarSeardeviceFeatureSeled').selectpicker('destroy');
+        $('#selsimilarSeardeviceFeatureSeled option').remove();
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+        $.ajax({
+                url: 'user/businiess/similarSearch/instancefeture',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                //ModelMaintainbaseinfoEditDlgBody
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].name;
+                    var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+                    $('#selsimilarSeardeviceFeatureSeled').append(strOption);
+
+                }
+                $('#selsimilarSeardeviceFeatureSeled').selectpicker();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    });
+
+    $("#selsimilarSeardeviceSameGroup").on('change', function(event) {
+        event.preventDefault();
+        var val = $('#selsimilarSeardeviceSameGroup').selectpicker('val');
+        if (val == 'true') {
+            $('#selsimilarSeardeviceSameModel').selectpicker('val', val);
+        }
+    });
+
+    $("#selsimilarSeardeviceSameModel").on('change', function(event) {
+        event.preventDefault();
+        var val = $('#selsimilarSeardeviceSameModel').selectpicker('val');
+        if (val == 'false') {
+            $('#selsimilarSeardeviceSameGroup').selectpicker('val', val);
+        }
+    });
+
+    var $selectIsNumber = $("#selsimilarSeardeviceSameModel");
+    var data = [{
+        id: true,
+        name: '是'
+    }, {
+        id: false,
+        name: '否'
+    }];
+    for (var i = 0; i < data.length; i++) {
+        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+        $selectIsNumber.append(strOption);
+    }
+    $selectIsNumber.selectpicker();
+
+    var $selectIsNumber = $("#selsimilarSeardeviceSameGroup");
+    var data = [{
+        id: true,
+        name: '是'
+    }, {
+        id: false,
+        name: '否'
+    }];
+    for (var i = 0; i < data.length; i++) {
+        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+        $selectIsNumber.append(strOption);
+    }
+    $selectIsNumber.selectpicker();
+
+    var $selectIsNumber = $("#selsimilarSeardeviceFeatureSeled");
+    $selectIsNumber.selectpicker();
+
+    var $selectIsNumber = $("#selsimilarSeardeviceParamsCompare");
+    var data = [{
+        id: 0,
+        name: '不对比'
+    }, {
+        id: 1,
+        name: '高于参照实例'
+    }, {
+        id: 2,
+        name: '低于参照实例'
+    }];
+    for (var i = 0; i < data.length; i++) {
+        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+        $selectIsNumber.append(strOption);
+    }
+    $selectIsNumber.selectpicker();
+
+    /*begin define tbSimilarSearchInfo */
+    $("#tbSimilarSearchInfo").bootstrapTable({
+        pagination: true,
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "createTime",
+            title: "创建时间",
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: "instanceNumber",
+            title: "实例编号"
+        }, {
+            field: "instanceName",
+            title: "实例名称"
+        }, {
+            field: "modelLineId",
+            title: "实例型号"
+        }, {
+            field: "createUser",
+            title: "创建人"
+        }, {
+            field: "lineId",
+            title: "实例主键序号",
+            visible: false
+        }]
+    });
+    /*end define tbSimilarSearchInfo */
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    var btnsimilarSearchNumberClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+
+        var json = [{
+            modelLineId: selRows[0].modelLineId
+        }];
+
+        $.ajax({
+                url: 'user/businiess/similarSearch/modelByLineId',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                var code = data.modelNumber;
+                var code0_3 = code.substring(0, 4);
+                var code4_5 = code.substring(4, 6);
+                var code6 = code.substring(6, 7);
+                var code7 = code.substring(7, 8);
+                var code8 = code.substring(8, 9);
+                var code9 = code.substring(9, 10);
+                var code10 = code.substring(10, 11);
+                var code11 = code.substring(11, 12);
+                var code12 = code.substring(12, 13);
+                var code13 = code.substring(13, 14);
+                $('#selSimilarSearchCodeMachineType').selectpicker('val', code0_3);
+                $('#iptDivthsimilarSearchMainParams').val(code4_5);
+                $('#selSimilarSearchCodeControlType').selectpicker('val', code6);
+                $('#selSimilarSearchCodePreciseLevel').selectpicker('val', code7);
+                $('#selSimilarSearchCodeMainPower').selectpicker('val', code8);
+                $('#selSimilarSearchCodeMainVel').selectpicker('val', code9);
+                $('#selSimilarSearchCodeHasKnife').selectpicker('val', code10);
+                $('#selSimilarSearchCodeHasnumber').selectpicker('val', code11);
+                $('#selSimilarSearchCodeDeviceSource').selectpicker('val', code12);
+                $('#selSimilarSearchCodeManagerlevel').selectpicker('val', code13);
+                var selected = $('#selSimilarSearchCodeMachineType option:selected').val();
+                $('[data-toggle="tooltip"]').tooltip('destroy');
+                $('#similarSearchMainParams').attr('title', '未知');
+                for (var i = 0; i < codemachinetypeJson.params.length; i++) {
+                    if (codemachinetypeJson.params[i].id == selected) {
+                        $('#similarSearchMainParams').attr('title', codemachinetypeJson.params[i].name);
+                        break;
+                    }
+                }
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#similarSearchNumberlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    }
+    $('#btnsimilarSearchNumber').on('click', btnsimilarSearchNumberClick);
+
+    /*获取设备类型字典*/
+    var codemachinetypeJson;
+    $.ajax({
+        url: "user/businiess/directionary/codemachinetype",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        codemachinetypeJson = data;
+        var $selectType = $("#selSimilarSearchCodeMachineType");
+        for (var i = 0; i < data.types.length; i++) {
+            var strOption = '<option value="' + data.types[i].id + '">' + data.types[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType.on('change', function() {
+            var selected = $('#selSimilarSearchCodeMachineType option:selected').val();
+            $('[data-toggle="tooltip"]').tooltip('destroy');
+            $('#similarSearchMainParams').attr('title', '未知');
+            for (var i = 0; i < codemachinetypeJson.params.length; i++) {
+                if (codemachinetypeJson.params[i].id == selected) {
+                    $('#similarSearchMainParams').attr('title', codemachinetypeJson.params[i].name);
+                    break;
+                }
+            }
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $selectType = $("#selSimilarSearchCodeControlType");
+        for (var i = 0; i < data.controltype.length; i++) {
+            var strOption = '<option value="' + data.controltype[i].id + '">' + data.controltype[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodePreciseLevel");
+        for (var i = 0; i < data.preciselevel.length; i++) {
+            var strOption = '<option value="' + data.preciselevel[i].id + '">' + data.preciselevel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodeMainPower");
+        for (var i = 0; i < data.mainpower.length; i++) {
+            var strOption = '<option value="' + data.mainpower[i].id + '">' + data.mainpower[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodeMainVel");
+        for (var i = 0; i < data.mainvel.length; i++) {
+            var strOption = '<option value="' + data.mainvel[i].id + '">' + data.mainvel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodeHasKnife");
+        for (var i = 0; i < data.hasKnife.length; i++) {
+            var strOption = '<option value="' + data.hasKnife[i].id + '">' + data.hasKnife[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodeHasnumber");
+        for (var i = 0; i < data.hasnumber.length; i++) {
+            var strOption = '<option value="' + data.hasnumber[i].id + '">' + data.hasnumber[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+
+        $selectType = $("#selSimilarSearchCodeDeviceSource");
+        for (var i = 0; i < data.deviceSource.length; i++) {
+            var strOption = '<option value="' + data.deviceSource[i].id + '">' + data.deviceSource[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selSimilarSearchCodeManagerlevel");
+        for (var i = 0; i < data.managerlevel.length; i++) {
+            var strOption = '<option value="' + data.managerlevel[i].id + '">' + data.managerlevel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#selsimilarSearchMachineMethod");
+        for (var i = 0; i < data.method.length; i++) {
+            var strOption = '<option value="' + data.method[i].id + '">' + data.method[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*获取设备类型字典*/
+
+    var btnsimilarSearchMethodClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+
+        $('#selsimilarSearchMachineMethod').selectpicker('deselectAll');
+        var json = [{
+            lineId: selRows[0].modelLineId
+        }];
+        setMessage('正在加载该选项的加工方法', 'info', true);
+        $.ajax({
+                url: 'user/businiess/directionary/methodById',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                var idArr = [];
+                for (var i = 0; i < data.length; i++) {
+                    idArr.push(data[i].id);
+                }
+                $('#selsimilarSearchMachineMethod').selectpicker('val', idArr);
+                $('#similarSearchMethodEditlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    };
+    $("#btnsimilarSearchMethod").on("click", btnsimilarSearchMethodClick);
+
+    var btnsimilarSearchBaseInfoClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+
+        var json = [{
+            lineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/baseinfo',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#similarSearchBaseInfoDlgBody').empty();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].name;
+                    var value = data[i].value;
+                    $tmpDiv0 = $('<div class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;"></div>');
+                    $tmpDiv1 = $('<div class="input-group"></div>');
+                    $tmpSpan = $('<span class="input-group-addon">' + name + '</span>');
+                    $tmpIpt = $('<input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">');
+                    $tmpIpt.attr('id', 'similarSearchBaseInfo_' + id);
+                    $tmpIpt.val(value);
+                    $tmpDiv1.append($tmpSpan);
+                    $tmpDiv1.append($tmpIpt);
+                    $tmpDiv0.append($tmpDiv1);
+                    $('#similarSearchBaseInfoDlgBody').append($tmpDiv0);
+                }
+                setMessage('已加载该选项信息', 'success', true);
+                $('#similarSearchBaseInfoDlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    }
+    $('#btnsimilarSearchBaseInfo').on('click', btnsimilarSearchBaseInfoClick);
+
+    var btnsimilarSearchFeatureClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+
+        var json = [{
+            lineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/feature',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#similarSearchFeatureDlgBody').empty();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].name;
+                    var value = data[i].value;
+                    $tmpDiv0 = $('<div class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;"></div>');
+                    $tmpDiv1 = $('<div class="input-group"></div>');
+                    $tmpSpan = $('<span class="input-group-addon">' + name + '</span>');
+                    $tmpIpt = $('<input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">');
+                    $tmpIpt.attr('id', 'similarSearchFeature_' + id);
+                    $tmpIpt.val(value);
+                    $tmpDiv1.append($tmpSpan);
+                    $tmpDiv1.append($tmpIpt);
+                    $tmpDiv0.append($tmpDiv1);
+                    $('#similarSearchFeatureDlgBody').append($tmpDiv0);
+                }
+                setMessage('已加载该选项信息', 'success', true);
+                $('#similarSearchFeatureDlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    }
+    $('#btnsimilarSearchFeature').on('click', btnsimilarSearchFeatureClick);
+
+    var btnSimilarSearchAvailabletimeClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        var json = [{
+            instanceLineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/availabletime',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#similarSearchAvailableMonth').val(data.availableMonth);
+                $('#similarSearchAvailableWeek').val(data.availableWeek);
+                $('#similarSearchAvailableDay').val(data.availableDay);
+                $('#similarSearchAvaliableDlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+    }
+    $('#btnSimilarSearchAvailabletime').on('click', btnSimilarSearchAvailabletimeClick);
+
+    var btnSimilarSearchPreviewUploadClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbSimilarSearchInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = {
+            sourceLineId: selRows[0].lineId,
+            fileSource: 2,
+            active: 1
+        };
+        $('#iptDivthsimilarSearchPreviewUploadDiv img').remove();
+        $('#iptDivthsimilarSearchPreviewUploadDiv').append('<img src="" height="100%" width="100%" alt="图片不存在或正在加载..." id="similarSearchInstancePreview" />');
+        setMessage('正在加载该选项的预览图', 'info', true);
+        var strSrc = "user/businiess/fileupload/preivew?sourceLineId=" + selRows[0].lineId + "&fileSource=2&active=1";
+
+        $('#similarSearchInstancePreview').attr('src', strSrc);
+        $('#similarSearchPreviewUploadDlg').modal();
+    }
+    $('#btnSimilarSearchPreviewUpload').on('click', btnSimilarSearchPreviewUploadClick);
+});
+</script>

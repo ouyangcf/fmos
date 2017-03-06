@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>云制造设备管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Loading Bootstrap UI -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!-- Loading Messenger UI -->
+    <link rel="stylesheet" type="text/css" href="css/messenger.css">
+    <link rel="stylesheet" type="text/css" href="css/messenger-theme-flat.css">
+    <!-- Loading Custom UI -->
+    <link href="css/custom/index-ui.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Title -->
+        <div class="row">
+            <h3 class="text-center">
+                云制造设备管理系统
+            </h3>
+            <p class="text-center small">
+                某公司
+            </p>
+        </div>
+        <!-- /Title -->
+        <!-- Login Form -->
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-form">
+                    <div class="form-group" id="div_name">
+                        <input type="text" class="form-control login-field" value="" placeholder="请输入你的账号" id="login-name" />
+                        <label class="login-field-icon fui-user" for="login-name" id="label_name"></label>
+                    </div>
+                    <div class="form-group" id="div_password">
+                        <input type="password" class="form-control login-field" value="" placeholder="密码" id="login-pass" />
+                        <label class="login-field-icon fui-lock" for="login-pass" id="label_pass"></label>
+                    </div>
+                    <a id="btn_login" class="btn btn-primary btn-lg btn-block" href="#">登录</a>
+                    <a class="login-link" href="#">忘记密码?</a>
+                </div>
+            </div>
+        </div>
+        <!-- /Login Form -->
+    </div>
+    <!-- Loading Jquery -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Loading Flat-UI -->
+    <script src="js/flat-ui.min.js"></script>
+    <!-- Loading Messenger -->
+    <script src="js/backbone-0.9.10.js"></script>
+    <script src="js/messenger.min.js"></script>
+    <script src="js/messenger-theme-flat.js"></script>
+    <!-- Loading Custom JavaScript -->
+    <script src="js/custom/utils.js"></script>
+    <script src="js/custom/index-init.js"></script>
+    <script src="js/custom/index-pocess.js"></script>
+</body>
+
+</html>

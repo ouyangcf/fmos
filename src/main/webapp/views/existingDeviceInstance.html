@@ -1,0 +1,91 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divExistingDeviceInstanceMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divExistingDeviceInstanceToolbar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divExistingDeviceInstanceToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnExistingDeviceInstanceDetailInfo" class="btn btn-primary">
+                <i class="glyphicon glyphicon-list-alt"></i>特征信息</a>
+            <a id="btnbtnExistingDeviceInstanceCustomInfo" class="btn btn-info">
+                <i class="glyphicon glyphicon-music"></i>自定义信息</a>
+        </div>
+    </div>
+    <div id="divExistingDeviceInstanceSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthExistingDeviceInstanceKeyWord" class="col-md-11 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thExistingDeviceInstanceKeyWord">
+            </div>
+        </div>
+        <a id="btnExistingDeviceInstanceSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divExistingDeviceInstanceTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbExistingDeviceInstance" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbExistingDeviceInstance"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnExistingDeviceInstanceDetailInfo */
+    var btnExistingDeviceInstanceDetailInfoClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnExistingDeviceInstanceDetailInfo").on("click", btnExistingDeviceInstanceDetailInfoClick);
+    /*end define btnExistingDeviceInstanceDetailInfo */
+
+    /*begin define btnbtnExistingDeviceInstanceCustomInfo */
+    var btnbtnExistingDeviceInstanceCustomInfoClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnbtnExistingDeviceInstanceCustomInfo").on("click", btnbtnExistingDeviceInstanceCustomInfoClick);
+    /*end define btnbtnExistingDeviceInstanceCustomInfo */
+
+    /*begin define thExistingDeviceInstanceKeyWord */
+    var $input = $("#thExistingDeviceInstanceKeyWord");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethExistingDeviceInstanceKeyWord */
+
+    /*begin define btnExistingDeviceInstanceSearch */
+    var btnExistingDeviceInstanceSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnExistingDeviceInstanceSearch").on("click", btnExistingDeviceInstanceSearchClick);
+    /*end define btnExistingDeviceInstanceSearch */
+
+    /*begin define tbExistingDeviceInstance */
+    $("#tbExistingDeviceInstance").bootstrapTable({
+        url: "existingDeviceInstance/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceNumber",
+            title: "设备编号"
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceMoel",
+            title: "设备型号"
+        }, {
+            field: "createTime",
+            title: "创建时间"
+        }]
+    });
+    /*end define tbExistingDeviceInstance */
+});
+</script>

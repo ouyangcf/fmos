@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+    <bean id="shiroRealm" class="com.unicom.fmos.shiro.realm.ShiroRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="cachingEnabled" value="true"/>
+        <property name="authenticationCachingEnabled" value="true"/>
+        <property name="authenticationCacheName" value="authenticationCache"/>
+        <property name="authorizationCachingEnabled" value="true"/>
+        <property name="authorizationCacheName" value="authorizationCache"/>
+    </bean>
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="shiroRealm"></property>
+        <property name="cacheManager" ref="cacheManager"></property>
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+    <bean id="credentialsMatcher" class="com.unicom.fmos.shiro.credentials.CredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+    <!-- 会话管理器 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager">
+    </bean>
+    <!-- 会话管理器 -->
+    <!-- shiroFilter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+        <property name="successUrl" value="/home.jsp" />
+        <property name="loginUrl" value="/index.html" />
+        <property name="unauthorizedUrl" value="/unauthorize.html" />
+        <property name="filterChainDefinitions">
+            <value>
+                /index.html=anon
+                /error.html=anon
+                /home.jsp=authc
+                /user/log/out=logout
+                /user/businiess/*/*=authc
+            </value>
+        </property>
+    </bean>
+    <!-- shiroFilter -->
+</beans>

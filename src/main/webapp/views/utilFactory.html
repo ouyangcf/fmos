@@ -1,0 +1,135 @@
+<div class="container-fluid" id="divUtilsContainer">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <form role="form">
+            <div class="form-group">
+                <label for="iptUtilNumber">编号</label>
+                <input type="text" class="form-control" id="iptUtilNumber" placeholder="编号">
+            </div>
+            <div class="form-group">
+                <label for="iptUtilTitle">题目</label>
+                <input type="text" class="form-control" id="iptUtilTitle" placeholder="题目">
+            </div>
+            <div class="form-group">
+                <label for="iptUtilDescription">描述</label>
+                <input type="text" class="form-control" id="iptUtilDescription" placeholder="描述">
+            </div>
+            <div class="form-group">
+                <label for="iptUtilCode">代码</label>
+                <textarea id="iptUtilCode" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="cbUtilDisplay"> 展示view
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnUtilGenerate">生成HTML文件</button>
+        </form>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    var divUtilsContainerResizePage = function() {
+        /*resetting the height*/
+        var height = window.screen.availHeight;
+        var setHeight = height * 0.9 - 127 - 50;
+        $('#divUtilsContainer').css('height', setHeight + 'px');
+        $("#divUtilsContainer").niceScroll({
+            cursorcolor: "#C6C8CA"
+        });
+        /*resetting the height*/
+    }
+
+    $(window).resize(function() {
+        divUtilsContainerResizePage();
+    });
+    divUtilsContainerResizePage();
+
+    var btnUtilGenerateClick = function(event) {
+        event.preventDefault();
+
+        var number = $('#iptUtilNumber').val();
+        var title = $('#iptUtilTitle').val();
+        var desc = $('#iptUtilDescription').val();
+        var code = $('#iptUtilCode').val();
+        var display = $('#cbUtilDisplay').prop('checked');
+
+        var $divMain = $('<div></div>');
+
+        var $divContainer = $('<div></div>');
+        $divContainer.attr('id', 'div' + number + 'Container');
+        $divContainer.addClass('container-fluid');
+
+        var $h3Title = $('<h3></h3>');
+        $h3Title.attr('id', 'h3' + number + 'Title');
+        $h3Title.text(title);
+
+        var $pDesc = $('<p></p>');
+        $pDesc.attr('id', 'p' + number + 'Desc');
+        $pDesc.text(desc);
+
+        var $divDisplay = $('<div></div>');
+        $divDisplay.attr('id', 'div' + number + 'Display');
+        if (display) {
+            $divDisplay.html(code);
+        }
+
+        var $preCode = $('<pre></pre>');
+        $preCode.attr('id', 'pre' + number + 'Code');
+        var escaped = $("<div>").text(code).html();
+        $preCode.html(escaped);
+
+        $divContainer.append($h3Title);
+        $divContainer.append($pDesc);
+        $divContainer.append($divDisplay);
+        $divContainer.append($preCode);
+        $divMain.append($divContainer);
+
+        var formContent = $divMain.html();
+
+        var strScript = '<script>jQuery(document).ready(function($) {\nvar div' + number + 'Container' + 'ResizePage = function() {/*resetting the height*/var height = window.screen.availHeight;var setHeight = height * 0.9 - 127 - 50;$("#div' + number + 'Container' + '").css("height", setHeight + "px");$("#div' + number + 'Container' + '").niceScroll({cursorcolor: "#C6C8CA"});/*resetting the height*/}$(window).resize(function() {div' + number + 'Container' + 'ResizePage();});div' + number + 'Container' + 'ResizePage();\n});<\/script>';
+        formContent = '<!-- Created by zhaojb on ' + moment().format('YYYY-MM-DD') + ' -->' + formContent + strScript;
+        var json = [{
+            formName: title,
+            formNumber: number,
+            formContent: formContent
+        }];
+        setMessage('正在导出,请稍等', 'info', true);
+        //向后台发送请求
+        var form = $("<form>"); //定义一个form表单
+        form.attr('style', 'display:none');
+        form.attr('target', '');
+        form.attr('method', 'post');
+        form.attr('action', 'user/businiess/form/generate');
+        if (title != '') {
+            //添加input
+            var input1 = $("<input>");
+            input1.attr('type', 'hidden');
+            input1.attr('name', 'formName');
+            input1.attr('value', title);
+            form.append(input1);
+        }
+        if (number != '') {
+            //添加input
+            var input2 = $("<input>");
+            input2.attr('type', 'hidden');
+            input2.attr('name', 'formNumber');
+            input2.attr('value', number);
+            form.append(input2);
+        }
+        if (formContent != '') {
+            //添加input
+            var input3 = $("<input>");
+            input3.attr('type', 'hidden');
+            input3.attr('name', 'formContent');
+            input3.attr('value', formContent);
+            form.append(input3);
+        }
+        //将表单放到body中
+        $('body').append(form);
+        form.submit(); //提交表单2
+    }
+    $('#btnUtilGenerate').on('click', btnUtilGenerateClick);
+});
+</script>

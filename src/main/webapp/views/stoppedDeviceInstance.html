@@ -1,0 +1,85 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divStoppedDeviceInstanceMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divStoppedDeviceInstanceToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divStoppedDeviceInstanceToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnStoppedDeviceInstance" class="btn btn-info">
+                <i class="glyphicon glyphicon-list-alt"></i>特征信息</a>
+        </div>
+    </div>
+    <div id="divStoppedDeviceInstanceSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthStoppedDeviceInstanceKeyWord" class="col-md-11 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thStoppedDeviceInstanceKeyWord">
+            </div>
+        </div>
+        <a id="btnStoppedDeviceInstanceSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divStoppedDeviceInstanceTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbStoppedDeviceInstanceinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbStoppedDeviceInstanceinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnStoppedDeviceInstance */
+    var btnStoppedDeviceInstanceClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnStoppedDeviceInstance").on("click", btnStoppedDeviceInstanceClick);
+    /*end define btnStoppedDeviceInstance */
+
+    /*begin define thStoppedDeviceInstanceKeyWord */
+    var $input = $("#thStoppedDeviceInstanceKeyWord");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethStoppedDeviceInstanceKeyWord */
+
+    /*begin define btnStoppedDeviceInstanceSearch */
+    var btnStoppedDeviceInstanceSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnStoppedDeviceInstanceSearch").on("click", btnStoppedDeviceInstanceSearchClick);
+    /*end define btnStoppedDeviceInstanceSearch */
+
+    /*begin define tbStoppedDeviceInstanceinfos */
+    $("#tbStoppedDeviceInstanceinfos").bootstrapTable({
+        url: "stoppedDeviceInstance/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceNumber",
+            title: "设备编号"
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "createTime",
+            title: "添加时间"
+        }, {
+            field: "stopTime",
+            title: "停用时间"
+        }]
+    });
+    /*end define tbStoppedDeviceInstanceinfos */
+});
+</script>

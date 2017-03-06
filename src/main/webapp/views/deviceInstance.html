@@ -1,0 +1,935 @@
+﻿<!-- Created by zhaojb on 2017-01-24 -->
+<div id="deviceInstanceMainContainer" class="container-fluid" style="margin-top:5px;margin-bottom:5px;">
+    <div class="row">
+        <div id="deviceInstanceToolDiv" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btndeviceInstanceDel" class="btn btn-danger hidden">
+                <i class="glyphicon glyphicon-refresh"></i>删除</a>
+            <a id="btndeviceInstanceAvailabletime" class="btn btn-primary">
+                <i class="glyphicon glyphicon-calendar"></i>可用时间</a>
+            <a id="btndeviceInstanceBasicInfo" class="btn btn-success">
+                <i class="glyphicon glyphicon-inbox"></i>基本信息</a>
+            <a id="btndeviceInstanceFeature" class="btn btn-default">
+                <i class="glyphicon glyphicon-film"></i>特征信息</a>
+            <a id="btnDeviceInstanceInstanceFileManage" class="btn btn-danger">
+                <i class="glyphicon glyphicon-magnet"></i>文件管理</a>
+            <a id="btnDeviceInstanceInstancePreviewUpload" class="btn btn-primary">
+                <i class="glyphicon glyphicon-paperclip"></i>实例预览</a>
+            <a id="btndeviceInstanceRefresh" class="btn btn-warning">
+                <i class="glyphicon glyphicon-refresh"></i>刷新</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row" style="margin-top: 2px;">
+                <div id="iptDivthInstanceModelNumber" class="col-md-6 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">实例编号</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="iptInstanceModelNumber">
+                    </div>
+                </div>
+                <div id="iptDivthInstanceModelName" class="col-md-6 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">实例名称</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="iptInstanceModelName">
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2px;">
+                <div id="iptDivInstanceModelModel" class="col-md-11 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">实例型号</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="iptInstanceModelModel">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <a id="btndeviceInstanceSearch" class="btn btn-primary pull-right">
+                        <i class="glyphicon glyphicon-search"></i>搜索</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="divdeviceInstanceTble" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbdeviceInstanceInfos"></table>
+        </div>
+    </div>
+</div>
+<!-- 可用时间编辑对话框 -->
+<div class="modal fade" id="deviceInstanceAvailableTimeEditlg" tabindex="-1" role="dialog" aria-labelledby="deviceInstanceDlgAvailableTimeLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceInstanceAvailabletimeEditClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceInstanceDlgAvailableTimeLabel">可用时间</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">月可用时间(小时)</span>
+                            <input class="form-control typeahead" id="deviceInstanceAvailableMonth" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">周可用时间(小时)</span>
+                            <input class="form-control typeahead" id="deviceInstanceAvailableWeek" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">日可用时间(小时)</span>
+                            <input class="form-control typeahead" id="deviceInstanceAvailableDay" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceInstanceAvailableTimeEditCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceInstanceAvailableTimeEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 可用时间编辑对话框 -->
+<!-- 基本信息编辑对话框 -->
+<div class="modal fade" id="deviceInstanceBaseInfoEditdlg" tabindex="-1" role="dialog" aria-labelledby="deviceInstanceDlgBaseInfoLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceInstanceBaseInfoEditClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceInstanceDlgBaseInfoLabel">基本信息</h4>
+            </div>
+            <div class="container-fluid" id="deviceInstanceBaseInfoEditdlgBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceInstanceBaseInfoEditCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceInstanceBaseInfoEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 基本信息编辑对话框 -->
+<!-- 特征信息编辑对话框 -->
+<div class="modal fade" id="deviceInstanceFeatureEditdlg" tabindex="-1" role="dialog" aria-labelledby="deviceInstanceDlgFeatureLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceInstanceFeatureEditClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceInstanceDlgFeatureLabel">特征信息</h4>
+            </div>
+            <div class="container-fluid" id="deviceInstanceFeatureEditdlgBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceInstanceFeatureEditCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceInstanceFeatureEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 特征信息编辑对话框 -->
+<!--  文件管理对话框 -->
+<div class="modal fade" id="deviceInstanceFileManageDlg" tabindex="-1" role="dialog" aria-labelledby="deviceInstanceFileManageDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceInstanceFileManageDlgClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceInstanceFileManageDlgLabel"> 文件管理</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="" class="col-md-12 col-md-offset-0" style="margin-top:10px;margin-bottom:5px;">
+                        <a id="btnDeviceInstanceInstanceFileDownload" class="btn btn-warning">
+                            <i class="glyphicon glyphicon-download"></i>文件下载</a>
+                    </div>
+                    <div id="divdeviceInstanceFileManageTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+                        <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbdeviceInstanceFileManage"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceInstanceFileManageDlgCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceInstanceFileManageDlgEnsure">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  文件管理对话框 -->
+<!--  预览图片上传对话框 -->
+<div class="modal fade" id="deviceInstancePreviewUploadDlg" tabindex="-1" role="dialog" aria-labelledby="deviceInstancePreviewUploadDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceInstancePreviewUploadDlgClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceInstancePreviewUploadDlgLabel"> 实例预览</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" id="deviceInstancePreviewUploadDlgDlgBody" style="margin-top: 2px;margin-bottom: 2px;">
+                    <div id="iptDivthdeviceInstancePreviewUploadDiv" class="col-md-12 col-md-offset-0">
+                        <img src="" height="100%" width="100%" alt="图片不存在或正在加载..." id="instancePreview" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceInstancePreviewUploadDlgCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceInstancePreviewUploadDlgEnsure">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  预览图片上传对话框 -->
+<script>
+jQuery(document).ready(function($) {
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+        $('#' + id).empty();
+        $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+        $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+        var url = 'views/' + id + '.html';
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                beforeSend: function(XHR) {
+                    setLoader(id);
+                }
+            })
+            .done(function(data) {
+                removeLoader(id);
+                $('#' + id).append(data);
+            })
+            .fail(function() {})
+            .always(function() {});
+    }
+
+    var btnDeviceInstanceBaseInfoEditEnsureClick = function(event) {
+        event.preventDefault();
+        var flag = false;
+        if ($('#deviceInstanceBaseInfoEditdlgBody input').length == 0) {
+            $('#deviceInstanceBaseInfoEditdlg').modal('hide');
+            return;
+        }
+        var str = '';
+        $('#deviceInstanceBaseInfoEditdlgBody input').each(function(index, el) {
+            if ($.trim($(el).val()) == '') {
+                flag = true;
+                str = str + '  ' + $(el).parent().children("span").text() + '  ';
+            }
+        });
+        if (flag == true) {
+            setMessage(str + "未填写", 'error', true);
+            event.stopPropagation();
+            return;
+        }
+        $('<div id="deviceInstanceBaseInfoResult"></div>').appendTo('body');
+        $('#deviceInstanceBaseInfoEditdlg').modal('hide');
+    }
+    $('#btnDeviceInstanceBaseInfoEditEnsure').on('click', btnDeviceInstanceBaseInfoEditEnsureClick);
+
+    var btnDeviceInstanceFeatureEditEnsureClick = function(event) {
+        event.preventDefault();
+        var flag = false;
+        if ($('#deviceInstanceFeatureEditdlgBody input').length == 0) {
+            $('#deviceInstanceFeatureEditdlg').modal('hide');
+            return;
+        }
+        var str = '';
+        $('#deviceInstanceFeatureEditdlgBody input').each(function(index, el) {
+            if ($.trim($(el).val()) == '') {
+                flag = true;
+                str = str + '  ' + $(el).parent().children("span").text() + '  ';
+            }
+        });
+        if (flag == true) {
+            setMessage(str + "未填写", 'error', true);
+            event.stopPropagation();
+            return;
+        }
+
+        var reg = /^[-+]?\d+(\.\d+)?$/;
+        $('#deviceInstanceFeatureEditdlgBody input').each(function(index, el) {
+            if (reg.test($.trim($(el).val())) == false) {
+                flag = true;
+                str = str + '  ' + $(el).parent().children("span").text() + '  ';
+            }
+        });
+        if (flag == true) {
+            setMessage(str + "未填写数字", 'error', true);
+            event.stopPropagation();
+            return;
+        }
+
+        $('<div id="deviceInstanceFeatureResult"></div>').appendTo('body');
+        $('#deviceInstanceFeatureEditdlg').modal('hide');
+    }
+    $('#btnDeviceInstanceFeatureEditEnsure').on('click', btnDeviceInstanceFeatureEditEnsureClick);
+
+    /*begin define btndeviceInstanceRefresh */
+    var btndeviceInstanceRefreshClick = function(event) {
+        event.preventDefault();
+        $('#deviceInstance').empty();
+        refresh('deviceInstance');
+        event.stopPropagation();
+    };
+    $("#btndeviceInstanceRefresh").on("click", btndeviceInstanceRefreshClick);
+    /*end define btndeviceInstanceRefresh */
+
+    /*begin define btndeviceInstanceRefresh */
+    var btndeviceInstanceDelClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        } else {
+            msg = Messenger().post({
+                message: "是否删除选定的行?",
+                hideAfter: 10,
+                actions: {
+                    delete: {
+                        label: "删除",
+                        action: function() {
+                            msg.hide();
+                            var j = 0;
+                            var idArr = [];
+                            for (var i = 0; i < selRows.length; i++) {
+                                if (selRows[i].lineId != undefined) {
+                                    idArr.push(selRows[i].lineId);
+                                    j++;
+                                }
+                            }
+                            if (j == 0) {
+                                setMessage('没有需要删除的行', 'error', true);
+                                return false;
+                            } else {
+                                $('#btndeviceInstanceDel').off('click');
+                                $.ajax({
+                                        url: 'user/business/deviceInstance/del',
+                                        type: 'POST',
+                                        data: {
+                                            "idArr": idArr
+                                        },
+                                        dataType: "json"
+                                    })
+                                    .done(function(data) {
+                                        if (data.retCode == -1) {
+                                            setMessage(data.errDesc, 'error', true);
+                                            return;
+                                        }
+                                        if (data.retCode == 1) {
+                                            setMessage('删除成功', 'success', true);
+                                            $('#btndeviceInstanceRefresh').click();
+                                        }
+                                    })
+                                    .fail(function(data) {
+                                        setMessage('删除失败', 'error', true);
+                                    })
+                                    .always(function(data) {
+                                        $('#btndeviceInstanceDel').on('click', btndeviceInstanceDelClick);
+                                    });
+                            }
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        action: function() {
+                            msg.hide();
+                        }
+                    }
+                }
+            });
+        }
+        event.stopPropagation();
+    };
+    $("#btndeviceInstanceDel").on("click", btndeviceInstanceDelClick);
+    /*end define btndeviceInstanceRefresh */
+
+    var btnDeviceInstanceAvailableTimeEditEnsureClick = function(event) {
+        $('<div id="DeviceInstanceAvailableTimeEditResult"></div>').appendTo('body');
+        $('#deviceInstanceAvailableTimeEditlg').modal('hide');
+    };
+    $('#btnDeviceInstanceAvailableTimeEditEnsure').on('click', btnDeviceInstanceAvailableTimeEditEnsureClick);
+
+    $('#deviceInstanceAvailableTimeEditlg').on('hidden.bs.modal', function(event) {
+        if ($('#DeviceInstanceAvailableTimeEditResult').length != 0) {
+            $('#DeviceInstanceAvailableTimeEditResult').remove();
+            var $table = $('#tbdeviceInstanceInfos');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var availableMonth = $('#deviceInstanceAvailableMonth').val();
+            var availableWeek = $('#deviceInstanceAvailableWeek').val();
+            var availableDay = $('#deviceInstanceAvailableDay').val();
+            var json = [{
+                instanceLineId: selRows[0].lineId,
+                availableMonth: availableMonth,
+                availableWeek: availableWeek,
+                availableDay: availableDay
+            }];
+            $.ajax({
+                    url: 'user/business/deviceInstance/availableupdate',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'success', true);
+                        $('#btndeviceInstanceRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                });
+        }
+    });
+
+    $('#deviceInstanceBaseInfoEditdlg').on('hidden.bs.modal', function(event) {
+        if ($('#deviceInstanceBaseInfoResult').length != 0) {
+            $('#deviceInstanceBaseInfoResult').remove();
+            var $table = $('#tbdeviceInstanceInfos');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var nodeJsonArray = [];
+            var instanceLineId = selRows[0].lineId;
+
+            if ($('#deviceInstanceBaseInfoEditdlgBody input').length == 0) {
+                return;
+            }
+
+            $('#deviceInstanceBaseInfoEditdlgBody input').each(function(index, el) {
+                var infoValue = $(el).val();
+                var strBaseinfoHeadLineId = $(el).attr('id').split('_');
+                var baseinfoHeadLineId = strBaseinfoHeadLineId[1] * 1;
+                var jsoni = {
+                    "instanceLineId": instanceLineId,
+                    "baseinfoHeadLineId": baseinfoHeadLineId,
+                    "infoValue": infoValue
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+            setMessage('正在提交', 'info', true);
+            $.ajax({
+                    url: 'user/business/deviceInstance/baseinfoupdate',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(nodeJsonArray)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'success', true);
+                        $('#btndeviceInstanceRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                });
+        }
+    });
+    $('#deviceInstanceFeatureEditdlg').on('hidden.bs.modal', function(event) {
+        if ($('#deviceInstanceFeatureResult').length != 0) {
+            $('#deviceInstanceFeatureResult').remove();
+            var $table = $('#tbdeviceInstanceInfos');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var nodeJsonArray = [];
+            var instanceLineId = selRows[0].lineId;
+
+            if ($('#deviceInstanceFeatureEditdlgBody input').length == 0) {
+                return;
+            }
+
+            $('#deviceInstanceFeatureEditdlgBody input').each(function(index, el) {
+                var infoValue = $(el).val();
+                var strBaseinfoHeadLineId = $(el).attr('id').split('_');
+                var featureHeadLineId = strBaseinfoHeadLineId[1] * 1;
+                var jsoni = {
+                    "instanceLineId": instanceLineId,
+                    "featureHeadLineId": featureHeadLineId,
+                    "infoValue": infoValue
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+            setMessage('正在提交', 'info', true);
+            $.ajax({
+                    url: 'user/business/deviceInstance/featureupdate',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(nodeJsonArray)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'success', true);
+                        $('#btndeviceInstanceRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                });
+        }
+    });
+
+    /*begin define btndeviceInstanceRefresh */
+    var btndeviceInstanceAvailabletimeClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = [{
+            instanceLineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/availabletime',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#deviceInstanceAvailableMonth').val(data.availableMonth);
+                $('#deviceInstanceAvailableWeek').val(data.availableWeek);
+                $('#deviceInstanceAvailableDay').val(data.availableDay);
+                $('#deviceInstanceAvailableTimeEditlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+    };
+    $("#btndeviceInstanceAvailabletime").on("click", btndeviceInstanceAvailabletimeClick);
+    /*end define btndeviceInstanceRefresh */
+
+    /*begin define btndeviceInstanceRefresh */
+    var btndeviceInstanceBasicInfoClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = [{
+            lineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/baseinfo',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                out('迷之flag');
+                out(data);
+                $('#deviceInstanceBaseInfoEditdlgBody').empty();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].name;
+                    var value = data[i].value;
+                    $tmpDiv0 = $('<div class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;"></div>');
+                    $tmpDiv1 = $('<div class="input-group"></div>');
+                    $tmpSpan = $('<span class="input-group-addon">' + name + '</span>');
+                    $tmpIpt = $('<input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">');
+                    $tmpIpt.attr('id', 'deviceInstanceBaseInfoEdit_' + id);
+                    $tmpIpt.val(value);
+                    $tmpDiv1.append($tmpSpan);
+                    $tmpDiv1.append($tmpIpt);
+                    $tmpDiv0.append($tmpDiv1);
+                    $('#deviceInstanceBaseInfoEditdlgBody').append($tmpDiv0);
+                }
+                setMessage('已加载该选项信息', 'success', true);
+                $('#deviceInstanceBaseInfoEditdlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    };
+    $("#btndeviceInstanceBasicInfo").on("click", btndeviceInstanceBasicInfoClick);
+    /*end define btndeviceInstanceRefresh */
+
+    /*begin define btndeviceInstanceRefresh */
+    var btndeviceInstanceFeatureClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = [{
+            lineId: selRows[0].lineId
+        }];
+        $.ajax({
+                url: 'user/business/deviceInstance/feature',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#deviceInstanceFeatureEditdlgBody').empty();
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].name;
+                    var value = data[i].value;
+                    $tmpDiv0 = $('<div class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;"></div>');
+                    $tmpDiv1 = $('<div class="input-group"></div>');
+                    $tmpSpan = $('<span class="input-group-addon">' + name + '</span>');
+                    $tmpIpt = $('<input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">');
+                    $tmpIpt.attr('id', 'deviceInstanceFeatureEdit_' + id);
+                    $tmpIpt.val(value);
+                    $tmpDiv1.append($tmpSpan);
+                    $tmpDiv1.append($tmpIpt);
+                    $tmpDiv0.append($tmpDiv1);
+                    $('#deviceInstanceFeatureEditdlgBody').append($tmpDiv0);
+                }
+                setMessage('已加载该选项信息', 'success', true);
+                $('#deviceInstanceFeatureEditdlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    };
+    $("#btndeviceInstanceFeature").on("click", btndeviceInstanceFeatureClick);
+    /*end define btndeviceInstanceRefresh */
+
+    /*begin define iptInstanceModelModel */
+    $.ajax({
+        url: "user/business/deviceInstance/modellineids",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#iptInstanceModelModel");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineiptInstanceModelModel */
+
+    /*begin define iptInstanceModelName */
+    $.ajax({
+        url: "user/business/deviceInstance/instanceanme",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#iptInstanceModelName");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineiptInstanceModelName */
+
+    /*begin define iptInstanceModelNumber */
+    $.ajax({
+        url: "user/business/deviceInstance/instancenumber",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#iptInstanceModelNumber");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineiptInstanceModelNumber */
+
+    /*begin define btndeviceInstanceSearch */
+    var btndeviceInstanceSearchClick = function(event) {
+        event.preventDefault();
+        var instanceNumber = $('#iptInstanceModelNumber').val() == '' ? undefined : $('#iptInstanceModelNumber').val();
+        var instanceName = $('#iptInstanceModelName').val() == '' ? undefined : $('#iptInstanceModelName').val();
+        var createUser = $('#iptInstanceModelModel').val() == '' ? undefined : $('#iptInstanceModelModel').val();
+
+        var json = [{
+            instanceNumber: instanceNumber,
+            instanceName: instanceName,
+            createUser: createUser
+        }];
+        out(json);
+        $('#btndeviceInstanceSearch').off('click');
+        $.ajax({
+                url: 'user/business/deviceInstance/search',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                setMessage('共找到 ' + data.length + ' 条数据', 'info', true);
+                $('#tbdeviceInstanceInfos').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('查询失败', 'error', true);
+            }).always(function(data) {
+                $('#btndeviceInstanceSearch').on('click', btndeviceInstanceSearchClick);
+            });
+    };
+    $("#btndeviceInstanceSearch").on("click", btndeviceInstanceSearchClick);
+    /*end define btndeviceInstanceSearch */
+
+    /*begin define tbdeviceInstanceInfos */
+    $("#tbdeviceInstanceInfos").bootstrapTable({
+        url: "user/business/deviceInstance/infossp",
+        method: "get",
+        pagination: true,
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "createTime",
+            title: "创建时间",
+            sortable: true,
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: "instanceNumber",
+            title: "实例编号"
+        }, {
+            field: "instanceName",
+            title: "实例名称"
+        }, {
+            field: "modelLineId",
+            title: "实例型号"
+        }, {
+            field: "createUser",
+            title: "创建人"
+        }]
+    });
+    /*end define tbdeviceInstanceInfos */
+
+    $('#tbdeviceInstanceFileManage').bootstrapTable({
+        pagination: true,
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "fileName",
+            title: "文件名"
+        }, {
+            field: "fileExt",
+            title: "文件扩展名"
+        }, {
+            field: "fileSize",
+            title: "文件大小(单位:B)"
+        }, {
+            field: "createUser",
+            title: "上传人"
+        }, {
+            field: "createTime",
+            title: "上传时间"
+        }, {
+            field: "lineId",
+            title: "上传时间",
+            visible: false
+        }]
+    });
+
+    var btnDeviceInstanceInstanceFileDownloadClick = function(event) {
+        event.preventDefault();
+
+        var $table = $('#tbdeviceInstanceFileManage');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        setMessage('正在导出,请稍等', 'info', true);
+        //向后台发送请求
+        var form = $("<form>"); //定义一个form表单
+        form.attr('style', 'display:none');
+        form.attr('target', '');
+        form.attr('method', 'post');
+        form.attr('action', 'user/businiess/fileupload/download');
+        //添加input
+        var input1 = $("<input>");
+        input1.attr('type', 'hidden');
+        input1.attr('name', 'lineId');
+        input1.attr('value', selRows[0].lineId);
+        form.append(input1);
+        //将表单放到body中
+        $('body').append(form);
+        form.submit(); //提交表单2
+    }
+    $('#btnDeviceInstanceInstanceFileDownload').on('click', btnDeviceInstanceInstanceFileDownloadClick);
+
+    var btnDeviceInstanceInstanceFileManageClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        setMessage('正在加载该选项的文件信息', 'info', true);
+        var json = [{
+            sourceLineId: selRows[0].lineId,
+            fileSource: 1,
+            active: 1
+        }];
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+        $.ajax({
+                url: 'user/businiess/fileupload/infos',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#tbdeviceInstanceFileManage').bootstrapTable('load', data);
+                $('#deviceInstanceFileManageDlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+
+    }
+    $('#btnDeviceInstanceInstanceFileManage').on('click', btnDeviceInstanceInstanceFileManageClick);
+
+    var btnDeviceInstanceInstancePreviewUploadClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceInstanceInfos');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = {
+            sourceLineId: selRows[0].lineId,
+            fileSource: 2,
+            active: 1
+        };
+        out('接受到的参数是');
+        out(json);
+        $('#iptDivthdeviceInstancePreviewUploadDiv img').remove();
+        $('#iptDivthdeviceInstancePreviewUploadDiv').append('<img src="" height="100%" width="100%" alt="图片不存在或正在加载..." id="instancePreview" />');
+        setMessage('正在加载该选项的预览图', 'info', true);
+        var strSrc = "user/businiess/fileupload/preivew?sourceLineId=" + selRows[0].lineId + "&fileSource=2&active=1";
+
+        $('#instancePreview').attr('src', strSrc);
+        $('#deviceInstancePreviewUploadDlg').modal();
+    }
+    $('#btnDeviceInstanceInstancePreviewUpload').on('click', btnDeviceInstanceInstancePreviewUploadClick);
+
+});
+</script>

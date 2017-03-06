@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.sys.RoleDao">
+    <insert id="addRole" parameterType="com.unicom.fmos.entity.sys.Role" >
+        insert into td_role
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                LINE_ID,
+            </if>
+            <if test="roleName != null" >
+                ROLE_NAME,
+            </if>
+            <if test="createUser != null" >
+                CREATE_USER,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="active != null" >
+                ACTIVE,
+            </if>
+            <if test="activeUser != null" >
+                ACTIVE_USER,
+            </if>
+            <if test="activeTime != null" >
+                ACTIVE_TIME,
+            </if>
+            <if test="activeMemo != null" >
+                ACTIVE_MEMO,
+            </if>
+            <if test="updateUser != null" >
+                UPDATE_USER,
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME,
+            </if>
+            <if test="updateMemo != null" >
+                UPDATE_MEMO,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                #{lineId,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null" >
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="active != null" >
+                #{active,jdbcType=DECIMAL},
+            </if>
+            <if test="activeUser != null" >
+                #{activeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activeTime != null" >
+                #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeMemo != null" >
+                #{activeMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateMemo != null" >
+                #{updateMemo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <resultMap id="roleDtoResultMap" type="com.unicom.fmos.dto.RoleDto">
+        <id column="line_id" property="id"/>
+        <result property="name" column="role_name"/>
+    </resultMap>
+
+    <resultMap id="RoleResultMap" type="com.unicom.fmos.entity.sys.Role">
+        <id property="lineId" column="line_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="active" column="active"/>
+        <result property="activeUser" column="active_user"/>
+        <result property="activeTime" column="active_time"/>
+        <result property="activeMemo" column="active_memo"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateMemo" column="update_memo"/>
+    </resultMap>
+
+    <select id="getRoles" resultMap="roleDtoResultMap">
+        SELECT line_id AS id, role_name AS name
+        from td_role WHERE active = 1
+    </select>
+
+    <select id="getRoleData" resultMap="RoleResultMap">
+        SELECT *
+        from td_role WHERE active = 1 ORDER BY create_time desc
+    </select>
+
+    <select id="selectRole" parameterType="com.unicom.fmos.entity.sys.Role" resultMap="RoleResultMap">
+        SELECT *
+        from td_role WHERE
+        1 = 1 AND
+        active = 1
+        <if test="roleName != null">
+            AND role_name  LIKE CONCAT(CONCAT('%', #{roleName}), '%')
+        </if>
+        <if test="createTime != null">AND create_time  &gt;= #{createTime}</if>
+        <if test="activeTime != null">AND create_time &lt;= #{activeTime}</if>
+        ORDER BY create_time desc
+    </select>
+
+    <update id="delRole" parameterType="map">
+        UPDATE td_role SET
+        active = 0,
+        active_user = #{activeuser},
+        active_memo = #{activememo},
+        active_time = #{activetime}
+        WHERE line_id in
+        <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="editRole" parameterType="com.unicom.fmos.entity.sys.Role">
+        UPDATE td_role
+        <set>
+            <if test="roleName != null ">role_name = #{roleName},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateMemo != null ">update_memo = #{updateMemo},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="lineId != null">and line_id = #{lineId}</when>
+                <otherwise>and line_id = </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultType="com.unicom.fmos.entity.sys.Role">
+        SELECT * FROM td_role WHERE line_id = #{lineId}
+    </select>
+
+    <select id="selectRoleByPrivl" resultMap="RoleResultMap" parameterType="com.unicom.fmos.entity.sys.ResourceMenu">
+        select td_role.* from td_resource_menu,td_privilege,td_role where td_resource_menu.menu_number = #{menuNumber}
+and td_privilege.role_line_id = td_role.line_id
+and td_resource_menu.line_id = td_privilege.resource_line_id
+and td_privilege.active = 1 and td_privilege.checked = 1
+and td_resource_menu.active = 1 and td_role.active = 1
+    </select>
+
+    <select id="selectRoleByPrivlAndCondition" parameterType="map" resultMap="RoleResultMap">
+        SELECT td_role.* from td_role
+        WHERE
+        1 = 1 AND
+        active = 1
+        <if test="roleName != null">
+            AND role_name  LIKE CONCAT(CONCAT('%', #{roleName}), '%')
+        </if>
+        <if test="createTime != null">AND create_time  &gt;= #{createTime}</if>
+        <if test="activeTime != null">AND create_time &lt;= #{activeTime}</if>
+        AND
+        td_role.role_name IN
+        (select td_role.role_name from td_resource_menu,td_privilege,td_role where td_resource_menu.menu_number = #{menuNumber}
+        and td_privilege.role_line_id = td_role.line_id
+        and td_resource_menu.line_id = td_privilege.resource_line_id
+        and td_privilege.active = 1 and td_privilege.checked = 1
+        and td_resource_menu.active = 1 and td_role.active = 1)
+        ORDER BY td_role.create_time desc
+    </select>
+</mapper>

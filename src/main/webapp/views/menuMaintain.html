@@ -1,0 +1,961 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <div style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+        <span>菜单资源树</span>
+        <span class="menu-toolbar pull-right">
+          <a href="" class="menu-top-button" id="btn_menu_add"><i class="icon-plus"></i>&nbsp;新增</a>
+          <a href="" class="menu-top-button" id="btn_menu_del"><i class="icon-minus"></i>&nbsp;删除</a>
+          <a href="" class="menu-top-button" id="btn_menu_sort"><i class="icon-minus"></i>&nbsp;排序</a>
+        </span>
+      </div>
+      <div>
+        <ul id="treeMenu" class="ztree"></ul>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="div_menu_title" style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+        <span>资源操作</span>
+      </div>
+      <div>
+        <form class="form-horizontal hidden" id="menuPocessForm" role="form">
+          <div class="form-group has-feedback">
+            <label for="menuIcon" class="col-md-2 control-label">菜单图标</label>
+            <div class="col-md-10 required-div">
+              <input type="text" class="form-control" id="menuIcon" placeholder="菜单图标" data-toggle="modal" data-target="#dlgMenuIcon" />
+              <span class="glyphicon glyphicon-asterisk form-control-feedback required-icon"></span>
+            </div>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="menuName" class="col-md-2 control-label">菜单名称</label>
+            <div class="col-md-10 required-div">
+              <input type="text" class="form-control" id="menuName" placeholder="菜单名称">
+              <span class="glyphicon glyphicon-asterisk form-control-feedback required-icon"></span>
+            </div>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="menuNumber" class="col-md-2 control-label">菜单编号</label>
+            <div class="col-md-10 required-div">
+              <input type="text" class="form-control" id="menuNumber" placeholder="菜单编号">
+              <span class="glyphicon glyphicon-asterisk form-control-feedback required-icon"></span>
+            </div>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="menuPath" class="col-md-2 control-label">菜单路径</label>
+            <div class="col-md-10">
+              <input type="text" class="form-control" id="menuPath" placeholder="菜单路径">
+              <span></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <button type="button" class="btn btn-default" id="btn_menu_reset">重置</button>
+              <button type="button" class="btn btn-primary" id="btn_menu_save">保存</button>
+              <button type="button" class="btn btn-primary hidden" id="btn_menu_modify">修改</button>
+            </div>
+          </div>
+        </form>
+
+        <button type="button" class="btn btn-default hidden" id="btn_menu_sort_reset">重置</button>
+        <button type="button" class="btn btn-primary hidden" id="btn_menu_sort_save">保存</button>
+        <button type="button" class="btn btn-danger hidden" id="btn_menu_sort_exit">退出</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modals -->
+<!-- MenuDelModal -->
+<div class="modal fade" id="menuDelDlg" tabindex="-1" role="dialog" aria-labelledby="menuDelDlgLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" id="btn_menudel_close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="menuDelDlgLabel">删除确定</h4>
+      </div>
+      <div class="modal-body">
+        确定删除此结点以及以下内容?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_deldlg_cancel">取消</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="menuDelDlg_Ensure">确定</button>
+      </div>
+    </div>
+  </div>
+</div><!-- MenuDelModal -->
+<!-- MenuDelModal -->
+<div class="modal fade" id="sortConfirmDlg" tabindex="-1" role="dialog" aria-labelledby="sortConfirmDlgLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" id="btn_sort_close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="sortConfirmDlgLabel">排序确定</h4>
+      </div>
+      <div class="modal-body">
+        确定保存此次排序?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_sortdlg_cancel">取消</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="menusortDlg_Ensure">确定</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /MenuDelModal -->
+<!-- dlgMenuIcon -->
+<!-- Modal -->
+<div class="modal fade" id="dlgMenuIcon" tabindex="-1" role="dialog" aria-labelledby="dlgMenuIconLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="dlgMenuIconLabel">菜单图标</h4>
+      </div>
+      <div class="container-fluid" id="divMenuIconDlgBody">
+        <div class="row">
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-asterisk" value="glyphicon-asterisk" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-asterisk"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-plus" value="glyphicon-plus" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-plus"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-euro" value="glyphicon-euro" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-euro"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-minus" value="glyphicon-minus" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-minus"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-cloud" value="glyphicon-cloud" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-cloud"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-envelope" value="glyphicon-envelope" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-envelope"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-pencil" value="glyphicon-pencil" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-pencil"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-glass" value="glyphicon-glass" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-glass"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-music" value="glyphicon-music" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-music"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-search" value="glyphicon-search" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-search"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-heart" value="glyphicon-heart" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-heart"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-star" value="glyphicon-star" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-star"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-star-empty" value="glyphicon-star-empty" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-star-empty"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-user" value="glyphicon-user" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-user"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-film" value="glyphicon-film" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-film"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-th-large" value="glyphicon-th-large" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-th-large"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-th" value="glyphicon-th" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-th"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-th-list" value="glyphicon-th-list" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-th-list"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-ok" value="glyphicon-ok" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-ok"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-remove" value="glyphicon-remove" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-remove"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-zoom-in" value="glyphicon-zoom-in" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-zoom-in"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-zoom-out" value="glyphicon-zoom-out" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-zoom-out"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-off" value="glyphicon-off" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-off"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-signal" value="glyphicon-signal" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-signal"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-cog" value="glyphicon-cog" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-cog"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-trash" value="glyphicon-trash" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-trash"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-home" value="glyphicon-home" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-home"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-file" value="glyphicon-file" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-file"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-time" value="glyphicon-time" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-time"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-road" value="glyphicon-road" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-road"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-download-alt" value="glyphicon-download-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-download-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-download" value="glyphicon-download" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-download"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-upload" value="glyphicon-upload" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-upload"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tree-conifer" value="glyphicon-tree-conifer" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tree-conifer"></span></label>
+          </div>
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-inbox" value="glyphicon-inbox" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-inbox"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-play-circle" value="glyphicon-play-circle" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-play-circle"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-repeat" value="glyphicon-repeat" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-repeat"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-refresh" value="glyphicon-refresh" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-refresh"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-list-alt" value="glyphicon-list-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-list-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-lock" value="glyphicon-lock" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-lock"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-flag" value="glyphicon-flag" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-flag"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-headphones" value="glyphicon-headphones" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-headphones"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-volume-off" value="glyphicon-volume-off" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-volume-off"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-volume-down" value="glyphicon-volume-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-volume-down"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-volume-up" value="glyphicon-volume-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-volume-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-qrcode" value="glyphicon-qrcode" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-qrcode"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-barcode" value="glyphicon-barcode" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-barcode"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tag" value="glyphicon-tag" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tag"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tags" value="glyphicon-tags" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tags"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-book" value="glyphicon-book" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-book"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-bookmark" value="glyphicon-bookmark" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-bookmark"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-print" value="glyphicon-print" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-print"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-camera" value="glyphicon-camera" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-camera"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-font" value="glyphicon-font" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-font"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-bold" value="glyphicon-bold" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-bold"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-italic" value="glyphicon-italic" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-italic"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-text-height" value="glyphicon-text-height" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-text-height"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-text-width" value="glyphicon-text-width" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-text-width"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-align-left" value="glyphicon-align-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-align-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-align-center" value="glyphicon-align-center" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-align-center"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-align-right" value="glyphicon-align-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-align-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-align-justify" value="glyphicon-align-justify" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-align-justify"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-list" value="glyphicon-list" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-list"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-indent-left" value="glyphicon-indent-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-indent-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-indent-right" value="glyphicon-indent-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-indent-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-facetime-video" value="glyphicon-facetime-video" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-facetime-video"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-picture" value="glyphicon-picture" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-picture"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tree-deciduous" value="glyphicon-tree-deciduous" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tree-deciduous"></span></label>
+          </div>
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-map-marker" value="glyphicon-map-marker" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-map-marker"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-adjust" value="glyphicon-adjust" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-adjust"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tint" value="glyphicon-tint" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tint"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-edit" value="glyphicon-edit" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-edit"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-share" value="glyphicon-share" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-share"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-check" value="glyphicon-check" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-check"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-move" value="glyphicon-move" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-move"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-step-backward" value="glyphicon-step-backward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-step-backward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-fast-backward" value="glyphicon-fast-backward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-fast-backward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-backward" value="glyphicon-backward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-backward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-play" value="glyphicon-play" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-play"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-pause" value="glyphicon-pause" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-pause"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-stop" value="glyphicon-stop" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-stop"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-forward" value="glyphicon-forward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-forward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-fast-forward" value="glyphicon-fast-forward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-fast-forward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-step-forward" value="glyphicon-step-forward" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-step-forward"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-eject" value="glyphicon-eject" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-eject"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-chevron-left" value="glyphicon-chevron-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-chevron-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-chevron-right" value="glyphicon-chevron-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-chevron-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-plus-sign" value="glyphicon-plus-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-plus-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-minus-sign" value="glyphicon-minus-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-minus-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-remove-sign" value="glyphicon-remove-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-remove-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-ok-sign" value="glyphicon-ok-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-ok-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-question-sign" value="glyphicon-question-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-question-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-info-sign" value="glyphicon-info-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-info-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-screenshot" value="glyphicon-screenshot" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-screenshot"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-remove-circle" value="glyphicon-remove-circle" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-remove-circle"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-ok-circle" value="glyphicon-ok-circle" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-ok-circle"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-ban-circle" value="glyphicon-ban-circle" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-ban-circle"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-arrow-left" value="glyphicon-arrow-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-arrow-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-arrow-right" value="glyphicon-arrow-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-arrow-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-arrow-up" value="glyphicon-arrow-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-arrow-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-arrow-down" value="glyphicon-arrow-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-arrow-down"></span></label>
+          </div>
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-share-alt" value="glyphicon-share-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-share-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-resize-full" value="glyphicon-resize-full" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-resize-full"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-resize-small" value="glyphicon-resize-small" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-resize-small"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-exclamation-sign" value="glyphicon-exclamation-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-exclamation-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-gift" value="glyphicon-gift" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-gift"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-leaf" value="glyphicon-leaf" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-leaf"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-fire" value="glyphicon-fire" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-fire"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-eye-open" value="glyphicon-eye-open" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-eye-open"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-eye-close" value="glyphicon-eye-close" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-eye-close"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-warning-sign" value="glyphicon-warning-sign" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-warning-sign"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-plane" value="glyphicon-plane" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-plane"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-calendar" value="glyphicon-calendar" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-calendar"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-random" value="glyphicon-random" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-random"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-comment" value="glyphicon-comment" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-comment"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-magnet" value="glyphicon-magnet" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-magnet"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-chevron-up" value="glyphicon-chevron-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-chevron-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-chevron-down" value="glyphicon-chevron-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-chevron-down"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-retweet" value="glyphicon-retweet" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-retweet"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-shopping-cart" value="glyphicon-shopping-cart" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-shopping-cart"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-folder-close" value="glyphicon-folder-close" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-folder-close"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-folder-open" value="glyphicon-folder-open" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-folder-open"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-resize-vertical" value="glyphicon-resize-vertical" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-resize-vertical"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-resize-horizontal" value="glyphicon-resize-horizontal" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-resize-horizontal"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hdd" value="glyphicon-hdd" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hdd"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-bullhorn" value="glyphicon-bullhorn" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-bullhorn"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-bell" value="glyphicon-bell" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-bell"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-certificate" value="glyphicon-certificate" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-certificate"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-thumbs-up" value="glyphicon-thumbs-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-thumbs-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-thumbs-down" value="glyphicon-thumbs-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-thumbs-down"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hand-right" value="glyphicon-hand-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hand-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hand-left" value="glyphicon-hand-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hand-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hand-up" value="glyphicon-hand-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hand-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hand-down" value="glyphicon-hand-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hand-down"></span></label>
+          </div>
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-circle-arrow-right" value="glyphicon-circle-arrow-right" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-circle-arrow-right"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-circle-arrow-left" value="glyphicon-circle-arrow-left" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-circle-arrow-left"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-circle-arrow-up" value="glyphicon-circle-arrow-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-circle-arrow-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-circle-arrow-down" value="glyphicon-circle-arrow-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-circle-arrow-down"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-globe" value="glyphicon-globe" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-globe"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-wrench" value="glyphicon-wrench" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-wrench"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tasks" value="glyphicon-tasks" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tasks"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-filter" value="glyphicon-filter" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-filter"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-briefcase" value="glyphicon-briefcase" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-briefcase"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-fullscreen" value="glyphicon-fullscreen" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-fullscreen"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-dashboard" value="glyphicon-dashboard" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-dashboard"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-paperclip" value="glyphicon-paperclip" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-paperclip"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-heart-empty" value="glyphicon-heart-empty" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-heart-empty"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-link" value="glyphicon-link" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-link"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-phone" value="glyphicon-phone" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-phone"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-pushpin" value="glyphicon-pushpin" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-pushpin"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-usd" value="glyphicon-usd" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-usd"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-gbp" value="glyphicon-gbp" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-gbp"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort" value="glyphicon-sort" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-alphabet" value="glyphicon-sort-by-alphabet" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-alphabet"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-alphabet-alt" value="glyphicon-sort-by-alphabet-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-alphabet-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-order" value="glyphicon-sort-by-order" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-order"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-order-alt" value="glyphicon-sort-by-order-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-order-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-attributes" value="glyphicon-sort-by-attributes" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-attributes"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sort-by-attributes-alt" value="glyphicon-sort-by-attributes-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sort-by-attributes-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-unchecked" value="glyphicon-unchecked" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-unchecked"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-expand" value="glyphicon-expand" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-expand"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-collapse-down" value="glyphicon-collapse-down" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-collapse-down"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-collapse-up" value="glyphicon-collapse-up" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-collapse-up"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-log-in" value="glyphicon-log-in" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-log-in"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-flash" value="glyphicon-flash" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-flash"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-log-out" value="glyphicon-log-out" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-log-out"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-new-window" value="glyphicon-new-window" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-new-window"></span></label>
+          </div>
+          <div class="col-md-2">
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-record" value="glyphicon-record" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-record"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-save" value="glyphicon-save" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-save"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-open" value="glyphicon-open" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-open"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-saved" value="glyphicon-saved" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-saved"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-import" value="glyphicon-import" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-import"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-export" value="glyphicon-export" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-export"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-send" value="glyphicon-send" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-send"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-floppy-disk" value="glyphicon-floppy-disk" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-floppy-disk"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-floppy-saved" value="glyphicon-floppy-saved" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-floppy-saved"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-floppy-remove" value="glyphicon-floppy-remove" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-floppy-remove"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-floppy-save" value="glyphicon-floppy-save" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-floppy-save"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-floppy-open" value="glyphicon-floppy-open" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-floppy-open"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-credit-card" value="glyphicon-credit-card" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-credit-card"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-transfer" value="glyphicon-transfer" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-transfer"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-cutlery" value="glyphicon-cutlery" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-cutlery"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-header" value="glyphicon-header" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-header"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-compressed" value="glyphicon-compressed" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-compressed"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-earphone" value="glyphicon-earphone" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-earphone"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-phone-alt" value="glyphicon-phone-alt" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-phone-alt"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-tower" value="glyphicon-tower" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-tower"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-stats" value="glyphicon-stats" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-stats"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sd-video" value="glyphicon-sd-video" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sd-video"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-hd-video" value="glyphicon-hd-video" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-hd-video"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-subtitles" value="glyphicon-subtitles" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-subtitles"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sound-stereo" value="glyphicon-sound-stereo" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sound-stereo"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sound-dolby" value="glyphicon-sound-dolby" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sound-dolby"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sound-5-1" value="glyphicon-sound-5-1" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sound-5-1"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sound-6-1" value="glyphicon-sound-6-1" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sound-6-1"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-sound-7-1" value="glyphicon-sound-7-1" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-sound-7-1"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-copyright-mark" value="glyphicon-copyright-mark" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-copyright-mark"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-registration-mark" value="glyphicon-registration-mark" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-registration-mark"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-cloud-download" value="glyphicon-cloud-download" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-cloud-download"></span></label>
+              <label class="radio"><input type="radio" data-toggle="radio" name="menuIconRadios" id="glyphicon-cloud-upload" value="glyphicon-cloud-upload" data-radiocheck-toggle="radio" required="" class="custom-radio"><span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span><span class="glyphicon glyphicon-cloud-upload"></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="btnMenuIconCancel" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="btnMenuIconSave" data-dismiss="modal">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /dlgMenuIcon -->
+<!-- /modals -->
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    /*global variables*/
+    var treeJson;/*global variables*/
+
+    /*event defining*/
+    var treeInit = function() {
+      var setting =
+        {
+          callback: {onClick: resourceTreeOnClick},
+          edit: {
+            showRemoveBtn: false,
+            showRenameBtn: false
+          }
+        };
+      $.ajax({
+        url: 'user/businiess/menu/menuTree',
+        type: 'GET',
+        dataType: 'json'
+      })
+      .done(function(data) {
+        $.fn.zTree.init($("#treeMenu"), setting, data);
+        treeJson = data;
+        var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+        treeObj.expandAll(true);
+      })
+      .fail(function(data) {
+        setMessage('资源树加载失败', 'error', true);
+      })
+      .always(function(data) {
+      });
+    }
+
+    var closeTreeEditFunction = function() {
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeObj.setting.edit.enable = false;
+    }
+
+    var openTreeEditFunction = function() {
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeObj.setting.edit.enable = true;
+
+    }
+
+    var refresh = function(id) {
+      var url = 'views/' + id + '.html';
+      $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html',
+        beforeSend: function(XHR) {
+          setLoader(id);
+        }
+      })
+      .done(function(data) {
+        removeLoader(id);
+        $('#' + id).append(data);
+      })
+      .fail(function() {
+      })
+      .always(function() {
+      });
+    }
+
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+      $('#' + id).empty();
+      $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+      $('#' + id).empty();
+    }
+
+    var menuAddEvent = function(event) {
+      event.preventDefault();
+      closeTreeEditFunction();
+      var $title = $('#div_menu_title span');
+      $title.empty();
+      $title.text('菜单资源新增');
+      $('#menuPocessForm').removeClass('hidden');
+      $('#menuPocessForm input').val('');
+      $('#menuPocessForm input').removeClass('has-error');
+      $('#menuPocessForm span').removeClass();
+      $('div.required-div span').addClass('glyphicon glyphicon-asterisk form-control-feedback required-icon');
+      $('#btn_menu_modify').addClass('hidden');
+      $('#btn_menu_save').removeClass('hidden');
+      $('#btn_menu_sort_reset').addClass('hidden');
+      $('#btn_menu_sort_save').addClass('hidden');
+      $('#btn_menu_sort_exit').addClass('hidden');
+      event.stopPropagation();
+    }
+
+    var menuDelEvent = function(event) {
+      event.preventDefault();
+      closeTreeEditFunction();
+      $('#btn_menu_sort_reset').addClass('hidden');
+      $('#btn_menu_sort_save').addClass('hidden');
+      $('#btn_menu_sort_exit').addClass('hidden');
+      var $title = $('#div_menu_title span');
+      $title.empty();
+      $title.text('菜单资源删除');
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      var nodes = treeObj.getSelectedNodes();
+      if (nodes.length == 0) {
+        setMessage('请选择需要删除的父结点', 'error', true);
+      } else {
+        $('#menuDelDlg').modal();
+      }
+      event.stopPropagation();
+    }
+
+    var menuSaveEvent = function(event) {
+      event.preventDefault();
+      var $inputs = $('#menuPocessForm div.required-div input');
+      if(emptyTest($inputs)) {
+        setMessage('存在未填写项', 'error', true);
+        addEmptyClass($inputs);
+        return false;
+      }
+      if (uniqueTest()) {
+        setMessage('菜单编号不唯一', 'error', true);
+        addUniqueClass();
+        return false;
+      }
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      var nodes = treeObj.getSelectedNodes();
+      var menuNumber = $('#menuNumber').val();
+      var menuName = $('#menuName').val();
+      var menuPath = $('#menuPath').val();
+      var menuIcon = $('#menuIcon').val();
+      var sortId = 0;
+      var menuJson;
+      //when tree is not selected
+      if (nodes.length == 0 ) {
+        //when node does not has parent
+        var topNodes = treeObj.getNodesByFilter(function(node) {
+          return node.parentTId == null;
+        });
+        sortId = topNodes.length;
+        menuJson=
+          {
+            "menuName":menuName,
+            "menuNumber":menuNumber,
+            "path":menuPath,
+            "isParent":1,
+            "sortId": sortId,
+            "menuIcon": menuIcon
+          };
+      } else {
+        sortId = nodes[0].children.length;
+        menuJson=
+          {
+            "menuName":menuName,
+            "menuNumber":menuNumber,
+            "path":menuPath,
+            "isParent":0,
+            "parentLineId":nodes[0].id,
+            "sortId":sortId,
+            "menuIcon": menuIcon
+          };
+      }
+      setMessage('正在提交', 'info', true);
+      $(this).off('click');
+      $.ajax({
+        url: 'user/businiess/menu/menuresourceadd',
+        type: 'POST',
+        contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+        dataType: 'json',
+        data: menuJson
+      })
+      .done(function(data) {
+        if (data.retCode == -1) {
+          setMessage(data.errDesc, 'error', true);
+          return;
+        }
+        if (data.retCode == 1) {
+          setMessage('菜单资源新增成功', 'success', true);
+        }
+        $('#menuMaintain').empty();
+        refresh('menuMaintain');
+      })
+      .fail(function(data) {
+        setMessage('菜单资源新增失败', 'error', true);
+      })
+      .always(function(data) {
+        $('#btn_menu_save').on('click', menuSaveEvent);
+      });
+    }
+
+    var menuModifyEvent = function(event) {
+      event.preventDefault();
+      var $inputs = $('#menuPocessForm div.required-div input');
+      if(emptyTest($inputs)) {
+        setMessage('存在未填写项', 'error', true);
+        addEmptyClass($inputs);
+        return false;
+      }
+      if (uniqueTest()) {
+        setMessage('菜单编号不唯一', 'error', true);
+        addUniqueClass();
+        return false;
+      }
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      var nodes = treeObj.getSelectedNodes();
+      var menuNumber = $('#menuNumber').val();
+      var menuName = $('#menuName').val();
+      var menuPath =undefined;
+      var menuIcon = $('#menuIcon').val();
+      var isParent = nodes[0].parentTId == null? 1: 0;
+      var menuJson;
+      menuPath = $('#menuPath').val();
+      if (isParent == 0) {
+        var parentNode = treeObj.getNodesByFilter(function(node) {
+          return node.tId == nodes[0].parentTId;
+        })
+        menuJson = {
+          "menuName":menuName,
+          "menuNumber":menuNumber,
+          "path":menuPath,
+          "lineId":nodes[0].id,
+          "isParent":isParent,
+          "parentLineId":parentNode[0].id,
+          "menuIcon": menuIcon
+        };
+      } else {
+        menuJson = {
+          "menuName":menuName,
+          "menuNumber":menuNumber,
+          "path":menuPath,
+          "lineId":nodes[0].id,
+          "isParent":isParent,
+          "menuIcon": menuIcon
+        };
+      }
+      setMessage('正在提交', 'info', true);
+      $(this).off('click');
+      out(menuJson);
+      debugger;
+      $.ajax({
+        url: 'user/businiess/menu/menuresourceedit',
+        type: 'POST',
+        contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+        dataType: 'json',
+        data: menuJson
+      })
+      .done(function(data) {
+        if (data.retCode == -1) {
+          setMessage(data.errDesc, 'error', true);
+          return;
+        }
+        if (data.retCode == 1) {
+          setMessage('修改成功', 'success', true);
+        }
+        $('#menuMaintain').empty();
+        refresh('menuMaintain');
+      })
+      .fail(function(data) {
+        setMessage('修改失败', 'error', true);
+      })
+      .always(function(data) {
+        $('#btn_menu_modify').on('click', menuModifyEvent);
+      });
+    }
+
+    var menuResetEvent = function(event) {
+      event.preventDefault();
+      $('#btn_menu_sort_reset').addClass('hidden');
+      $('#btn_menu_sort_save').addClass('hidden');
+      $('#btn_menu_sort_exit').addClass('hidden');
+      $('#menuPocessForm').removeClass('hidden');
+      $('#menuPocessForm input').val('');
+      $('#menuPocessForm input').removeClass('has-error');
+      $('#menuPocessForm span').removeClass();
+      $('div.required-div span').addClass('glyphicon glyphicon-asterisk form-control-feedback required-icon');
+      event.stopPropagation();
+    }
+
+    var menuSortEvent = function(event) {
+      event.preventDefault();
+      openTreeEditFunction();
+      var $title = $('#div_menu_title span');
+      $title.empty();
+      $title.text('菜单资源排序');
+      $('#menuPocessForm').addClass('hidden');
+      $('#btn_menu_sort_reset').removeClass('hidden');
+      $('#btn_menu_sort_save').removeClass('hidden');
+      $('#btn_menu_sort_exit').removeClass('hidden');
+
+      $('#btn_menu_add').off('click');
+      $('#btn_menu_del').off('click');
+      $('#btn_menu_add').on('click', preventDefaultEvent);
+      $('#btn_menu_del').on('click', preventDefaultEvent);
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeObj.setting.callback.onClick = preventDefaultEvent;
+      setMessage('已进入排序,除非点击退出,否则将不能进行新增,修改以及删除操作', 'info', true);
+      event.stopPropagation();
+    }
+
+    var addEmptyClass = function(input) {
+      input.each(function(index, el) {
+        if (jQuery(this).val() == '') {
+          $(this).addClass('has-error');
+        }
+      });
+    }
+
+    var resourceTreeOnClick = function(event, treeId, treeNode) {
+      closeTreeEditFunction();
+      var $title = $('#div_menu_title span');
+      $title.empty();
+      $title.text('菜单资源编辑');
+      $('#btn_menu_sort_reset').addClass('hidden');
+      $('#btn_menu_sort_save').addClass('hidden');
+      $('#btn_menu_sort_exit').addClass('hidden');
+      $('#menuPocessForm').removeClass('hidden');
+      $('#menuPocessForm input').val('');
+      $('#menuPocessForm input').removeClass('has-error');
+      $('#menuPocessForm span').removeClass();
+
+      $('#menuName').val(treeNode.name);
+      $('#menuNumber').val(treeNode.number);
+      $('#menuPath').val(treeNode.path);
+      $('#menuIcon').val(treeNode.menuIcon);
+      $('div.required-div input').each(function(index, el) {
+        if ($(this).val() == '') {
+          $(this).next().addClass('glyphicon glyphicon-asterisk form-control-feedback required-icon');
+        } else {
+          $(this).next().addClass('glyphicon glyphicon-ok form-control-feedback success-icon');
+        }
+      });
+      var strlength = $('#menuPath').val().length
+      if (strlength != 0) {
+        $('#menuPath').next().addClass('glyphicon glyphicon-ok form-control-feedback success-icon');
+      }
+      $('#btn_menu_modify').removeClass('hidden');
+      $('#btn_menu_save').addClass('hidden');
+    }
+
+    var menuDelDlg_Ensure_ClickEvent = function(event) {
+      event.preventDefault();
+      $('<div id="menuDelResult"></div>').appendTo('body');
+      $('#menuDelDlg').modal('hide');
+      event.stopPropagation();
+    };
+
+    var btnMenuIconSaveClickEvent = function(event) {
+      event.preventDefault();
+      $('<div id="dlgMenuIconResult"></div>').appendTo('body');
+      $('#dlgMenuIcon').modal('hide');
+      event.stopPropagation();
+    };
+
+    var menuSortResetEvent = function(event) {
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeReset();
+      treeObj.setting.callback.onClick = preventDefaultEvent;
+      openTreeEditFunction();
+    }
+
+    var treeReset =function() {
+      var setting =
+        {
+          callback: {onClick: preventDefaultEvent},
+          edit: {
+            showRemoveBtn: false,
+            showRenameBtn: false
+          }
+        };
+      $.fn.zTree.init($("#treeMenu"), setting, treeJson);
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeObj.expandAll(true);
+    }
+
+    var menuSortClickEvent = function(event) {
+      $('#sortConfirmDlg').modal();
+    }
+
+    var preventDefaultEvent = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    var menusortDlg_Ensure_ClickEvent = function(event) {
+      event.preventDefault();
+      $('<div id="menuSortResult"></div').appendTo('body');
+      $('#sortConfirmDlg').modal('hide');
+      event.stopPropagation();
+    }
+
+    var menuSorteExitClickEvent = function(event) {
+      $('#btn_menu_add').off('click');
+      $('#btn_menu_del').off('click');
+      $('#btn_menu_add').on('click', menuAddEvent);
+      $('#btn_menu_del').on('click', menuDelEvent);
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+      treeObj.setting.callback.onClick = resourceTreeOnClick;
+      closeTreeEditFunction();
+      $('#btn_menu_sort_reset').addClass('hidden');
+      $('#btn_menu_sort_save').addClass('hidden');
+      $('#btn_menu_sort_exit').addClass('hidden');
+      var $title = $('#div_menu_title span');
+      $title.empty();
+      $title.text('资源操作');
+      setMessage('已退出排序', 'info', true);
+      treeInit();
+    }
+
+    var uniqueTest = function() {
+      var result = false;
+      var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+
+      if ($('#btn_menu_modify').hasClass('hidden')) {
+          var nodes = treeObj.getNodesByFilter(function(node) {
+            return $('#menuNumber').val() == node.number;
+          });
+          if (nodes.length != 0) {
+            result = true;
+          }
+      } else {
+        var selnodes = treeObj.getSelectedNodes();
+        var selid = selnodes[0].id;
+        var nodes = treeObj.getNodesByFilter(function(node) {
+          return $('#menuNumber').val() == node.number && node.id != selid;
+        });
+        if (nodes.length != 0) {
+          result = true;
+        }
+      }
+      return result;
+    }
+
+    var addUniqueClass = function() {
+      $('#menuNumber').addClass('has-error');
+      $('#menuNumber').next().removeClass();
+      $('#menuNumber').next().addClass('glyphicon glyphicon-remove form-control-feedback required-icon');
+    }/*event defining*/
+
+    /*event biding*/
+    $('#menuPocessForm input').change(function(event) {
+      out('checkedFlag');
+      $(this).removeClass('has-error');
+      $(this).next().removeClass();
+      if ($(this).val() == '') {
+        $(this).next().addClass('glyphicon glyphicon-asterisk form-control-feedback required-icon');
+        $(this).addClass('has-error');
+      } else {
+        $(this).next().addClass('glyphicon glyphicon-ok form-control-feedback success-icon');
+      }
+      if ($('#menuPath').val() != '') {
+        $('#menuPath').next().removeClass();
+        $('#menuPath').next().addClass('glyphicon glyphicon-ok form-control-feedback success-icon');
+        $('#menuPath').removeClass('has-error');
+      } else {
+        $('#menuPath').next().removeClass();
+        $('#menuPath').removeClass('has-error');
+      }
+    });
+    $('#btn_menu_add').on('click', menuAddEvent);
+    $('#btnMenuIconSave').on('click', btnMenuIconSaveClickEvent);
+    $('#btn_menu_del').on('click', menuDelEvent);
+    $('#btn_menu_save').on('click', menuSaveEvent);
+    $('#btn_menu_reset').on('click', menuResetEvent);
+    $('#btn_menu_sort').on('click', menuSortEvent);
+    $('#btn_menu_modify').on('click', menuModifyEvent);
+    $('#btn_menu_sort_reset').on('click', menuSortResetEvent);
+    $('#menuDelDlg_Ensure').on('click', menuDelDlg_Ensure_ClickEvent);
+    $('#menusortDlg_Ensure').on('click', menusortDlg_Ensure_ClickEvent);
+    $('#btn_menu_sort_save').on('click', menuSortClickEvent);
+    $('#btn_menu_sort_exit').on('click', menuSorteExitClickEvent);
+    $('#menuDelDlg').on('hidden.bs.modal', function (event) {
+      if ($('#menuDelResult').length != 0 ) {
+        setMessage('正在删除', 'info', true);
+         var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+         var nodes = treeObj.getSelectedNodes();
+         var menuJson = {"lineId": nodes[0].id};
+         $(this).off('click');
+         $.ajax({
+           url: 'user/businiess/menu/menuresourcedel',
+           type: 'POST',
+           contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+           dataType: 'json',
+           data: menuJson
+         })
+         .done(function(data) {
+           if (data.retCode == -1) {
+             setMessage(data.errDesc, 'error', true);
+             return;
+           }
+           if (data.retCode == 1) {
+             setMessage('删除成功', 'success', true);
+           }
+           $('#menuMaintain').empty();
+           refresh('menuMaintain');
+         })
+         .fail(function(data) {
+           setMessage('删除失败', 'error', true);
+         })
+         .always(function(data) {
+         });
+         $('#menuDelResult').remove();
+        var $title = $('#div_menu_title span');
+        $title.empty();
+        $title.text('资源操作');
+      }
+    });
+    $('#sortConfirmDlg').on('hidden.bs.modal', function (event) {
+      if ($('#menuSortResult').length != 0 ) {
+        $('#menuSortResult').remove();
+        var treeObj = $.fn.zTree.getZTreeObj("treeMenu");
+        var nodes = treeObj.transformToArray(treeObj.getNodes());
+        var nodeJsonArray = [];
+        for(var i = 0;i < nodes.length; i++) {
+          var lineId;
+          var isParent;
+          var parentLineId;
+          var sortId;
+
+          lineId = nodes[i].id;
+
+          //when node has parent
+          if (nodes[i].parentTId != null) {
+            var nodeId = nodes[i].id;
+            isParent = 0;
+            var parentTId = nodes[i].parentTId;
+            var itsParentNode = treeObj.getNodesByFilter(function(parentNode) {
+              return parentNode.tId == parentTId;
+            });
+            parentLineId = itsParentNode[0].id;
+            var itsSlibings = treeObj.getNodesByFilter(function(slibingNode) {
+              return slibingNode.parentTId == parentTId;
+            });
+            var itsPos = 0;
+            while(itsPos != itsSlibings.length) {
+              if (nodeId == itsSlibings[itsPos].id) {
+                break;
+              }
+              itsPos++;
+            }
+            sortId = itsPos;
+            var jsoni = {
+              "lineId": lineId,
+              "isParent": isParent,
+              "parentLineId": parentLineId,
+              "sortId": sortId
+            }
+            nodeJsonArray.push(jsoni);
+            continue;
+          }
+          //when node has no parent
+          if (nodes[i].parentTId == null) {
+            var nodeId = nodes[i].id;
+            isParent = 1;
+            var topNodes = treeObj.getNodesByFilter(function(topNode) {
+              return topNode.parentTId == null;
+            });
+            var topNodePos = 0;
+            while(topNodePos != topNodes.length) {
+              if (nodeId == topNodes[topNodePos].id) {
+                break;
+              }
+              topNodePos++;
+            }
+            sortId = topNodePos;
+            var jsoni = {
+              "lineId": lineId,
+              "isParent": isParent,
+              "sortId": sortId
+            }
+            nodeJsonArray.push(jsoni);
+            continue;
+          }
+        }
+        $('#btn_menu_sort_save').off('click');
+        setMessage('正在提交', 'info', true);
+         $.ajax({
+           url: 'user/businiess/menu/menuresourcesort',
+           type: 'POST',
+           contentType:"application/json;charset=UTF-8",
+           dataType: 'json',
+           data: JSON.stringify(nodeJsonArray)
+         })
+         .done(function(data) {
+           if (data.retCode == -1) {
+             setMessage(data.errDesc, 'error', true);
+             return;
+           }
+           if (data.retCode == 1) {
+             setMessage('修改成功', 'success', true);
+           }
+           $('#menuMaintain').empty();
+           refresh('menuMaintain');
+         })
+         .fail(function(data) {
+           setMessage('修改失败', 'error', true);
+         })
+         .always(function(data) {
+          $('#btn_menu_sort_save').on('click', menuSortClickEvent);
+         });
+      }
+    });
+
+    $('#dlgMenuIcon').on('hidden.bs.modal', function (event) {
+      if ($('#dlgMenuIconResult').length != 0 ) {
+        $('#dlgMenuIconResult').remove();
+        var $checked = $('#divMenuIconDlgBody input:checked');
+        $('#menuIcon').val($checked.val());
+        $('#menuIcon').change();
+      }
+    });
+    /*event biding*/
+
+
+    /*inter init*/
+    treeInit();/*inter init*/
+  });
+</script>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.sys.PrivilegeDao">
+
+    <resultMap id="privilegeResultMap" type="com.unicom.fmos.entity.sys.Privilege">
+        <id property="lineId" column="line_id"/>
+        <result property="roleLineId" column="role_line_id"/>
+        <result property="resourceLineId" column="resource_line_id"/>
+        <result property="checked" column="checked"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="active" column="active"/>
+        <result property="activeUser" column="active_user"/>
+        <result property="activeTime" column="active_time"/>
+        <result property="activeMemo" column="active_memo"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateMemo" column="update_memo"/>
+    </resultMap>
+
+    <select id="insertOrUpdate" parameterType="com.unicom.fmos.dto.InsertUpdateDto" statementType="CALLABLE">
+        {
+          call insertOfUpdatePrivilege (
+            #{roleId,jdbcType=DECIMAL},
+            #{resourceId,jdbcType=DECIMAL},
+            #{isChecked,jdbcType=DECIMAL},
+            #{createMan,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}
+          )
+        }
+    </select>
+
+    <select id="getPrivilegeByRoleId" parameterType="java.lang.Integer" resultMap="privilegeResultMap">
+        SELECT * FROM td_privilege
+          WHERE 1 = 1
+            AND role_line_id = #{lineId}
+            AND active = 1
+            AND checked = 1
+    </select>
+
+    <update id="delPrivilege" parameterType="map">
+        UPDATE td_privilege SET
+        active = 0,
+        active_user = #{activeuser},
+        active_memo = #{activememo},
+        active_time = #{activetime}
+        WHERE resource_line_id in
+        <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectPrivilegeByCondition" parameterType="com.unicom.fmos.entity.sys.Privilege" resultMap="privilegeResultMap">
+        select * from td_privilege
+        WHERE 1 = 1
+            AND role_line_id = #{roleLineId}
+            AND active = 1
+            AND resource_line_id = #{resourceLineId}
+    </select>
+
+
+    <insert id="insertSelective" parameterType="com.unicom.fmos.entity.sys.Privilege" >
+        insert into td_privilege
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                LINE_ID,
+            </if>
+            <if test="roleLineId != null" >
+                ROLE_LINE_ID,
+            </if>
+            <if test="resourceLineId != null" >
+                RESOURCE_LINE_ID,
+            </if>
+            <if test="checked != null" >
+                CHECKED,
+            </if>
+            <if test="createUser != null" >
+                CREATE_USER,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="active != null" >
+                ACTIVE,
+            </if>
+            <if test="activeUser != null" >
+                ACTIVE_USER,
+            </if>
+            <if test="activeTime != null" >
+                ACTIVE_TIME,
+            </if>
+            <if test="activeMemo != null" >
+                ACTIVE_MEMO,
+            </if>
+            <if test="updateUser != null" >
+                UPDATE_USER,
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME,
+            </if>
+            <if test="updateMemo != null" >
+                UPDATE_MEMO,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                #{lineId,jdbcType=DECIMAL},
+            </if>
+            <if test="roleLineId != null" >
+                #{roleLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="resourceLineId != null" >
+                #{resourceLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="checked != null" >
+                #{checked,jdbcType=DECIMAL},
+            </if>
+            <if test="createUser != null" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="active != null" >
+                #{active,jdbcType=DECIMAL},
+            </if>
+            <if test="activeUser != null" >
+                #{activeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activeTime != null" >
+                #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeMemo != null" >
+                #{activeMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateMemo != null" >
+                #{updateMemo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.unicom.fmos.entity.sys.Privilege" >
+        update td_privilege
+        <set >
+            <if test="roleLineId != null" >
+                ROLE_LINE_ID = #{roleLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="resourceLineId != null" >
+                RESOURCE_LINE_ID = #{resourceLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="checked != null" >
+                CHECKED = #{checked,jdbcType=DECIMAL},
+            </if>
+            <if test="createUser != null" >
+                CREATE_USER = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="active != null" >
+                ACTIVE = #{active,jdbcType=DECIMAL},
+            </if>
+            <if test="activeUser != null" >
+                ACTIVE_USER = #{activeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activeTime != null" >
+                ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeMemo != null" >
+                ACTIVE_MEMO = #{activeMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateMemo != null" >
+                UPDATE_MEMO = #{updateMemo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where LINE_ID = #{lineId,jdbcType=DECIMAL}
+    </update>
+</mapper>

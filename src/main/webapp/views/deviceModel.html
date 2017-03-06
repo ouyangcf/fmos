@@ -1,0 +1,1362 @@
+<!-- Created by zhaojb on 2017-01-23 -->
+<div id="deviceModelMainContainer" class="container-fluid" style="margin-top:5px;margin-bottom:5px;">
+    <div class="row">
+        <div id="deviceModelToolbar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btndeviceModelDel" class="btn btn-danger hidden">
+                <i class="glyphicon glyphicon-remove"></i>删除</a>
+            <a id="btnDeviceModelModelNumber" class="btn btn-primary">
+                <i class="glyphicon glyphicon-globe"></i>型号编码</a>
+            <a id="btnDeviceModelModelMethod" class="btn btn-success">
+                <i class="glyphicon glyphicon-briefcase"></i>加工方法</a>
+            <a id="btnDeviceModelModelBaseInfo" class="btn btn-info hidden">
+                <i class="glyphicon glyphicon-bell"></i>基本信息定义</a>
+            <a id="btnDeviceModelModelFeature" class="btn btn-default hidden">
+                <i class="glyphicon glyphicon-filter"></i>特征信息定义</a>
+            <a id="btnDeviceModelModelFileManage" class="btn btn-danger">
+                <i class="glyphicon glyphicon-magnet"></i>文件下载</a>
+            <a id="btndeviceModelRefresh" class="btn btn-warning">
+                <i class="glyphicon glyphicon-refresh"></i>刷新</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row" style="margin-top: 2px;">
+                <div id="iptDivthdeviceModelName" class="col-md-6 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">型号名称</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thdeviceModelName">
+                    </div>
+                </div>
+                <div id="iptDivthdeviceModelNumber" class="col-md-6 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">型号编码</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thdeviceModelNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2px;">
+                <div id="selDivseldeviceModelType" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">型号类型</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelType"></select>
+                    </div>
+                </div>
+                <div id="selDivseldeviceModelIsNumber" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">是否数控</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelIsNumber"></select>
+                    </div>
+                </div>
+                <div id="selDivseldeviceModelIsActive" class="col-md-4 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">是否启用</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelIsActive"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 2px;">
+                <div id="iptDivthdeviceModelModel" class="col-md-6 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">型号编号</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thdeviceModelModel">
+                    </div>
+                </div>
+                <div id="iptDivthdeviceModelGroup" class="col-md-5 col-md-offset-0">
+                    <div class="input-group">
+                        <span class="input-group-addon">型号组别</span>
+                        <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thdeviceModelGroup">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <a id="btndeviceModelSearch" class="btn btn-primary pull-right">
+                        <i class="glyphicon glyphicon-search"></i>搜索</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="divdeviceModelTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbdeviceModelInfo"></table>
+        </div>
+    </div>
+</div>
+<!-- 型号编码编辑对话框 -->
+<div class="modal fade" id="deviceModelNumberEditlg" tabindex="-1" role="dialog" aria-labelledby="deviceModelDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceModelEditClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceModelDlgLabel">型号编码</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeMachineTypeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">设备类型</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeMachineType" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="deviceModelEditMainParams" data-toggle="tooltip" data-placement="top" title="未知">主参数</span>
+                            <input class="form-control typeahead" id="iptDivthdeviceModelMainParams" autocomplete="off" type="text" data-provide="typeahead" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeControlTypeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">控制方式</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeControlType" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodePreciseLevelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">精度等级</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodePreciseLevel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeMainPowerDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">主轴功率</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeMainPower" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeMainVelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">主轴转速</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeMainVel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeHasKnifeDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否有刀库</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeHasKnife" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeHasnumberDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否有数控转台/分度头</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeHasnumber" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeDeviceSourceDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">设备来源</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeDeviceSource" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="seldeviceModelCodeManagerlevelDiv">
+                            <div class="input-group">
+                                <span class="input-group-addon">管理级别</span>
+                                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="seldeviceModelCodeManagerlevel" disabled="disabled"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceModelEditCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceModelEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 型号编码编辑对话框 -->
+<!-- 加工方法编辑对话框 -->
+<div class="modal fade" id="deviceModelMethodEditlg" tabindex="-1" role="dialog" aria-labelledby="deviceModelDlgMethodLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceModelEditMethodClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceModelDlgMethodLabel">加工方法</h4>
+            </div>
+            <div class="modal-body">
+                <div id="seldeviceModelMachineMethodDiv">
+                    <div class="input-group">
+                        <span class="input-group-addon">加工方法</span>
+                        <select class="selectpicker show-tick form-control" data-live-search="true" multiple data-style="btn-cutom-select" id="seldeviceModelMachineMethod" disabled="disabled"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceModelMethodEditCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceModelMethodEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 加工方法编辑对话框 -->
+<!-- 基本信息定义编辑对话框 -->
+<div class="modal fade" id="deviceModelBaseInfoEditlg" tabindex="-1" role="dialog" aria-labelledby="deviceModelDlgBaseInfoLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceModelEditBaseInfoClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceModelDlgBaseInfoLabel">基本信息定义编辑</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" id="baseinfoEditDlgBody"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnDeviceModelBaseInfoEditCancel">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnDeviceModelBaseInfoEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 基本信息定义编辑对话框 -->
+<!--  特征信息定义编辑对话框 -->
+<div class="modal fade" id="deviceModelFeatureInfoEditlg" tabindex="-1" role="dialog" aria-labelledby="deviceModelDlgFeatureInfoLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceModelEditFeatureInfoClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceModelDlgFeatureInfoLabel"> 特征信息定义编辑</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row" id="featureEditDlgBody"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnDeviceModelFeatureInfoEditCancel">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnDeviceModelFeatureInfoEditEnsure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  特征信息定义编辑对话框 -->
+<!--  文件管理对话框 -->
+<div class="modal fade" id="deviceModelFileManageDlg" tabindex="-1" role="dialog" aria-labelledby="deviceModelFileManageDlgLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="btndeviceModelFileManageDlgClose">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deviceModelFileManageDlgLabel"> 文件管理</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="" class="col-md-12 col-md-offset-0" style="margin-top:10px;margin-bottom:5px;">
+                        <a id="btnDeviceModelModelFileDownload" class="btn btn-warning">
+                            <i class="glyphicon glyphicon-download"></i>文件下载</a>
+                    </div>
+                    <div id="divdeviceModelFileManageTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+                        <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbdeviceModelFileManage"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default hidden" data-dismiss="modal" id="btnDeviceModelFileManageDlgCancel">取消</button>
+                <button type="button" class="btn btn-primary hidden" data-dismiss="modal" id="btnDeviceModelFileManageDlgEnsure">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  文件管理对话框 -->
+<script>
+jQuery(document).ready(function($) {
+
+    $('[data-toggle="tooltip"]').tooltip();
+    /**
+     * [setLoader description]
+     * @param {[type]} id [description]
+     */
+    var setLoader = function(id) {
+        $('#' + id).empty();
+        $('#' + id).append('<div class="loader-inner ball-pulse" style = "margin-top:20%;margin-left:45%"><div></div><div></div><div></div></div>');
+    }
+
+    /**
+     * [removeLoader description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var removeLoader = function(id) {
+        $('#' + id).empty();
+    }
+
+    /**
+     * [refresh description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
+     */
+    var refresh = function(id) {
+        var url = 'views/' + id + '.html';
+        $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                beforeSend: function(XHR) {
+                    setLoader(id);
+                }
+            })
+            .done(function(data) {
+                removeLoader(id);
+                $('#' + id).append(data);
+            })
+            .fail(function() {})
+            .always(function() {});
+    }
+
+    /*begin define btndeviceModelDel */
+    var btndeviceModelDelClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        } else {
+            msg = Messenger().post({
+                message: "是否删除选定的行?",
+                hideAfter: 10,
+                actions: {
+                    delete: {
+                        label: "删除",
+                        action: function() {
+                            msg.hide();
+                            var j = 0;
+                            var idArr = [];
+                            for (var i = 0; i < selRows.length; i++) {
+                                if (selRows[i].lineId != undefined) {
+                                    idArr.push(selRows[i].lineId);
+                                    j++;
+                                }
+                            }
+                            if (j == 0) {
+                                setMessage('没有需要删除的行', 'error', true);
+                                return false;
+                            } else {
+                                $('#btndeviceModelDel').off('click');
+                                $.ajax({
+                                        url: 'user/businiess/deviceModel/del',
+                                        type: 'POST',
+                                        data: {
+                                            "idArr": idArr
+                                        },
+                                        dataType: "json"
+                                    })
+                                    .done(function(data) {
+                                        if (data.retCode == -1) {
+                                            setMessage(data.errDesc, 'error', true);
+                                            return;
+                                        }
+                                        if (data.retCode == 1) {
+                                            setMessage('删除成功', 'success', true);
+                                            $('#btndeviceModelRefresh').click();
+                                        }
+                                    })
+                                    .fail(function(data) {
+                                        setMessage('删除失败', 'error', true);
+                                    })
+                                    .always(function(data) {
+                                        $('#btndeviceModelDel').on('click', btndeviceModelDelClick);
+                                    });
+                            }
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        action: function() {
+                            msg.hide();
+                        }
+                    }
+                }
+            });
+        }
+        event.stopPropagation();
+    };
+    $("#btndeviceModelDel").on("click", btndeviceModelDelClick);
+    /*end define btndeviceModelDel */
+
+    /*begin define btndeviceModelRefresh */
+    var btndeviceModelRefreshClick = function(event) {
+        event.preventDefault();
+        $('#deviceModel').empty();
+        refresh('deviceModel');
+        event.stopPropagation();
+    };
+    $("#btndeviceModelRefresh").on("click", btndeviceModelRefreshClick);
+    /*end define btndeviceModelRefresh */
+
+    var btnDeviceModelBaseInfoEditEnsureClick = function(event) {
+        event.preventDefault();
+        $('<div id="deviceModelBaseInfoEditResult"></div>').appendTo('body');
+        $('#deviceModelBaseInfoEditlg').modal('hide');
+    }
+    $("#btnDeviceModelBaseInfoEditEnsure").on("click", btnDeviceModelBaseInfoEditEnsureClick);
+
+    var btnDeviceModelFeatureInfoEditEnsureClick = function(event) {
+        event.preventDefault();
+        $('<div id="deviceModelfeatureEditResult"></div>').appendTo('body');
+        $('#deviceModelFeatureInfoEditlg').modal('hide');
+    }
+    $("#btnDeviceModelFeatureInfoEditEnsure").on("click", btnDeviceModelFeatureInfoEditEnsureClick);
+
+    var btnDeviceModelModelBaseInfoClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = [{
+            modelLineId: selRows[0].lineId
+        }];
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+        $.ajax({
+                url: 'user/businiess/directionary/baseinfo',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                //baseinfoEditDlgBody
+                out(data);
+                $divPart0 = $('<div class="col-md-4 col-md-offset-1"></div>');
+                $divPart1 = $('<div class="col-md-4"></div>');
+                $divPart2 = $('<div class="col-md-3"></div>');
+                $('#baseinfoEditDlgBody').empty();
+                for (var i = 0; i < data.baseinfo.length; i++) {
+                    var id = data.baseinfo[i].id;
+                    var name = data.baseinfo[i].name;
+                    var $tmpIpt = $('<input type="checkbox" value="" data-toggle="checkbox" class="custom-checkbox">');
+                    var $tmpLabel = $('<label class="checkbox"></label>');
+                    var tmpId = 'baseinfoEditId_' + id;
+                    $tmpIpt.attr('id', tmpId);
+                    $tmpLabel.text(name);
+                    $tmpLabel.attr('for', tmpId);
+                    $tmpLabel.prepend($tmpIpt);
+                    var r = i % 3;
+                    switch (r) {
+                        case 0:
+                            $divPart0.append($tmpLabel);
+                            break;
+                        case 1:
+                            $divPart1.append($tmpLabel);
+                            break;
+                        case 2:
+                            $divPart2.append($tmpLabel);
+                            break;
+                        default:
+                            $divPart0.append($tmpLabel);
+                            break;
+                    }
+
+                }
+
+                $('#baseinfoEditDlgBody').append($divPart0);
+                $('#baseinfoEditDlgBody').append($divPart1);
+                $('#baseinfoEditDlgBody').append($divPart2);
+                $('#baseinfoEditDlgBody :checkbox').radiocheck();
+                for (var i = 0; i < data.checkedList.length; i++) {
+                    var id = data.checkedList[i].directionaryDetailLineId;
+                    out('此处应有本子' + id);
+                    var tmpId = '#baseinfoEditId_' + id;
+                    out($(tmpId).length);
+                    $(tmpId).attr("checked", true);
+                }
+                $('#deviceModelBaseInfoEditlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+
+    }
+    $('#btnDeviceModelModelBaseInfo').on('click', btnDeviceModelModelBaseInfoClick);
+
+    var btnDeviceModelModelFeatureClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        var json = [{
+            modelLineId: selRows[0].lineId
+        }];
+        setMessage('正在加载该选项的特征信息定义', 'info', true);
+        $.ajax({
+                url: 'user/businiess/directionary/feature',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                //featureEditDlgBody
+                $('#featureEditDlgBody').empty();
+                $divPart0 = $('<div class="col-md-4 col-md-offset-1"></div>');
+                $divPart1 = $('<div class="col-md-4"></div>');
+                $divPart2 = $('<div class="col-md-3"></div>');
+                for (var i = 0; i < data.baseinfo.length; i++) {
+                    var id = data.baseinfo[i].id;
+                    var name = data.baseinfo[i].name;
+                    var $tmpIpt = $('<input type="checkbox" value="" data-toggle="checkbox" class="custom-checkbox">');
+                    var $tmpLabel = $('<label class="checkbox"></label>');
+                    var tmpId = 'featureEditId_' + id;
+                    $tmpIpt.attr('id', tmpId);
+                    $tmpLabel.text(name);
+                    $tmpLabel.attr('for', tmpId);
+                    $tmpLabel.prepend($tmpIpt);
+
+                    var r = i % 3;
+                    switch (r) {
+                        case 0:
+                            $divPart0.append($tmpLabel);
+                            break;
+                        case 1:
+                            $divPart1.append($tmpLabel);
+                            break;
+                        case 2:
+                            $divPart2.append($tmpLabel);
+                            break;
+                        default:
+                            $divPart0.append($tmpLabel);
+                            break;
+                    }
+                }
+                $('#featureEditDlgBody').append($divPart0);
+                $('#featureEditDlgBody').append($divPart1);
+                $('#featureEditDlgBody').append($divPart2);
+                $('#featureEditDlgBody :checkbox').radiocheck();
+                for (var i = 0; i < data.checkedList.length; i++) {
+                    var id = data.checkedList[i].directionaryDetailLineId;
+                    var tmpId = '#featureEditId_' + id;
+                    $(tmpId).attr("checked", true);
+                }
+                setMessage('已加载该选项信息', 'success', true);
+                $('#deviceModelFeatureInfoEditlg').modal();
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    }
+    $('#btnDeviceModelModelFeature').on('click', btnDeviceModelModelFeatureClick);
+
+    /*begin define btn7 */
+    var btnDeviceModelModelNumberClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+
+        var code = selRows[0].modelNumber;
+        var code0_3 = code.substring(0, 4);
+        var code4_5 = code.substring(4, 6);
+        var code6 = code.substring(6, 7);
+        var code7 = code.substring(7, 8);
+        var code8 = code.substring(8, 9);
+        var code9 = code.substring(9, 10);
+        var code10 = code.substring(10, 11);
+        var code11 = code.substring(11, 12);
+        var code12 = code.substring(12, 13);
+        var code13 = code.substring(13, 14);
+        $('#seldeviceModelCodeMachineType').selectpicker('val', code0_3);
+        $('#iptDivthdeviceModelMainParams').val(code4_5);
+        $('#seldeviceModelCodeControlType').selectpicker('val', code6);
+        $('#seldeviceModelCodePreciseLevel').selectpicker('val', code7);
+        $('#seldeviceModelCodeMainPower').selectpicker('val', code8);
+        $('#seldeviceModelCodeMainVel').selectpicker('val', code9);
+        $('#seldeviceModelCodeHasKnife').selectpicker('val', code10);
+        $('#seldeviceModelCodeHasnumber').selectpicker('val', code11);
+        $('#seldeviceModelCodeDeviceSource').selectpicker('val', code12);
+        $('#seldeviceModelCodeManagerlevel').selectpicker('val', code13);
+        var selected = $('#seldeviceModelCodeMachineType option:selected').val();
+        $('[data-toggle="tooltip"]').tooltip('destroy');
+        out('flag');
+        $('#deviceModelEditMainParams').attr('title', '未知');
+        for (var i = 0; i < codemachinetypeJson.params.length; i++) {
+            if (codemachinetypeJson.params[i].id == selected) {
+                $('#deviceModelEditMainParams').attr('title', codemachinetypeJson.params[i].name);
+                break;
+            }
+        }
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#deviceModelNumberEditlg').modal();
+    };
+    $("#btnDeviceModelModelNumber").on("click", btnDeviceModelModelNumberClick);
+    /*end define btnDeviceModelRefresh */
+
+    /*begin define btn7 */
+    var btnDeviceModelModelMethodClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+
+        $('#seldeviceModelMachineMethod').selectpicker('deselectAll');
+        var json = [{
+            lineId: selRows[0].lineId
+        }];
+        setMessage('正在加载该选项的加工方法', 'info', true);
+        $.ajax({
+                url: 'user/businiess/directionary/methodById',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                var idArr = [];
+                for (var i = 0; i < data.length; i++) {
+                    idArr.push(data[i].id);
+                }
+                $('#seldeviceModelMachineMethod').selectpicker('val', idArr);
+                $('#deviceModelMethodEditlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+    };
+    $("#btnDeviceModelModelMethod").on("click", btnDeviceModelModelMethodClick);
+    /*end define btnDeviceModelRefresh */
+
+    /*begin define thdeviceModelName */
+    $.ajax({
+        url: "user/businiess/directionary/machinename",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#thdeviceModelName");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethdeviceModelName */
+
+    /*begin define thdeviceModelModel */
+
+    $.ajax({
+        url: "user/businiess/directionary/machinemodel",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#thdeviceModelModel");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethdeviceModelModel */
+
+    /*begin define thdeviceModelNumber */
+    $.ajax({
+        url: "user/businiess/directionary/machinenumber",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#thdeviceModelNumber");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethdeviceModelNumber */
+
+    /*begin define thdeviceModelGroup */
+    $.ajax({
+        url: "user/businiess/directionary/machinegroup",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $input = $("#thdeviceModelGroup");
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethdeviceModelGroup */
+
+    /*获取设备类型字典*/
+    var codemachinetypeJson;
+    $.ajax({
+        url: "user/businiess/directionary/codemachinetype",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        codemachinetypeJson = data;
+        var $selectType = $("#seldeviceModelCodeMachineType");
+        for (var i = 0; i < data.types.length; i++) {
+            var strOption = '<option value="' + data.types[i].id + '">' + data.types[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType.on('change', function() {
+            var selected = $('#seldeviceModelCodeMachineType option:selected').val();
+            $('[data-toggle="tooltip"]').tooltip('destroy');
+            $('#deviceModelEditMainParams').attr('title', '未知');
+            for (var i = 0; i < codemachinetypeJson.params.length; i++) {
+                if (codemachinetypeJson.params[i].id == selected) {
+                    $('#deviceModelEditMainParams').attr('title', codemachinetypeJson.params[i].name);
+                    break;
+                }
+            }
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $selectType = $("#seldeviceModelCodeControlType");
+        for (var i = 0; i < data.controltype.length; i++) {
+            var strOption = '<option value="' + data.controltype[i].id + '">' + data.controltype[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodePreciseLevel");
+        for (var i = 0; i < data.preciselevel.length; i++) {
+            var strOption = '<option value="' + data.preciselevel[i].id + '">' + data.preciselevel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodeMainPower");
+        for (var i = 0; i < data.mainpower.length; i++) {
+            var strOption = '<option value="' + data.mainpower[i].id + '">' + data.mainpower[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodeMainVel");
+        for (var i = 0; i < data.mainvel.length; i++) {
+            var strOption = '<option value="' + data.mainvel[i].id + '">' + data.mainvel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodeHasKnife");
+        for (var i = 0; i < data.hasKnife.length; i++) {
+            var strOption = '<option value="' + data.hasKnife[i].id + '">' + data.hasKnife[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodeHasnumber");
+        for (var i = 0; i < data.hasnumber.length; i++) {
+            var strOption = '<option value="' + data.hasnumber[i].id + '">' + data.hasnumber[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+
+        $selectType = $("#seldeviceModelCodeDeviceSource");
+        for (var i = 0; i < data.deviceSource.length; i++) {
+            var strOption = '<option value="' + data.deviceSource[i].id + '">' + data.deviceSource[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelCodeManagerlevel");
+        for (var i = 0; i < data.managerlevel.length; i++) {
+            var strOption = '<option value="' + data.managerlevel[i].id + '">' + data.managerlevel[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+        $selectType = $("#seldeviceModelMachineMethod");
+        for (var i = 0; i < data.method.length; i++) {
+            var strOption = '<option value="' + data.method[i].id + '">' + data.method[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*获取设备类型字典*/
+    /*begin define seldeviceModelType */
+
+    $.ajax({
+        url: "user/businiess/directionary/machinetype",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        var $selectType = $("#seldeviceModelType");
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+
+            $selectType.append(strOption);
+        }
+        $selectType.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineseldeviceModelType */
+
+    /*begin define seldeviceModelIsNumber */
+    var $selectIsNumber = $("#seldeviceModelIsNumber");
+    var data = [{
+        name: '全部'
+    }, {
+        id: 1,
+        name: '是'
+    }, {
+        id: 0,
+        name: '否'
+    }];
+    for (var i = 0; i < data.length; i++) {
+        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+        $selectIsNumber.append(strOption);
+    }
+    $selectIsNumber.selectpicker();
+    /*end defineseldeviceModelIsNumber */
+
+    /*begin define seldeviceModelIsActive */
+    var $IsActive = $("#seldeviceModelIsActive");
+    var data = [{
+        name: '全部'
+    }, {
+        id: 1,
+        name: '是'
+    }, {
+        id: 0,
+        name: '否'
+    }];
+    for (var i = 0; i < data.length; i++) {
+        var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+        $IsActive.append(strOption);
+    }
+    $IsActive.selectpicker();
+    /*end defineseldeviceModelIsActive */
+
+    /*begin define btndeviceModelSearch */
+    var btndeviceModelSearchClick = function(event) {
+        event.preventDefault();
+        var modelName = $('#thdeviceModelName').val() == '' ? undefined : $('#thdeviceModelName').val();
+        var modelNumber = $('#thdeviceModelNumber').val() == '' ? undefined : $('#thdeviceModelNumber').val();
+        var modelType = $('#seldeviceModelType').selectpicker('val') == "undefined" ? undefined : $('#seldeviceModelType').val();
+        var numberialController = $('#seldeviceModelIsNumber').selectpicker('val') == "undefined" ? undefined : Number($('#seldeviceModelIsNumber').val());
+        var active = $('#seldeviceModelIsActive').selectpicker('val') == "undefined" ? undefined : Number($('#seldeviceModelIsActive').val());
+        var modelModel = $('#thdeviceModelModel').val() == '' ? undefined : $('#thdeviceModelModel').val();
+        var modelGroup = $('#thdeviceModelGroup').val() == '' ? undefined : $('#thdeviceModelGroup').val();
+
+        var json = [{
+            modelName: modelName,
+            modelNumber: modelNumber,
+            modelType: modelType,
+            numberialController: numberialController,
+            active: active,
+            modelModel: modelModel,
+            modelGroup: modelGroup
+        }];
+        $('#btndeviceModelSearch').off('click');
+        $.ajax({
+                url: 'user/businiess/deviceModel/search',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                setMessage('共找到 ' + data.length + ' 条数据', 'info', true);
+                var str = JSON.stringify(data)
+                $('#tbdeviceModelInfo').bootstrapTable('load', data);
+            })
+            .fail(function(data) {
+                setMessage('查询失败', 'error', true);
+            }).always(function(data) {
+                $('#btndeviceModelSearch').on('click', btndeviceModelSearchClick);
+            });
+        event.stopPropagation();
+    };
+    $("#btndeviceModelSearch").on("click", btndeviceModelSearchClick);
+    /*end define btndeviceModelSearch */
+
+    /*begin define tbdeviceModelInfo */
+    $("#tbdeviceModelInfo").bootstrapTable({
+        url: "user/businiess/deviceModel/infossp",
+        method: "get",
+        pagination: true,
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "createTime",
+            title: "创建时间",
+            formatter: function(value, row, index) {
+                if (value == undefined) {
+                    return value;
+                } else {
+                    var tempTime = new Date(value);
+                    var fullYear = tempTime.getFullYear();
+                    var month = tempTime.getMonth() + 1;
+                    var date = tempTime.getDate();
+                    var hours = tempTime.getHours();
+                    var minute = tempTime.getMinutes();
+                    var second = tempTime.getSeconds();
+                    var strTime =
+                        fullYear + "-" +
+                        month + "-" +
+                        date + " " +
+                        hours + ":" +
+                        minute + ":" +
+                        second;
+                    return strTime;
+                }
+            }
+        }, {
+            field: "modelName",
+            title: "型号名称"
+        }, {
+            field: "modelModel",
+            title: "型号编号"
+        }, {
+            field: "modelNumber",
+            title: "型号编码"
+        }, {
+            field: "modelGroup",
+            title: "型号组别"
+        }, {
+            field: "modelType",
+            title: "型号类型"
+        }, {
+            field: "numberialController",
+            title: "是否为数控"
+        }, {
+            field: "createUser",
+            title: "创建人"
+        }, {
+            field: "lineId",
+            title: "主键序号",
+            visible: false
+        }],
+        onLoadSuccess: function(data) {}
+    });
+    /*end define tbdeviceModelInfo */
+    $('#deviceModelNumberEditlg').on('hidden.bs.modal', function(event) {
+        if ($('#deviceModelNumberEditlgResult').length != 0) {
+            $('#deviceModelNumberEditlgResult').remove();
+            var $table = $('#tbdeviceModelInfo');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var code0_3 = $('#seldeviceModelCodeMachineType').selectpicker('val');
+            var code4_5 = $('#iptDivthdeviceModelMainParams').val();
+            var code6 = $('#seldeviceModelCodeControlType').selectpicker('val');
+            var code7 = $('#seldeviceModelCodePreciseLevel').selectpicker('val');
+            var code8 = $('#seldeviceModelCodeMainPower').selectpicker('val');
+            var code9 = $('#seldeviceModelCodeMainVel').selectpicker('val');
+            var code10 = $('#seldeviceModelCodeHasKnife').selectpicker('val');
+            var code11 = $('#seldeviceModelCodeHasnumber').selectpicker('val');
+            var code12 = $('#seldeviceModelCodeDeviceSource').selectpicker('val');
+            var code13 = $('#seldeviceModelCodeManagerlevel').selectpicker('val');
+            if (code4_5.length == 1) {
+                code4_5 = '0' + code4_5;
+            }
+            var modelNumber = code0_3 + code4_5 + code6 + code7 + code8 + code9 + code10 + code11 + code12 + code13;
+            var json = [{
+                lineId: selRows[0].lineId,
+                modelNumber: modelNumber
+            }];
+            setMessage('正在提交', 'info', true);
+            $.ajax({
+                    url: 'user/businiess/deviceModel/update',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(json)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'info', true);
+                        $('#btndeviceModelRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                });
+        }
+    });
+    $('#deviceModelBaseInfoEditlg').on('hidden.bs.modal', function(event) {
+        if ($('#deviceModelBaseInfoEditResult').length != 0) {
+            $('#deviceModelBaseInfoEditResult').remove();
+            var nodeJsonArray = [];
+            var $table = $('#tbdeviceModelInfo');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var modelLineId = selRows[0].lineId;
+
+            $('#baseinfoEditDlgBody input:checked').each(function(index, el) {
+                var str_id = $(el).attr('id').split('_');
+                var id = str_id[1] * 1;
+                var jsoni = {
+                    "directionaryDetailLineId": id,
+                    "modelLineId": modelLineId,
+                    "active": 1
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+            $('#baseinfoEditDlgBody input').not(':checked').each(function(index, el) {
+                var str_id = $(el).attr('id').split('_');
+                var id = str_id[1] * 1;
+                var jsoni = {
+                    "directionaryDetailLineId": id,
+                    "modelLineId": modelLineId,
+                    "active": 0
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+            setMessage('正在提交', 'info', true);
+            $.ajax({
+                    url: 'user/businiess/deviceModel/basicinfochecked',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(nodeJsonArray)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'info', true);
+                        $('#btndeviceModelRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                }).always(function(data) {
+                    $('#btndeviceModelSearch').on('click', btndeviceModelSearchClick);
+                });
+        }
+    });
+    $('#deviceModelFeatureInfoEditlg').on('hidden.bs.modal', function(event) {
+        if ($('#deviceModelfeatureEditResult').length != 0) {
+            $('#deviceModelfeatureEditResult').remove();
+            var nodeJsonArray = [];
+            var $table = $('#tbdeviceModelInfo');
+            var selRows = $table.bootstrapTable('getAllSelections');
+            var modelLineId = selRows[0].lineId;
+
+            $('#featureEditDlgBody input:checked').each(function(index, el) {
+                var str_id = $(el).attr('id').split('_');
+                var id = str_id[1] * 1;
+                var jsoni = {
+                    "directionaryDetailLineId": id,
+                    "modelLineId": modelLineId,
+                    "active": 1
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+            $('#featureEditDlgBody input').not(':checked').each(function(index, el) {
+                var str_id = $(el).attr('id').split('_');
+                var id = str_id[1] * 1;
+                var jsoni = {
+                    "directionaryDetailLineId": id,
+                    "modelLineId": modelLineId,
+                    "active": 0
+                }
+                nodeJsonArray.push(jsoni);
+            });
+
+
+            setMessage('正在提交', 'info', true);
+            $.ajax({
+                    url: 'user/businiess/deviceModel/featurechecked',
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'json',
+                    data: JSON.stringify(nodeJsonArray)
+                })
+                .done(function(data) {
+                    if (data.retCode == -1) {
+                        setMessage(data.errDesc, 'error', true);
+                        return;
+                    }
+                    if (data.retCode == 1) {
+                        setMessage('修改成功', 'info', true);
+                        $('#btndeviceModelRefresh').click();
+                    }
+                })
+                .fail(function(data) {
+                    setMessage('修改失败', 'error', true);
+                }).always(function(data) {
+                    $('#btndeviceModelSearch').on('click', btndeviceModelSearchClick);
+                });
+        }
+    });
+
+    $('#btnDeviceModelEditEnsure').on('click', function(event) {
+        event.preventDefault();
+        /* Act on the event */
+        var code0_3 = $('#seldeviceModelCodeMachineType').selectpicker('val');
+        var code4_5 = $('#iptDivthdeviceModelMainParams').val().trim();
+        var code6 = $('#seldeviceModelCodeControlType').selectpicker('val');
+        var code7 = $('#seldeviceModelCodePreciseLevel').selectpicker('val');
+        var code8 = $('#seldeviceModelCodeMainPower').selectpicker('val');
+        var code9 = $('#seldeviceModelCodeMainVel').selectpicker('val');
+        var code10 = $('#seldeviceModelCodeHasKnife').selectpicker('val');
+        var code11 = $('#seldeviceModelCodeHasnumber').selectpicker('val');
+        var code12 = $('#seldeviceModelCodeDeviceSource').selectpicker('val');
+        var code13 = $('#seldeviceModelCodeManagerlevel').selectpicker('val');
+        if (code0_3 == null || code6 == null || code7 == null || code8 == null || code9 == null || code10 == null || code11 == null || code12 == null || code13 == null || code4_5 == '') {
+            setMessage('存在未填写项', 'error', true);
+            event.stopPropagation();
+            return;
+        }
+        if (!$.isNumeric(code4_5)) {
+            setMessage('主参数仅能填写数字', 'error', true);
+            event.stopPropagation();
+            return;
+        }
+        if (Number(code4_5) < 0 || Number(code4_5) > 99) {
+            setMessage('主参数范围为0-99', 'error', true);
+            event.stopPropagation();
+            return;
+        }
+        $('<div id="deviceModelNumberEditlgResult"></div>').appendTo('body');
+        $('#deviceModelNumberEditlg').modal('hide');
+    });
+
+    $('#btnDeviceModelMethodEditEnsure').on('click', function(event) {
+        event.preventDefault();
+        /* Act on the event */
+        var nodeJsonArray = [];
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        var selectedOptions = $("#seldeviceModelMachineMethod option:selected");
+        if (selectedOptions != null) {
+            selectedOptions.each(function(index, el) {
+                var jsoni = {
+                    "modelLineId": selRows[0].lineId,
+                    "directionaryLineId": $(el).val(),
+                    "active": 1
+                }
+                nodeJsonArray.push(jsoni);
+            });
+        }
+        var unselectedOptions = $("#seldeviceModelMachineMethod option").not(':selected');
+        if (unselectedOptions != null) {
+            unselectedOptions.each(function(index, el) {
+                var jsoni = {
+                    "modelLineId": selRows[0].lineId,
+                    "directionaryLineId": $(el).val(),
+                    "active": 0
+                }
+                nodeJsonArray.push(jsoni);
+            });
+        }
+        $('#seldeviceModelMachineMethod').selectpicker('deselectAll');
+        setMessage('正在提交', 'info', true);
+        $.ajax({
+                url: 'user/businiess/machinemethod/update',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(nodeJsonArray)
+            })
+            .done(function(data) {
+                if (data.retCode == -1) {
+                    setMessage(data.errDesc, 'error', true);
+                    return;
+                }
+                if (data.retCode == 1) {
+                    setMessage('修改成功', 'success', true);
+                    $('#btndeviceModelRefresh').click();
+                }
+            })
+            .fail(function(data) {
+                setMessage('修改失败', 'error', true);
+            });
+    });
+
+    $('#tbdeviceModelFileManage').bootstrapTable({
+        pagination: true,
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "fileName",
+            title: "文件名"
+        }, {
+            field: "fileExt",
+            title: "文件扩展名"
+        }, {
+            field: "fileSize",
+            title: "文件大小(单位:B)"
+        }, {
+            field: "createUser",
+            title: "上传人"
+        }, {
+            field: "createTime",
+            title: "上传时间"
+        }, {
+            field: "lineId",
+            title: "上传时间",
+            visible: false
+        }]
+    });
+
+    var btnDeviceModelModelFileManageClick = function(event) {
+        event.preventDefault();
+        var $table = $('#tbdeviceModelInfo');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        if (selRows[0].lineId == undefined) {
+            setMessage('请选择已存在的数据', 'error', true);
+            return;
+        }
+        setMessage('正在加载该选项的文件信息', 'info', true);
+        var json = [{
+            sourceLineId: selRows[0].lineId,
+            fileSource: 0,
+            active: 1
+        }];
+        setMessage('正在加载该选项的基本信息定义', 'info', true);
+        $.ajax({
+                url: 'user/businiess/fileupload/infos',
+                type: 'POST',
+                contentType: "application/json;charset=UTF-8",
+                dataType: 'json',
+                data: JSON.stringify(json)
+            })
+            .done(function(data) {
+                $('#tbdeviceModelFileManage').bootstrapTable('load', data);
+                $('#deviceModelFileManageDlg').modal();
+                setMessage('已加载该选项信息', 'success', true);
+            })
+            .fail(function(data) {
+                setMessage('加载失败', 'error', true);
+            });
+
+    }
+    $('#btnDeviceModelModelFileManage').on('click', btnDeviceModelModelFileManageClick);
+
+    var btnDeviceModelModelFileDownloadClick = function(event) {
+        event.preventDefault();
+
+        var $table = $('#tbdeviceModelFileManage');
+        var selRows = $table.bootstrapTable('getAllSelections');
+        if (selRows.length == 0) {
+            setMessage('未选中行', 'error', true);
+            return;
+        }
+        if (selRows.length > 1) {
+            setMessage('请单选', 'error', true);
+            return;
+        }
+        setMessage('正在导出,请稍等', 'info', true);
+        //向后台发送请求
+        var form = $("<form>"); //定义一个form表单
+        form.attr('style', 'display:none');
+        form.attr('target', '');
+        form.attr('method', 'post');
+        form.attr('action', 'user/businiess/fileupload/download');
+        //添加input
+        var input1 = $("<input>");
+        input1.attr('type', 'hidden');
+        input1.attr('name', 'lineId');
+        input1.attr('value', selRows[0].lineId);
+        form.append(input1);
+        //将表单放到body中
+        $('body').append(form);
+        form.submit(); //提交表单2
+    }
+    $('#btnDeviceModelModelFileDownload').on('click', btnDeviceModelModelFileDownloadClick);
+});
+</script>

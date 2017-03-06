@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.sys.UserDao">
+    <sql id="user_column_sql">
+        line_id,
+        role_line_id,
+        user_id,
+        user_name,
+        user_password,
+        create_user,
+        create_time,
+        active,
+        active_user,
+        active_time,
+        active_memo,
+        update_user,
+        update_time,
+        update_memo,
+        area_code,
+        depart_code,
+        position_code,
+        salt
+    </sql>
+    <sql id="user_whereClause_sql">
+        <if test="lineId != null">and line_id = #{lineId}</if>
+        <if test="roleLineId != null">and role_line_id = #{roleLineId}</if>
+        <if test="userId != null">and user_id = #{userId}</if>
+        <if test="userName != null">and user_name = #{userName}</if>
+        <if test="userPassword != null">and user_password = #{userPassword}</if>
+        <if test="createUser != null">and create_user = #{createUser}</if>
+        <if test="createTime != null">and create_time = #{createTime}</if>
+        <if test="active != null">and active = #{active}</if>
+        <if test="activeUser != null">and active_user = #{activeUser}</if>
+        <if test="activeTime != null">and active_time = #{activeTime}</if>
+        <if test="activeMemo != null">and active_memo = #{activeMemo}</if>
+        <if test="updateUser != null">and update_user = #{updateUser}</if>
+        <if test="updateTime != null">and update_time = #{updateTime}</if>
+        <if test="updateMemo != null">and update_memo = #{updateMemo}</if>
+        <if test="areaCode != null">and area_code = #{areaCode}</if>
+        <if test="departCode != null">and depart_code = #{departCode}</if>
+        <if test="positionCode != null">and position_code = #{positionCode}</if>
+        <if test="salt != null">and salt = #{salt}</if>
+    </sql>
+    <resultMap id="UserResultMap" type="com.unicom.fmos.entity.sys.User">
+        <id property="lineId" column="line_id"/>
+        <result property="roleLineId" column="role_line_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassword" column="user_password"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="active" column="active"/>
+        <result property="activeUser" column="active_user"/>
+        <result property="activeTime" column="active_time"/>
+        <result property="activeMemo" column="active_memo"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateMemo" column="update_memo"/>
+        <result property="areaCode" column="area_code"/>
+        <result property="departCode" column="depart_code"/>
+        <result property="positionCode" column="position_code"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt" />
+    </resultMap>
+    <select id="selectByConfidition" parameterType="com.unicom.fmos.entity.sys.User" resultMap="UserResultMap">
+        select <include refid="user_column_sql"/> from td_user
+        <where>
+            1 = 1
+            and active = 1
+            <include refid="user_whereClause_sql"/>
+        </where>
+    </select>
+
+    <resultMap id="typeHeadDtoResultMap" type="com.unicom.fmos.dto.TypeHeadDto">
+        <id property="id" column="line_id"/>
+        <result property="name" column="user_id"/>
+    </resultMap>
+    <select id="getUserIdKey" resultMap="typeHeadDtoResultMap">
+        select line_id,user_id from td_user WHERE 1 = 1 and active = 1
+    </select>
+
+    <resultMap id="typeHeadDtoRoleResultMap" type="com.unicom.fmos.dto.TypeHeadDto">
+        <id property="id" column="line_id"/>
+        <result property="name" column="role_name"/>
+    </resultMap>
+    <select id="getRoleDirectionary" resultMap="typeHeadDtoRoleResultMap">
+        select line_id,role_name from td_role WHERE 1 = 1 and active = 1
+    </select>
+
+    <select id="selectAll" resultMap="UserResultMap">
+        select <include refid="user_column_sql"/> from td_user
+        <where>
+            1 = 1
+            and active = 1
+        </where>
+    </select>
+
+    <insert id="add" parameterType="com.unicom.fmos.entity.sys.User" >
+        insert into td_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                LINE_ID,
+            </if>
+            <if test="roleLineId != null" >
+                ROLE_LINE_ID,
+            </if>
+            <if test="userId != null" >
+                USER_ID,
+            </if>
+            <if test="userName != null" >
+                USER_NAME,
+            </if>
+            <if test="userPassword != null" >
+                USER_PASSWORD,
+            </if>
+            <if test="createUser != null" >
+                CREATE_USER,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="active != null" >
+                ACTIVE,
+            </if>
+            <if test="activeUser != null" >
+                ACTIVE_USER,
+            </if>
+            <if test="activeTime != null" >
+                ACTIVE_TIME,
+            </if>
+            <if test="activeMemo != null" >
+                ACTIVE_MEMO,
+            </if>
+            <if test="updateUser != null" >
+                UPDATE_USER,
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME,
+            </if>
+            <if test="updateMemo != null" >
+                UPDATE_MEMO,
+            </if>
+            <if test="areaCode != null" >
+                area_code,
+            </if>
+            <if test="departCode != null" >
+                depart_code,
+            </if>
+            <if test="positionCode != null" >
+                position_code,
+            </if>
+            <if test="salt != null" >
+                salt,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="lineId != null" >
+                #{lineId,jdbcType=DECIMAL},
+            </if>
+            <if test="roleLineId != null" >
+                #{roleLineId,jdbcType=DECIMAL},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null" >
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null" >
+                #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="active != null" >
+                #{active,jdbcType=DECIMAL},
+            </if>
+            <if test="activeUser != null" >
+                #{activeUser,jdbcType=VARCHAR},
+            </if>
+            <if test="activeTime != null" >
+                #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeMemo != null" >
+                #{activeMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null" >
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateMemo != null" >
+                #{updateMemo,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null" >
+                #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="departCode != null" >
+                #{departCode,jdbcType=VARCHAR},
+            </if>
+            <if test="positionCode != null" >
+                #{positionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null" >
+                #{salt,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.unicom.fmos.entity.sys.User">
+        UPDATE td_user
+        <set>
+            <if test="roleLineId != null ">role_line_id = #{roleLineId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="userName != null ">user_name = #{userName},</if>
+            <if test="userPassword != null ">user_password = #{userPassword},</if>
+            <if test="areaCode != null ">area_code = #{areaCode},</if>
+            <if test="departCode != null ">depart_code = #{departCode},</if>
+            <if test="positionCode != null ">position_code = #{positionCode},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateMemo != null ">update_memo = #{updateMemo},</if>
+            <if test="salt != null ">salt = #{salt},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="lineId != null">and line_id = #{lineId}</when>
+                <otherwise>and line_id = </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <update id="delRole" parameterType="map">
+        UPDATE td_user SET
+        active = 0,
+        active_user = #{activeuser},
+        active_memo = #{activememo},
+        active_time = #{activetime}
+        WHERE line_id in
+        <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectUser" parameterType="com.unicom.fmos.entity.sys.User" resultMap="UserResultMap">
+        SELECT *
+        from td_user WHERE
+        1 = 1 AND
+        active = 1
+        <if test="userId != null">
+            AND user_id  LIKE CONCAT(CONCAT('%', #{userId}), '%')
+        </if>
+        <if test="createTime != null">AND create_time  &gt;= #{createTime}</if>
+        <if test="activeTime != null">AND create_time &lt;= #{activeTime}</if>
+        ORDER BY create_time desc
+    </select>
+</mapper>

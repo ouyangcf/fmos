@@ -1,0 +1,36 @@
+<h1>msgInterface</h1>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    var json = [{
+        usernumber: "8618675001294",
+        usermessage: "你好,这是一条测试短信"
+    }];
+    var messageJson = [{
+    	messageDtos: json,
+    	userId: "msg",
+    	userPassword: "0c0bc87f0b22e58668c9450ffe20911b"
+    }];
+    $.ajax({
+            url: 'http://163.177.97.218/cqssys/user/msg/send',
+            type: 'POST',
+            contentType: "application/json;charset=UTF-8",
+            dataType: 'json',
+            data: JSON.stringify(messageJson)
+        })
+        .done(function(data) {
+            out(data.result[0]);
+            if (data.retCode == -1) {
+                setMessage(data.errDesc, 'error', true);
+                return;
+            }
+            if (data.retCode == 1) {
+                setMessage(data.errDesc, 'info', true);
+                return;
+            }
+        })
+        .fail(function(data) {
+            setMessage('发送失败, 错误码为 ' + data.statusText, 'error', true);
+            out(data);
+        });
+});
+</script>

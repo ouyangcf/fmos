@@ -1,0 +1,29 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDevicedynamicInfoMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDevicedynamicInfoToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDevicedynamicInfoToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    </div>
+    <div id="divDevicedynamicInfoSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    <div id="divDevicedynamicInfoTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDevicedynamicInfoinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDevicedynamicInfoinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define tbDevicedynamicInfoinfos */
+    $("#tbDevicedynamicInfoinfos").bootstrapTable({
+        url: "devicedynamicInfo/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }]
+    });
+    /*end define tbDevicedynamicInfoinfos */
+});
+</script>

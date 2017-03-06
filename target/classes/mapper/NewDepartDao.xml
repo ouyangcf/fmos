@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unicom.fmos.dao.business.NewDepartDao" >
+  <resultMap id="NewDepartBaseResultMap" type="com.unicom.fmos.entity.business.NewDepart" >
+    <result column="DEPART_ID" property="departId" jdbcType="VARCHAR" />
+    <result column="DEPART_NAME" property="departName" jdbcType="VARCHAR" />
+    <result column="NEW_UPPER_CHANNEL" property="newUpperChannel" jdbcType="VARCHAR" />
+    <result column="NEW_AREA_NAME" property="newAreaName" jdbcType="VARCHAR" />
+    <result column="NEW_BASIC_CELL" property="newBasicCell" jdbcType="VARCHAR" />
+    <result column="CUC_CHNL_CODE" property="cucChnlCode" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+    <result column="NEW_TEAM_NAME" property="newTeamName" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="NEW_UPPER_CHANNEL_CODE" property="newUpperChannelCode" jdbcType="VARCHAR" />
+    <result column="NEW_AREA_CODE" property="newAreaCode" jdbcType="VARCHAR" />
+    <result column="NEW_BASIC_CELL_CODE" property="newBasicCellCode" jdbcType="VARCHAR" />
+    <result column="NEW_TEAM_CODE" property="newTeamCode" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="ChannelQualityDtoBaseResultMap" type="com.unicom.fmos.dto.ChannelQualityDto" >
+    <result column="NEW_UPPER_CHANNEL" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectFirstLayout" resultMap="ChannelQualityDtoBaseResultMap">
+    select distinct new_upper_channel ,1 as layout, 1 as isParent, 0 as checkType from new_depart_201510
+  </select>
+
+  <select id="selectSecondLayout" parameterType="com.unicom.fmos.dto.ChannelQualityDto" resultMap="ChannelQualityDtoBaseResultMap">
+    select distinct NEW_BASIC_CELL as name ,2 as layout, 1 as isParent, 0 as checkType from new_depart_201510 WHERE NEW_UPPER_CHANNEL= #{name}
+  </select>
+
+  <select id="selectThirdLayout" parameterType="com.unicom.fmos.dto.ChannelQualityDto" resultMap="ChannelQualityDtoBaseResultMap">
+    select distinct DEPART_NAME as name ,3 as layout, 0 as isParent, 0 as checkType from new_depart_201510 WHERE NEW_BASIC_CELL= #{name}
+  </select>
+</mapper>

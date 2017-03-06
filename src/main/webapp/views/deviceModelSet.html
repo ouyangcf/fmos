@@ -1,0 +1,126 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceModelSetMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceModelSetToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceModelSetToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnDeviceModelSetAddDevice" class="btn btn-info">
+                <i class="glyphicon glyphicon-plus"></i>添加</a>
+            <a id="btnDviceModelSetDeviceActive" class="btn btn-warning">
+                <i class="glyphicon glyphicon-minus"></i>停用</a>
+            <a id="btnDdeviceModelSetEdit" class="btn btn-danger">
+                <i class="glyphicon glyphicon-pencil"></i>编辑</a>
+        </div>
+    </div>
+    <div id="divDeviceModelSetSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthDeviceModelSet" class="col-md-6 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thDeviceModelSet">
+            </div>
+        </div>
+        <div id="selDivselDeviceModelSetShowType" class="col-md-5 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">显示类型</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selDeviceModelSetShowType"></select>
+            </div>
+        </div>
+        <a id="btnDeviceModelSetSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divDeviceModelSetTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceModelSetinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceModelSetinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnDeviceModelSetAddDevice */
+    var btnDeviceModelSetAddDeviceClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceModelSetAddDevice").on("click", btnDeviceModelSetAddDeviceClick);
+    /*end define btnDeviceModelSetAddDevice */
+
+    /*begin define btnDviceModelSetDeviceActive */
+    var btnDviceModelSetDeviceActiveClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDviceModelSetDeviceActive").on("click", btnDviceModelSetDeviceActiveClick);
+    /*end define btnDviceModelSetDeviceActive */
+
+    /*begin define btnDdeviceModelSetEdit */
+    var btnDdeviceModelSetEditClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDdeviceModelSetEdit").on("click", btnDdeviceModelSetEditClick);
+    /*end define btnDdeviceModelSetEdit */
+
+    /*begin define thDeviceModelSet */
+    var $input = $("#thDeviceModelSet");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethDeviceModelSet */
+
+    /*begin define selDeviceModelSetShowType */
+    var $select = $("#selDeviceModelSetShowType");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselDeviceModelSetShowType */
+
+    /*begin define btnDeviceModelSetSearch */
+    var btnDeviceModelSetSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnDeviceModelSetSearch").on("click", btnDeviceModelSetSearchClick);
+    /*end define btnDeviceModelSetSearch */
+
+    /*begin define tbDeviceModelSetinfos */
+    $("#tbDeviceModelSetinfos").bootstrapTable({
+        url: "deviceModelSet/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceNumber",
+            title: "设备编码"
+        }, {
+            field: "deviceType",
+            title: "设备类型"
+        }, {
+            field: "isNumberialControl",
+            title: "是否数控"
+        }]
+    });
+    /*end define tbDeviceModelSetinfos */
+});
+</script>

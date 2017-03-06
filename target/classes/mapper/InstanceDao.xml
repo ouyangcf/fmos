@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.business.InstanceDao">
+  <resultMap id="BaseResultMap" type="com.unicom.fmos.entity.business.Instance">
+    <id column="line_id" jdbcType="INTEGER" property="lineId" />
+    <result column="model_line_id" jdbcType="INTEGER" property="modelLineId" />
+    <result column="instance_number" jdbcType="VARCHAR" property="instanceNumber" />
+    <result column="instance_name" jdbcType="VARCHAR" property="instanceName" />
+    <result column="create_user_line_id" jdbcType="INTEGER" property="createUserLineId" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="active" jdbcType="BIT" property="active" />
+    <result column="active_user" jdbcType="VARCHAR" property="activeUser" />
+    <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
+    <result column="active_memo" jdbcType="VARCHAR" property="activeMemo" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_memo" jdbcType="VARCHAR" property="updateMemo" />
+  </resultMap>
+
+  <select id="infos" resultMap="BaseResultMap">
+    SELECT * FROM td_instance WHERE
+    1 = 1
+    AND
+    active = 1
+    ORDER By create_time DESC
+  </select>
+
+  <select id="infosbyid" resultMap="BaseResultMap" parameterType="com.unicom.fmos.entity.business.Instance">
+    SELECT * FROM td_instance WHERE
+    1 = 1
+    AND
+    active = 1
+    AND create_user_line_id = #{createUserLineId, jdbcType=INTEGER}
+    ORDER By create_time DESC
+  </select>
+
+  <select id="select" parameterType="com.unicom.fmos.entity.business.Instance" resultMap="BaseResultMap">
+    SELECT * from td_instance
+    <where>
+      1 = 1
+      <if test="lineId != null" >
+        AND line_id = #{lineId ,jdbcType=INTEGER}
+      </if>
+      <if test="modelLineId != null" >
+        AND model_line_id = #{modelLineId,jdbcType=INTEGER}
+      </if>
+      <if test="instanceNumber != null" >
+        AND instance_number = #{instanceNumber ,jdbcType=VARCHAR}
+      </if>
+      <if test="instanceName != null" >
+        AND instance_name = #{instanceName,jdbcType=VARCHAR}
+      </if>
+      <if test="createUser != null" >
+        AND create_user = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="active != null" >
+        AND active = #{active ,jdbcType=BIT}
+      </if>
+      <if test="activeUser != null" >
+        AND active_user = #{activeUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="activeTime != null" >
+        AND active_time = #{activeTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="activeMemo != null" >
+        AND active_memo = #{activeMemo ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUser != null" >
+        AND update_user = #{updateUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+        AND  update_time = #{updateTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateMemo != null" >
+        AND  update_memo = #{updateMemo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <insert id="insertSelective" parameterType="com.unicom.fmos.entity.business.Instance">
+    insert into td_instance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        line_id,
+      </if>
+      <if test="modelLineId != null">
+        model_line_id,
+      </if>
+      <if test="instanceNumber != null">
+        instance_number,
+      </if>
+      <if test="instanceName != null">
+        instance_name,
+      </if>
+      <if test="createUserLineId != null">
+        create_user_line_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="active != null">
+        active,
+      </if>
+      <if test="activeUser != null">
+        active_user,
+      </if>
+      <if test="activeTime != null">
+        active_time,
+      </if>
+      <if test="activeMemo != null">
+        active_memo,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateMemo != null">
+        update_memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="lineId != null">
+        #{lineId,jdbcType=INTEGER},
+      </if>
+      <if test="modelLineId != null">
+        #{modelLineId,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceNumber != null">
+        #{instanceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceName != null">
+        #{instanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserLineId != null">
+        #{createUserLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null">
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null">
+        #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null">
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null">
+        #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null">
+        #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.unicom.fmos.entity.business.Instance">
+    update td_instance
+    <set>
+      <if test="modelLineId != null">
+        model_line_id = #{modelLineId,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceNumber != null">
+        instance_number = #{instanceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceName != null">
+        instance_name = #{instanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserLineId != null">
+        create_user_line_id = #{createUserLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null">
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null">
+        active_user = #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null">
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null">
+        active_memo = #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null">
+        update_memo = #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByCondition" parameterType="com.unicom.fmos.entity.business.Instance" resultMap="BaseResultMap">
+    SELECT td_instance.* FROM td_instance,td_model
+     <where>
+       1 = 1
+       AND td_instance.active = 1
+       AND td_model.active = 1
+       AND td_model.line_id = td_instance.model_line_id
+       <if test="instanceNumber != null">
+         AND instance_number  LIKE CONCAT(CONCAT('%', #{instanceNumber,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="instanceName != null">
+         AND instance_name  LIKE CONCAT(CONCAT('%', #{instanceName,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="createUser != null">
+         AND td_model.model_model  LIKE CONCAT(CONCAT('%', #{createUser,jdbcType=VARCHAR}), '%')
+       </if>
+     </where>
+  </select>
+
+  <select id="selectByConditionWithUserId" parameterType="com.unicom.fmos.entity.business.Instance" resultMap="BaseResultMap">
+    SELECT td_instance.* FROM td_instance,td_model
+     <where>
+       1 = 1
+       AND td_instance.active = 1
+       AND td_model.active = 1
+       AND td_model.line_id = td_instance.model_line_id
+       AND td_instance.create_user_line_id = #{createUserLineId,jdbcType=INTEGER}
+       <if test="instanceNumber != null">
+         AND instance_number  LIKE CONCAT(CONCAT('%', #{instanceNumber,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="instanceName != null">
+         AND instance_name  LIKE CONCAT(CONCAT('%', #{instanceName,jdbcType=VARCHAR}), '%')
+       </if>
+       <if test="createUser != null">
+         AND td_model.model_model  LIKE CONCAT(CONCAT('%', #{createUser,jdbcType=VARCHAR}), '%')
+       </if>
+     </where>
+  </select>
+
+  <select id="selectInstanceByModelLineId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM td_instance
+    WHERE
+    1 = 1
+    AND active = 1
+    AND model_line_id in
+    <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </select>
+
+</mapper>

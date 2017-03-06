@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.business.MachineMethodDao">
+  <resultMap id="BaseResultMap" type="com.unicom.fmos.entity.business.MachineMethod" >
+    <id column="line_id" property="lineId" jdbcType="INTEGER" />
+    <result column="model_line_id" property="modelLineId" jdbcType="INTEGER" />
+    <result column="directionary_line_id" property="directionaryLineId" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="active_user" property="activeUser" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="active_memo" property="activeMemo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_memo" property="updateMemo" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unicom.fmos.entity.business.MachineMethod" >
+    insert into td_machine_method
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        line_id,
+      </if>
+      <if test="modelLineId != null" >
+        model_line_id,
+      </if>
+      <if test="directionaryLineId != null" >
+        directionary_line_id,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="activeUser != null" >
+        active_user,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="activeMemo != null" >
+        active_memo,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateMemo != null" >
+        update_memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        #{lineId,jdbcType=INTEGER},
+      </if>
+      <if test="modelLineId != null" >
+        #{modelLineId,jdbcType=INTEGER},
+      </if>
+      <if test="directionaryLineId != null" >
+        #{directionaryLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null" >
+        #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.unicom.fmos.entity.business.MachineMethod" >
+    update td_machine_method
+    <set >
+      <if test="modelLineId != null" >
+        model_line_id = #{modelLineId,jdbcType=INTEGER},
+      </if>
+      <if test="directionaryLineId != null" >
+        directionary_line_id = #{directionaryLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null" >
+        active_user = #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        active_memo = #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        update_memo = #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+
+  <select id="select" parameterType="com.unicom.fmos.entity.business.MachineMethod" resultMap="BaseResultMap">
+    SELECT * FROM td_machine_method
+    <where>
+      1 = 1
+      <if test="lineId != null" >
+        AND line_id = #{lineId ,jdbcType=INTEGER}
+      </if>
+      <if test="modelLineId != null" >
+        AND model_line_id = #{modelLineId,jdbcType=INTEGER}
+      </if>
+      <if test="directionaryLineId != null" >
+        AND directionary_line_id = #{directionaryLineId ,jdbcType=INTEGER}
+      </if>
+      <if test="createUser != null" >
+        AND create_user = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="active != null" >
+        AND active = #{active ,jdbcType=BIT}
+      </if>
+      <if test="activeUser != null" >
+        AND active_user = #{activeUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="activeTime != null" >
+        AND active_time = #{activeTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="activeMemo != null" >
+        AND active_memo = #{activeMemo ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUser != null" >
+        AND update_user = #{updateUser ,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+        AND  update_time = #{updateTime ,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateMemo != null" >
+        AND  update_memo = #{updateMemo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

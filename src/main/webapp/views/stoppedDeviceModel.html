@@ -1,0 +1,111 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divStoppedDeviceModelMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divStoppedDeviceModelToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divStoppedDeviceModelToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnStoppedDeviceModelDetails" class="btn btn-info">
+                <i class="glyphicon glyphicon-list-alt"></i>详细信息</a>
+        </div>
+    </div>
+    <div id="divStoppedDeviceModelSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthStoppedDeviceModel" class="col-md-6 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thStoppedDeviceModel">
+            </div>
+        </div>
+        <div id="selDivselStoppedDeviceModel" class="col-md-5 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">显示方式</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selStoppedDeviceModel"></select>
+            </div>
+        </div>
+        <a id="btnStoppedDeviceModelSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divStoppedDeviceModelTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbStoppedDeviceModelinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbStoppedDeviceModelinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnStoppedDeviceModelDetails */
+    var btnStoppedDeviceModelDetailsClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnStoppedDeviceModelDetails").on("click", btnStoppedDeviceModelDetailsClick);
+    /*end define btnStoppedDeviceModelDetails */
+
+    /*begin define thStoppedDeviceModel */
+    var $input = $("#thStoppedDeviceModel");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethStoppedDeviceModel */
+
+    /*begin define selStoppedDeviceModel */
+    var $select = $("#selStoppedDeviceModel");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselStoppedDeviceModel */
+
+    /*begin define btnStoppedDeviceModelSearch */
+    var btnStoppedDeviceModelSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnStoppedDeviceModelSearch").on("click", btnStoppedDeviceModelSearchClick);
+    /*end define btnStoppedDeviceModelSearch */
+
+    /*begin define tbStoppedDeviceModelinfos */
+    $("#tbStoppedDeviceModelinfos").bootstrapTable({
+        url: "stoppedDeviceModel/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceNumber",
+            title: "设备编码"
+        }, {
+            field: "deviceGroup",
+            title: "设备组别"
+        }, {
+            field: "deviceType",
+            title: "设备类型"
+        }, {
+            field: "stopTime",
+            title: "停用时间"
+        }]
+    });
+    /*end define tbStoppedDeviceModelinfos */
+});
+</script>

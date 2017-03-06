@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unicom.fmos.dao.business.ChannelqualityPrivilegeDao" >
+  <resultMap id="ChannelqualityPrivilegeBaseResultMap" type="com.unicom.fmos.entity.business.ChannelqualityPrivilege" >
+    <result column="LINE_ID" property="lineId" jdbcType="DECIMAL" />
+    <result column="ROLE_LINE_ID" property="roleLineId" jdbcType="DECIMAL" />
+    <result column="NODE_NAME" property="nodeName" jdbcType="VARCHAR" />
+    <result column="CHECKED" property="checked" jdbcType="DECIMAL" />
+    <result column="CHECKED_TYPE" property="checkedType" jdbcType="DECIMAL" />
+    <result column="LAYOUT" property="layout" jdbcType="DECIMAL" />
+    <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="ACTIVE" property="active" jdbcType="DECIMAL" />
+    <result column="ACTIVE_USER" property="activeUser" jdbcType="VARCHAR" />
+    <result column="ACTIVE_TIME" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="ACTIVE_MEMO" property="activeMemo" jdbcType="VARCHAR" />
+    <result column="UPDATE_USER" property="updateUser" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_MEMO" property="updateMemo" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.unicom.fmos.entity.business.ChannelqualityPrivilege" >
+    insert into TD_CHANNELQUIALITY_PRIVILEGE (LINE_ID, ROLE_LINE_ID, NODE_NAME,
+    CHECKED, CHECKED_TYPE, LAYOUT,
+    CREATE_USER, CREATE_TIME, ACTIVE,
+    ACTIVE_USER, ACTIVE_TIME, ACTIVE_MEMO,
+    UPDATE_USER, UPDATE_TIME, UPDATE_MEMO
+    )
+    values (SEQ__CHANNELQUIALITY_PRIVILEGE.nextval, #{roleLineId,jdbcType=DECIMAL}, #{nodeName,jdbcType=VARCHAR},
+    #{checked,jdbcType=DECIMAL}, #{checkedType,jdbcType=DECIMAL}, #{layout,jdbcType=DECIMAL},
+    #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{active,jdbcType=DECIMAL},
+    #{activeUser,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{activeMemo,jdbcType=VARCHAR},
+    #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateMemo,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.unicom.fmos.entity.business.ChannelqualityPrivilege" >
+    insert into TD_CHANNELQUIALITY_PRIVILEGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        LINE_ID,
+      </if>
+      <if test="roleLineId != null" >
+        ROLE_LINE_ID,
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME,
+      </if>
+      <if test="checked != null" >
+        CHECKED,
+      </if>
+      <if test="checkedType != null" >
+        CHECKED_TYPE,
+      </if>
+      <if test="layout != null" >
+        LAYOUT,
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="active != null" >
+        ACTIVE,
+      </if>
+      <if test="activeUser != null" >
+        ACTIVE_USER,
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME,
+      </if>
+      <if test="activeMemo != null" >
+        ACTIVE_MEMO,
+      </if>
+      <if test="updateUser != null" >
+        UPDATE_USER,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="updateMemo != null" >
+        UPDATE_MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        #{lineId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleLineId != null" >
+        #{roleLineId,jdbcType=DECIMAL},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="checked != null" >
+        #{checked,jdbcType=DECIMAL},
+      </if>
+      <if test="checkedType != null" >
+        #{checkedType,jdbcType=DECIMAL},
+      </if>
+      <if test="layout != null" >
+        #{layout,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=DECIMAL},
+      </if>
+      <if test="activeUser != null" >
+        #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectSelective" resultMap="ChannelqualityPrivilegeBaseResultMap" parameterType="com.unicom.fmos.entity.business.ChannelqualityPrivilege">
+    SELECT * FROM TD_CHANNELQUIALITY_PRIVILEGE
+    <where>
+      1 = 1
+      AND active = 1
+      <if test="lineId != null" >
+        AND LINE_ID = #{lineId,jdbcType=DECIMAL}
+      </if>
+      <if test="roleLineId != null" >
+        AND ROLE_LINE_ID = #{roleLineId,jdbcType=DECIMAL}
+      </if>
+      <if test="nodeName != null" >
+        AND NODE_NAME = #{nodeName,jdbcType=VARCHAR}
+      </if>
+      <if test="checked != null" >
+        AND CHECKED = #{checked,jdbcType=DECIMAL}
+      </if>
+      <if test="checkedType != null" >
+        AND CHECKED_TYPE = #{checkedType,jdbcType=DECIMAL}
+      </if>
+      <if test="layout != null" >
+        AND LAYOUT = #{layout,jdbcType=DECIMAL}
+      </if>
+      <if test="createUser != null" >
+        AND CREATE_USER = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="active != null" >
+        AND ACTIVE = #{active,jdbcType=DECIMAL}
+      </if>
+      <if test="activeUser != null" >
+        AND ACTIVE_USER = #{activeUser,jdbcType=VARCHAR}
+      </if>
+      <if test="activeTime != null" >
+        AND ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="activeMemo != null" >
+        AND ACTIVE_MEMO = #{activeMemo,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUser != null" >
+        AND UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+        AND UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateMemo != null" >
+        AND UPDATE_MEMO = #{updateMemo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <update id="updateSelective" parameterType="com.unicom.fmos.entity.business.ChannelqualityPrivilege">
+    UPDATE TD_CHANNELQUIALITY_PRIVILEGE
+    <set>
+      <if test="roleLineId != null" >
+        ROLE_LINE_ID = #{roleLineId,jdbcType=DECIMAL},
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="checked != null" >
+        CHECKED = #{checked,jdbcType=DECIMAL},
+      </if>
+      <if test="checkedType != null" >
+        CHECKED_TYPE = #{checkedType,jdbcType=DECIMAL},
+      </if>
+      <if test="layout != null" >
+        LAYOUT = #{layout,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        ACTIVE = #{active,jdbcType=DECIMAL},
+      </if>
+      <if test="activeUser != null" >
+        ACTIVE_USER = #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        ACTIVE_TIME = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        ACTIVE_MEMO = #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        UPDATE_MEMO = #{updateMemo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      line_id = #{lineId,jdbcType=DECIMAL}
+    </where>
+  </update>
+</mapper>

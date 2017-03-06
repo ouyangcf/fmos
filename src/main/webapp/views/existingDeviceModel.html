@@ -1,0 +1,131 @@
+<!-- Created by zhaojb on 2017-01-07 -->
+<div id="divExistingDeviceModelMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divExistingDeviceModelToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divExistingDeviceModelToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+            <a id="btnExistingDeviceModelDetail" class="btn btn-warning">
+                <i class="glyphicon glyphicon-list-alt"></i>详细信息</a>
+        </div>
+    </div>
+    <div id="divExistingDeviceModelSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="iptDivthExistingDeviceModelKeyWord" class="col-md-5 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">关键字</span>
+                <input class="form-control typeahead" autocomplete="off" type="text" data-provide="typeahead" id="thExistingDeviceModelKeyWord">
+            </div>
+        </div>
+        <div id="selDivselExistingDeviceModelShowMethod" class="col-md-3 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">显示方式</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selExistingDeviceModelShowMethod"></select>
+            </div>
+        </div>
+        <div id="selDivselExistingDeviceModelShowType" class="col-md-3 col-md-offset-0">
+            <div class="input-group">
+                <span class="input-group-addon">显示类型</span>
+                <select class="selectpicker show-tick form-control" data-live-search="true" data-style="btn-cutom-select" id="selExistingDeviceModelShowType"></select>
+            </div>
+        </div>
+        <a id="btnExistingDeviceModelSearch" class="btn btn-primary">
+            <i class="glyphicon glyphicon-search"></i>搜索</a>
+    </div>
+    <div id="divEistingDeviceModelTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbExistingDeviceModel" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbExistingDeviceModel"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define btnExistingDeviceModelDetail */
+    var btnExistingDeviceModelDetailClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnExistingDeviceModelDetail").on("click", btnExistingDeviceModelDetailClick);
+    /*end define btnExistingDeviceModelDetail */
+
+    /*begin define thExistingDeviceModelKeyWord */
+    var $input = $("#thExistingDeviceModelKeyWord");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        $input.typeahead({
+            source: data
+        });
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end definethExistingDeviceModelKeyWord */
+
+    /*begin define selExistingDeviceModelShowMethod */
+    var $select = $("#selExistingDeviceModelShowMethod");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselExistingDeviceModelShowMethod */
+
+    /*begin define selExistingDeviceModelShowType */
+    var $select = $("#selExistingDeviceModelShowType");
+    $.ajax({
+        url: "directionary/someDictionary",
+        type: "GET",
+        dataType: "json"
+    }).done(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var strOption = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            $select.append(strOption);
+        }
+        $select.selectpicker();
+    }).fail(function() {
+        setMessage("获取字典失败", "error", true);
+    });
+    /*end defineselExistingDeviceModelShowType */
+
+    /*begin define btnExistingDeviceModelSearch */
+    var btnExistingDeviceModelSearchClick = function(event) {
+        event.preventDefault();
+    };
+    $("#btnExistingDeviceModelSearch").on("click", btnExistingDeviceModelSearchClick);
+    /*end define btnExistingDeviceModelSearch */
+
+    /*begin define tbExistingDeviceModel */
+    $("#tbExistingDeviceModel").bootstrapTable({
+        url: "existingDeviceModel/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }, {
+            field: "deviceName",
+            title: "设备名称"
+        }, {
+            field: "deviceModel",
+            title: "设备型号"
+        }, {
+            field: "deviceNumber",
+            title: "设备编码"
+        }, {
+            field: "deviceGroup",
+            title: "设备组别"
+        }, {
+            field: "deviceType",
+            title: "设备类型"
+        }]
+    });
+    /*end define tbExistingDeviceModel */
+});
+</script>

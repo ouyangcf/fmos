@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicom.fmos.dao.sys.DirectionaryDao">
+    <sql id="directionary_detail_column_sql">
+        line_id,
+        directionary_line_id,
+        directionary_key,
+        directionary_value,
+        create_user,
+        create_time,
+        active,
+        active_user,
+        active_time,
+        active_memo,
+        update_user,
+        update_time,
+        update_memo
+    </sql>
+    <sql id="directionary_head_column_sql">
+        line_id,
+        directionary_group,
+        create_user,
+        create_time,
+        active,
+        active_user,
+        active_time,
+        active_memo,
+        update_user,
+        update_time,
+        update_memo
+    </sql>
+    <sql id="directionary_detail_whereClause_sql">
+        <if test="lineId != null">and line_id = #{lineId}</if>
+        <if test="directionaryLineId != null">and directionary_line_id = #{directionaryLineId}</if>
+        <if test="directionaryKey != null">and directionary_key = #{directionaryKey}</if>
+        <if test="directionaryValue != null">and directionary_value = #{directionaryValue}</if>
+        <if test="createUser != null">and create_user = #{createUser}</if>
+        <if test="createTime != null">and create_time = #{createTime}</if>
+        <if test="active != null">and active = #{active}</if>
+        <if test="activeUser != null">and active_user = #{activeUser}</if>
+        <if test="activeTime != null">and active_time = #{activeTime}</if>
+        <if test="activeMemo != null">and active_memo = #{activeMemo}</if>
+        <if test="updateUser != null">and update_user = #{updateUser}</if>
+        <if test="updateTime != null">and update_time = #{updateTime}</if>
+        <if test="updateMemo != null">and update_memo = #{updateMemo}</if>
+    </sql>
+    <sql id="directionary_head_whereClause_sql">
+        <if test="lineId != null">and line_id = #{lineId}</if>
+        <if test="directionaryGroup != null">and directionary_group = #{directionaryGroup}</if>
+        <if test="createUser != null">and create_user = #{createUser}</if>
+        <if test="createTime != null">and create_time = #{createTime}</if>
+        <if test="active != null">and active = #{active}</if>
+        <if test="activeUser != null">and active_user = #{activeUser}</if>
+        <if test="activeTime != null">and active_time = #{activeTime}</if>
+        <if test="activeMemo != null">and active_memo = #{activeMemo}</if>
+        <if test="updateUser != null">and update_user = #{updateUser}</if>
+        <if test="updateTime != null">and update_time = #{updateTime}</if>
+        <if test="updateMemo != null">and update_memo = #{updateMemo}</if>
+    </sql>
+    <resultMap id="directionaryDetailResultMap" type="com.unicom.fmos.entity.sys.DirectionaryDetail">
+        <id property="lineId" column="line_id"/>
+        <result property="directionaryLineId" column="directionary_line_id"/>
+        <result property="directionaryKey" column="directionary_key"/>
+        <result property="directionaryValue" column="directionary_value"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="active" column="active"/>
+        <result property="activeUser" column="active_user"/>
+        <result property="activeTime" column="active_time"/>
+        <result property="activeMemo" column="active_memo"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateMemo" column="update_memo"/>
+    </resultMap>
+    <resultMap id="directionaryHeadResultMap" type="com.unicom.fmos.entity.sys.DirectionaryHead">
+        <id property="lineId" column="line_id"/>
+        <result property="directionaryGroup" column="directionary_group"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="active" column="active"/>
+        <result property="activeUser" column="active_user"/>
+        <result property="activeTime" column="active_time"/>
+        <result property="activeMemo" column="active_memo"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateMemo" column="update_memo"/>
+    </resultMap>
+
+    <sql id="directionary_detail_insert_column_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">line_id,</if>
+            <if test="directionaryKey != null ">directionary_key,</if>
+            <if test="directionaryLineId != null ">directionary_line_id,</if>
+            <if test="directionaryValue != null ">directionary_value,</if>
+            <if test="createUser != null ">create_user,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="active != null ">active,</if>
+            <if test="activeUser != null ">active_user,</if>
+            <if test="activeTime != null ">active_time,</if>
+            <if test="activeMemo != null ">active_memo,</if>
+            <if test="updateUser != null ">update_user,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateMemo != null ">update_memo,</if>
+        </trim>
+    </sql>
+    <sql id="directionary_detail_insert_whereclause_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">#{lineId},</if>
+            <if test="directionaryKey != null ">#{directionaryKey},</if>
+            <if test="directionaryLineId != null ">#{directionaryLineId},</if>
+            <if test="directionaryValue != null ">#{directionaryValue},</if>
+            <if test="createUser != null ">#{createUser},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="active != null ">#{active},</if>
+            <if test="activeUser != null ">#{activeUser},</if>
+            <if test="activeTime != null ">#{activeTime},</if>
+            <if test="activeMemo != null ">#{activeMemo},</if>
+            <if test="updateUser != null ">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateMemo != null ">#{updateMemo},</if>
+        </trim>
+    </sql>
+
+    <sql id="directionary_head_insert_column_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">line_id,</if>
+            <if test="directionaryGroup != null ">directionary_group,</if>
+            <if test="createUser != null ">create_user,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="active != null ">active,</if>
+            <if test="activeUser != null ">active_user,</if>
+            <if test="activeTime != null ">active_time,</if>
+            <if test="activeMemo != null ">active_memo,</if>
+            <if test="updateUser != null ">update_user,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateMemo != null ">update_memo,</if>
+        </trim>
+    </sql>
+    <sql id="directionary_head_insert_whereclause_sql">
+        <trim suffixOverrides="," suffix="">
+            <if test="lineId != null ">#{lineId},</if>
+            <if test="directionaryGroup != null ">#{directionaryGroup},</if>
+            <if test="createUser != null ">#{createUser},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="active != null ">#{active},</if>
+            <if test="activeUser != null ">#{activeUser},</if>
+            <if test="activeTime != null ">#{activeTime},</if>
+            <if test="activeMemo != null ">#{activeMemo},</if>
+            <if test="updateUser != null ">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateMemo != null ">#{updateMemo},</if>
+        </trim>
+    </sql>
+
+
+    <select id="selectDirectionaryDetail" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail" resultMap="directionaryDetailResultMap">
+        SELECT * FROM td_directionary_detail
+        <where>
+            1 = 1
+            <if test="lineId != null">and line_id = #{lineId}</if>
+            <if test="directionaryLineId != null">and directionary_line_id = #{directionaryLineId}</if>
+            <if test="directionaryKey != null">and directionary_key = #{directionaryKey}</if>
+            <if test="directionaryValue != null">and directionary_value = #{directionaryValue}</if>
+            <if test="createUser != null">and create_user = #{createUser}</if>
+            <if test="createTime != null">and create_time = #{createTime}</if>
+            <if test="active != null">and active = #{active}</if>
+            <if test="activeUser != null">and active_user = #{activeUser}</if>
+            <if test="activeTime != null">and active_time = #{activeTime}</if>
+            <if test="activeMemo != null">and active_memo = #{activeMemo}</if>
+            <if test="updateUser != null">and update_user = #{updateUser}</if>
+            <if test="updateTime != null">and update_time = #{updateTime}</if>
+            <if test="updateMemo != null">and update_memo = #{updateMemo}</if>
+        </where>
+    </select>
+
+    <select id="selectAllDirectionaryDetail" resultMap="directionaryDetailResultMap">
+        select * from td_directionary_detail
+        <where>
+            1 = 1
+            and active = 1
+        </where>
+    </select>
+
+    <select id="selectAllDirectionaryHead" resultMap="directionaryHeadResultMap">
+        select * from td_directionary_head
+        <where>
+            1 = 1
+            and active = 1
+        </where>
+    </select>
+
+    <insert id="insertDirectionaryDetail" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail">
+        INSERT  INTO td_directionary_detail (
+        <include refid="directionary_detail_insert_column_sql"/>
+        )
+        VALUES (
+        <include refid="directionary_detail_insert_whereclause_sql"/>
+        )
+    </insert>
+
+    <insert id="insertDirectionaryHead" parameterType="com.unicom.fmos.entity.sys.DirectionaryHead">
+        INSERT  INTO td_directionary_head (
+        <include refid="directionary_head_insert_column_sql"/>
+        )
+        VALUES (
+        <include refid="directionary_head_insert_whereclause_sql"/>
+        )
+    </insert>
+
+    <update id="updateDirectionaryDetail" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail">
+        UPDATE td_directionary_detail
+        <set>
+            <if test="directionaryKey != null ">directionary_key = #{directionaryKey},</if>
+            <if test="directionaryLineId != null ">directionary_line_id = #{directionaryLineId},</if>
+            <if test="directionaryValue != null ">directionary_value = #{directionaryValue},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateMemo != null ">update_memo = #{updateMemo},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="lineId != null">and line_id = #{lineId}</when>
+                <otherwise>and line_id = </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <update id="updateDirectionaryHead" parameterType="com.unicom.fmos.entity.sys.DirectionaryHead">
+        UPDATE td_directionary_head
+        <set>
+            <if test="directionaryGroup != null ">directionary_group = #{directionaryGroup},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateMemo != null ">update_memo = #{updateMemo},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="lineId != null">and line_id = #{lineId}</when>
+                <otherwise>and line_id = </otherwise>
+            </choose>
+        </where>
+    </update>
+
+    <select id="selectDirectionaryDetailByCondition" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail" resultMap="directionaryDetailResultMap">
+        SELECT <include refid="directionary_detail_column_sql"/>
+        FROM td_directionary_detail
+        <where>
+            1 = 1 AND
+            active = 1
+            <include refid="directionary_detail_whereClause_sql"/>
+            ORDER BY create_time desc
+        </where>
+    </select>
+
+    <select id="searchDirectionaryDetail" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail" resultMap="directionaryDetailResultMap">
+        SELECT <include refid="directionary_detail_column_sql"/>
+        FROM td_directionary_detail
+        <where>
+            1 = 1 AND
+            active = 1
+            <if test="directionaryKey != null">
+                AND directionary_key  LIKE CONCAT(CONCAT('%', #{directionaryKey}), '%')
+            </if>
+            <if test="directionaryValue != null">
+                AND directionary_value  LIKE CONCAT(CONCAT('%', #{directionaryValue}), '%')
+            </if>
+            <if test="createTime != null">AND create_time  &gt;= #{createTime}</if>
+            <if test="activeTime != null">AND create_time &lt;= #{activeTime}</if>
+            <if test="directionaryLineId != null">and directionary_line_id = #{directionaryLineId}</if>
+            ORDER BY create_time desc
+        </where>
+    </select>
+
+    <update id="delDirectionaryDetail" parameterType="com.unicom.fmos.entity.sys.DirectionaryDetail">
+        UPDATE td_directionary_detail SET
+        active = 0,
+        active_user = #{activeUser},
+        active_memo = #{activeMemo},
+        active_time = #{activeTime}
+        WHERE line_id  = #{lineId}
+    </update>
+
+    <update id="delDirectionaryHead" parameterType="com.unicom.fmos.entity.sys.DirectionaryHead">
+        UPDATE td_directionary_head SET
+        active = 0,
+        active_user = #{activeUser},
+        active_memo = #{activeMemo},
+        active_time = #{activeTime}
+        WHERE line_id  = #{lineId}
+    </update>
+
+    <update id="delDetail" parameterType="map">
+        UPDATE td_directionary_detail SET
+        active = 0,
+        active_user = #{activeuser},
+        active_memo = #{activememo},
+        active_time = #{activetime}
+        WHERE line_id in
+        <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <resultMap id="directionaryDtoResultMap" type="com.unicom.fmos.dto.DirectionaryDto">
+
+    </resultMap>
+
+    <select id="getDirectionaryDetailByDirectionaryHead" parameterType="com.unicom.fmos.entity.sys.DirectionaryHead" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = #{directionaryGroup}
+    </select>
+
+    <select id="getmachinename" resultMap="directionaryDtoResultMap">
+        SELECT td_model.model_name as id,td_model.model_name as name FROM td_model WHERE
+        1 = 1
+        AND td_model.active = 1
+    </select>
+
+    <select id="getmachinemodel" resultMap="directionaryDtoResultMap">
+        SELECT td_model.model_model as id,td_model.model_model as name FROM td_model WHERE
+        1 = 1
+        AND td_model.active = 1
+    </select>
+
+    <select id="getmachinenumber" resultMap="directionaryDtoResultMap">
+        SELECT td_model.model_number as id,td_model.model_number as name FROM td_model WHERE
+        1 = 1
+        AND td_model.active = 1
+    </select>
+
+    <select id="getmachinegroup" resultMap="directionaryDtoResultMap">
+        SELECT td_model.model_group as id,td_model.model_group as name FROM td_model WHERE
+        1 = 1
+        AND td_model.active = 1
+    </select>
+
+    <select id="getcodemachinetype" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位1&amp;2&amp;3&amp;4'
+    </select>
+
+    <select id="getcodemainparams" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位1&amp;2&amp;3&amp;4&amp;5&amp;6'
+    </select>
+
+
+    <select id="getmanagerlevel" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位14'
+    </select>
+
+
+    <select id="getdeviceSource" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位13'
+    </select>
+
+
+    <select id="gethasnumber" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位12'
+    </select>
+
+
+    <select id="gethasKnife" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位11'
+    </select>
+
+
+    <select id="getmainvel" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位10'
+    </select>
+
+
+    <select id="getmainpower" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位9'
+    </select>
+
+    <select id="getpreciselevel" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位8'
+    </select>
+
+    <select id="getcontroltype" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.directionary_key as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '设备编码码位7'
+    </select>
+
+    <select id="getmethod" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.line_id as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '加工方法'
+    </select>
+
+    <select id="getMethodByLineId" resultMap="directionaryDtoResultMap" parameterType="com.unicom.fmos.entity.business.Model">
+        SELECT td_directionary_detail.line_id as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head,td_machine_method WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_machine_method.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '加工方法'
+        AND td_machine_method.model_line_id = #{lineId}
+        AND td_machine_method.directionary_line_id = td_directionary_detail.line_id
+    </select>
+
+    <select id="modellineids" resultMap="directionaryDtoResultMap">
+    SELECT DISTINCT td_model.model_model as name, td_model.line_id as id FROM td_model
+    WHERE
+    1 = 1
+    AND active = 1
+    </select>
+    <select id="instanceanme" resultMap="directionaryDtoResultMap">
+        SELECT DISTINCT td_instance.instance_name as id,td_instance.instance_name as name FROM td_instance WHERE
+        1 = 1
+        AND td_instance.active = 1
+    </select>
+    <select id="instancenumber" resultMap="directionaryDtoResultMap">
+        SELECT DISTINCT td_instance.instance_number as id,td_instance.instance_number as name FROM td_instance WHERE
+        1 = 1
+        AND td_instance.active = 1
+    </select>
+
+    <select id="baseinfo" resultMap="directionaryDtoResultMap">
+      SELECT td_directionary_detail.line_id as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '基本信息'
+    </select>
+
+    <select id="feature" resultMap="directionaryDtoResultMap">
+        SELECT td_directionary_detail.line_id as id,td_directionary_detail.directionary_value as name FROM td_directionary_detail,td_directionary_head WHERE
+        1 = 1
+        AND td_directionary_head.active = 1
+        AND td_directionary_detail.active = 1
+        AND td_directionary_detail.directionary_line_id = td_directionary_head.line_id
+        AND td_directionary_head.directionary_group = '特征信息'
+    </select>
+
+</mapper>

@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.unicom.fmos.dao.business.FileDao" >
+  <resultMap id="BaseResultMap" type="com.unicom.fmos.entity.business.File" >
+    <id column="line_id" property="lineId" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_ext" property="fileExt" jdbcType="VARCHAR" />
+    <result column="file_size" property="fileSize" jdbcType="INTEGER" />
+    <result column="file_source" property="fileSource" jdbcType="INTEGER" />
+    <result column="source_line_id" property="sourceLineId" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="active_user" property="activeUser" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="active_memo" property="activeMemo" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_memo" property="updateMemo" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.unicom.fmos.entity.business.File" extends="BaseResultMap" >
+    <result column="file_body" property="fileBody" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.unicom.fmos.entity.business.File" >
+    insert into td_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        line_id,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileExt != null" >
+        file_ext,
+      </if>
+      <if test="fileSize != null" >
+        file_size,
+      </if>
+      <if test="fileSource != null" >
+        file_source,
+      </if>
+      <if test="sourceLineId != null" >
+        source_line_id,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="activeUser != null" >
+        active_user,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="activeMemo != null" >
+        active_memo,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateMemo != null" >
+        update_memo,
+      </if>
+      <if test="fileBody != null" >
+        file_body,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lineId != null" >
+        #{lineId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileExt != null" >
+        #{fileExt,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        #{fileSize,jdbcType=INTEGER},
+      </if>
+      <if test="fileSource != null" >
+        #{fileSource,jdbcType=INTEGER},
+      </if>
+      <if test="sourceLineId != null" >
+        #{sourceLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null" >
+        #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        #{updateMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="fileBody != null" >
+        #{fileBody,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.unicom.fmos.entity.business.File" >
+    update td_file
+    <set >
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileExt != null" >
+        file_ext = #{fileExt,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSize != null" >
+        file_size = #{fileSize,jdbcType=INTEGER},
+      </if>
+      <if test="fileSource != null" >
+        file_source = #{fileSource,jdbcType=INTEGER},
+      </if>
+      <if test="sourceLineId != null" >
+        source_line_id = #{sourceLineId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="activeUser != null" >
+        active_user = #{activeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeMemo != null" >
+        active_memo = #{activeMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateMemo != null" >
+        update_memo = #{updateMemo,jdbcType=VARCHAR},
+      </if>
+      <if test="fileBody != null" >
+        file_body = #{fileBody,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </update>
+
+  <select id="select" parameterType="com.unicom.fmos.entity.business.File" resultMap="BaseResultMap">
+    select line_id, file_name, file_ext,
+      file_size, file_source, source_line_id,
+      create_user, create_time, active,
+      active_user, active_time, active_memo,
+      update_user, update_time, update_memo from td_file
+      <where>
+        1 = 1
+        <if test="lineId != null" >
+          AND line_id =  #{lineId,jdbcType=INTEGER}
+        </if>
+        <if test="fileName != null" >
+          AND file_name = #{fileName,jdbcType=VARCHAR}
+        </if>
+        <if test="fileExt != null" >
+          AND file_ext = #{fileExt,jdbcType=VARCHAR}
+        </if>
+        <if test="fileSize != null" >
+          AND file_size = #{fileSize,jdbcType=INTEGER}
+        </if>
+        <if test="fileSource != null" >
+          AND file_source = #{fileSource,jdbcType=INTEGER}
+        </if>
+        <if test="sourceLineId != null" >
+          AND source_line_id = #{sourceLineId,jdbcType=INTEGER}
+        </if>
+        <if test="createUser != null" >
+          AND create_user = #{createUser,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+          AND create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="active != null" >
+          AND active = #{active,jdbcType=BIT}
+        </if>
+        <if test="activeUser != null" >
+          AND active_user = #{activeUser,jdbcType=VARCHAR}
+        </if>
+        <if test="activeTime != null" >
+          AND active_time =  #{activeTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="activeMemo != null" >
+          AND active_memo = #{activeMemo,jdbcType=VARCHAR}
+        </if>
+        <if test="updateUser != null" >
+          AND update_user = #{updateUser,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null" >
+          AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateMemo != null" >
+          AND update_memo = #{updateMemo,jdbcType=VARCHAR}
+        </if>
+      </where>
+  </select>
+
+  <delete id="del" parameterType="map">
+    DELETE FROM td_file
+    WHERE line_id in
+    <foreach collection="idList" item = "id" index="index" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select * from td_file
+    where line_id = #{lineId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.unicom.fmos.entity.business.File">
+    select * from td_file
+    <where>
+      1 = 1
+      <if test="lineId != null" >
+        AND line_id =  #{lineId,jdbcType=INTEGER}
+      </if>
+      <if test="fileName != null" >
+        AND file_name = #{fileName,jdbcType=VARCHAR}
+      </if>
+      <if test="fileExt != null" >
+        AND file_ext = #{fileExt,jdbcType=VARCHAR}
+      </if>
+      <if test="fileSize != null" >
+        AND file_size = #{fileSize,jdbcType=INTEGER}
+      </if>
+      <if test="fileSource != null" >
+        AND file_source = #{fileSource,jdbcType=INTEGER}
+      </if>
+      <if test="sourceLineId != null" >
+        AND source_line_id = #{sourceLineId,jdbcType=INTEGER}
+      </if>
+      <if test="createUser != null" >
+        AND create_user = #{createUser,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="active != null" >
+        AND active = #{active,jdbcType=BIT}
+      </if>
+      <if test="activeUser != null" >
+        AND active_user = #{activeUser,jdbcType=VARCHAR}
+      </if>
+      <if test="activeTime != null" >
+        AND active_time =  #{activeTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="activeMemo != null" >
+        AND active_memo = #{activeMemo,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUser != null" >
+        AND update_user = #{updateUser,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+        AND update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateMemo != null" >
+        AND update_memo = #{updateMemo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+</mapper>

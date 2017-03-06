@@ -1,0 +1,367 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-4">
+      <div style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+        <span id="spanPvlRolename"></span><span>菜单资源树</span>
+        <span class="menu-toolbar pull-right">
+          <a href="" class="menu-top-button" id="btnPvlSave"><i class="icon-plus"></i>&nbsp;保存</a>
+        </span>
+      </div>
+      <div>
+        <ul id="treePvl" class="ztree"></ul>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="divPvlTitle" style="border-bottom: 1px solid #DDDDDD;margin-bottom: 20px;">
+        <span>角色信息表</span>
+      </div>
+      <div class="container-fluid">
+        <div class="row" id="divPvlSearchbar">
+          <div class="col-md-12">
+            <div class="input-group">
+              <span class="input-group-addon">角色名称</span>
+              <input class="form-control typeahead" id="iptPvlSearchname" autocomplete="off" type="text" data-provide="typeahead">
+              <span class="input-group-addon">创建于</span>
+              <input type="text" class="form-control daterangesetter" id="dpkPvlSearchstarttime">
+              <span class="input-group-addon">至</span>
+              <input type="text" class="form-control daterangesetter" id="dpkPvlSearchendtime">
+              <span class="input-group-addon">期间</span>
+              <span class="input-group-btn">
+                <button class="btn btn-info" id="btnPvlRolesearch" type="button" style="color: #fff;background-color: #3498db;border: none;">搜索</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <table id="tbPvlRoleinfo" data-striped="true" data-show-header="true" data-halign="true"  data-height="390">
+          </div>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+
+    /**
+     * [Format description]
+     * @param {[type]} fmt [description]
+     */
+    Date.prototype.format =function(format) { //author: meizz
+      var o = {
+        "M+" : this.getMonth()+1, //month
+        "d+" : this.getDate(),    //day
+        "h+" : this.getHours(),   //hour
+        "m+" : this.getMinutes(), //minute
+        "s+" : this.getSeconds(), //second
+        "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+        "S" : this.getMilliseconds() //millisecond
+      }
+      if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
+      (this.getFullYear()+"").substr(4- RegExp.$1.length));
+      for(var k in o)if(new RegExp("("+ k +")").test(format))
+      format = format.replace(RegExp.$1,
+      RegExp.$1.length==1? o[k] :
+      ("00"+ o[k]).substr((""+ o[k]).length));
+      return format;
+    }
+
+    //begin loading iptPvlSearchname
+    var  roleInfoInit = function() {
+      var $input = $('#iptPvlSearchname');
+      $.ajax({
+        url: 'user/businiess/rolematain/getRoles',
+        type: 'GET',
+        dataType: 'json'
+      })
+      .done(function(data) {
+        $input.typeahead({ source:data });
+      })
+      .fail(function() {
+        setMessage('获取角色字典失败', 'error', true);
+      });
+    }
+    roleInfoInit();
+    //end loading iptPvlSearchname
+
+    /*global variables*/
+    var jsonPvlTree;
+    /*global variables*/
+
+    //begin tree init
+    /**
+     * [treeInit description]
+     * @return {[type]} [description]
+     */
+    var treeInit = function(roleLineId) {
+      var setting =
+        {
+          edit: {
+            showRemoveBtn: false,
+            showRenameBtn: false
+          },
+          check: {
+            enable: true
+          }
+        };
+
+      /*when excute use it*/
+      setMessage('正在加载权限树', 'info', true);
+      $.ajax({
+        url: 'user/businiess/privilege/prvltree',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+          "roleLineId": roleLineId
+        }
+      })
+      .done(function(data) {
+        $.fn.zTree.init($("#treePvl"), setting, data.menuTree);
+        var treeObj = $.fn.zTree.getZTreeObj("treePvl");
+        var prvl = data.privilege;
+        for (var i = 0; i < prvl.length; i++) {
+          var resourceId = prvl[i].resourceLineId;
+          var node = treeObj.getNodesByFilter(function(node) {
+            return node.id == resourceId;
+          }, true);
+
+          if (node.length != 0 ) {
+            treeObj.checkNode(node, true, false);
+          }
+        }
+        treeObj.expandAll(true);
+        setMessage('已完成权限树加载', 'success', true);
+      })
+      .fail(function(data) {
+        setMessage('权限树加载失败', 'error', true);
+      })
+      .always(function(data) {
+      });
+      /*when excute use it*/
+    }
+
+    /**
+     * [btnPvlSaveClick description]
+     * @param  {[type]} event [description]
+     * @return {[type]}       [description]
+     */
+    var btnPvlSaveClick = function(event) {
+      event.preventDefault();
+      var treeObj = $.fn.zTree.getZTreeObj("treePvl");
+      var nodes = treeObj.transformToArray(treeObj.getNodes());
+      var rows = $('#tbPvlRoleinfo').bootstrapTable('getSelections');
+      var lineId = rows[0].lineId;
+      var jsonNodeInfo = [];
+      for(var i = 0; i< nodes.length; i++) {
+        var jsonTmp = {
+          resourceLineId: nodes[i].id,
+          roleLineId: lineId,
+          checked: nodes[i].checked == true ? 1 : 0
+        }
+        jsonNodeInfo.push(jsonTmp);
+      }
+      var jsonSend = {
+        "privileges": jsonNodeInfo
+      }
+      setMessage('正在保存', 'info', true);
+      $('#btnPvlSave').off('click');
+      $.ajax({
+       url: 'user/businiess/privilege/save',
+       type: 'POST',
+       contentType:"application/json;charset=UTF-8",
+       dataType: 'json',
+       data: JSON.stringify(jsonNodeInfo)
+      })
+      .done(function(data) {
+        if (data.retCode == -1) {
+          setMessage(data.errDesc, 'error', true);
+          return;
+        }
+        if (data.retCode == 1) {
+          setMessage('保存成功', 'info',true);
+          treeInit(lineId);
+        }
+      })
+      .fail(function(data) {
+        setMessage('保存失败','error',true);
+      })
+      .always(function(){
+        $('#btnPvlSave').on('click', btnPvlSaveClick);
+      });
+      //when debug use it
+      event.stopPropagation();
+    }
+    //btnPvlSaveClickEvent Binding
+    $('#btnPvlSave').on('click', btnPvlSaveClick);
+    //end tree init
+
+    //begin table init
+    $('.daterangesetter').daterangepicker({
+      "singleDatePicker": true,
+      "locale": {
+      "format": "YYYY-MM-DD",
+      "separator": "-",
+      "applyLabel": "应用",
+      "cancelLabel": "取消",
+      "monthNames": [
+        "一月",
+        "二月",
+        "三月",
+        "四月",
+        "五月",
+        "六月",
+        "七月",
+        "八月",
+        "九月",
+        "十月",
+        "十一月",
+        "十二月"],
+      "daysOfWeek": [
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"]
+      }
+    });
+    $('#dpkPvlSearchstarttime').data('daterangepicker').setStartDate(moment().subtract(29, 'days'));
+    $('#dpkPvlSearchendtime').data('daterangepicker').setStartDate(moment());
+    $('#tbPvlRoleinfo').bootstrapTable({
+      url: 'user/businiess/rolematain/getRoleData',
+      method: 'get',
+      pagination: true,
+      columns: [{
+        field: 'state',
+        radio: true
+      },
+      {
+        field: 'lineId',
+        title: '主键序号'
+      },
+      {
+        field: 'roleName',
+        title: '角色名称'
+      },
+      {
+        field: 'createUser',
+        title: '创建人'
+      },
+      {
+        field: 'createTime',
+        title: '创建时间',
+        sortable: true,
+        formatter: function(value, row, index) {
+          if (value == undefined) {
+            return value;
+          } else {
+            var tempTime = new Date(value);
+            var fullYear = tempTime.getFullYear();
+            var month = tempTime.getMonth() + 1;
+            var date = tempTime.getDate();
+            var hours = tempTime.getHours();
+            var minute = tempTime.getMinutes();
+            var second = tempTime.getSeconds();
+            var strTime =
+              fullYear + "-" +
+              month + "-" +
+              date + " " +
+              hours + ":" +
+              minute + ":" +
+              second;
+            return strTime;
+          }
+        }
+      },
+      {
+        field: 'updateUser',
+        title: '更新人'
+      },
+      {
+        field: 'updateTime',
+        title: '更新时间',
+        sortable: true,
+        formatter: function(value, row, index) {
+          if (value == undefined) {
+            return value;
+          } else {
+            var tempTime = new Date(value);
+            var fullYear = tempTime.getFullYear();
+            var month = tempTime.getMonth() + 1;
+            var date = tempTime.getDate();
+            var hours = tempTime.getHours();
+            var minute = tempTime.getMinutes();
+            var second = tempTime.getSeconds();
+            var strTime =
+              fullYear + "-" +
+              month + "-" +
+              date + " " +
+              hours + ":" +
+              minute + ":" +
+              second;
+            return strTime;
+          }
+        }
+      },
+      {
+        field: 'updateMemo',
+        title: '更新说明'
+      }],
+      onAll: function(name, args) {
+      },
+      onLoadSuccess: function(data) {
+        if (data.length != 0) {
+          var newArr = new Array();
+          var j = 0;
+          for (var i = 1; i < data.length; i++) {
+            newArr[j] = data[i];
+            j++;
+          }
+          $('#tbPvlRoleinfo').bootstrapTable('load', newArr);
+        }
+      },
+      onCheck: function(row) {
+        var lineId = row.lineId;
+        {
+          treeInit(lineId);
+        }
+      }
+    });
+
+    var btnPvlRolesearchClick = function(event) {
+      event.preventDefault();
+      var roleName = $('#iptPvlSearchname').val() == '' ? undefined : $('#iptPvlSearchname').val();
+      var startTime = $('#dpkPvlSearchstarttime').val() + ' 00:00:00';
+      var endTime = $('#dpkPvlSearchendtime').val() + ' 23:59:59';
+      var json = [{
+        roleName: roleName,
+        createTime: startTime,
+        activeTime: endTime
+      }];
+      $('#btnPvlRolesearch').off('click');
+      $.fn.zTree.destroy("treePvl");
+      $.ajax({
+       url: 'user/businiess/rolematain/searchRole',
+       type: 'POST',
+       contentType:"application/json;charset=UTF-8",
+       dataType: 'json',
+       data: JSON.stringify(json)
+      })
+      .done(function(data) {
+        setMessage('共找到 ' + data.length + ' 条数据','info',true);
+        $('#tbPvlRoleinfo').bootstrapTable('load', data);
+      })
+      .fail(function(data) {
+        setMessage('查询失败','error',true);
+      })
+      .always(function(){
+        $('#btnPvlRolesearch').on('click', btnPvlRolesearchClick);
+      });
+      event.stopPropagation();
+    }
+    $('#btnPvlRolesearch').on('click', btnPvlRolesearchClick);
+  });
+</script>

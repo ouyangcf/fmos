@@ -1,0 +1,29 @@
+<!-- Created by zhaojb on 2017-01-09 -->
+<div id="divDeviceSimilarSearchMainContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+    <div id="divDeviceSimilarSearchToolContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="divDeviceSimilarSearchToolBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    </div>
+    <div id="divDeviceSimilarSearchSearchBar" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;"></div>
+    <div id="divDeviceSimilarSearchTableContainer" class="col-md-12 col-md-offset-0" style="margin-top:5px;margin-bottom:5px;">
+        <div id="tbDivtbDeviceSimilarSearchinfos" class="col-md-12 col-md-offset-0">
+            <table data-striped="true" data-show-header="true" data-halign="true" data-height="390" id="tbDeviceSimilarSearchinfos"></table>
+        </div>
+    </div>
+</div>
+<script>
+jQuery(document).ready(function($) {
+
+    /*begin define tbDeviceSimilarSearchinfos */
+    $("#tbDeviceSimilarSearchinfos").bootstrapTable({
+        url: "deviceSimilarSearch/infos",
+        method: "get",
+        pagination: true,
+        onEditableSave: function(field, row, oldValue, $el) {},
+        columns: [{
+            field: "state",
+            checkbox: true
+        }]
+    });
+    /*end define tbDeviceSimilarSearchinfos */
+});
+</script>
